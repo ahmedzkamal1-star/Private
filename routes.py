@@ -138,6 +138,29 @@ def course_details(course_id):
 def profile():
     return render_template('profile.html', user=current_user)
 
+@main.route('/db-audit')
+@login_required
+def db_audit():
+    if current_user.code != 'admin': # Restricted to admin code for safety
+         return "Unauthorized", 403
+    courses = Course.query.all()
+    enrollments = Enrollment.query.all()
+    users = User.query.all()
+    
+    output = "<h3>Courses:</h3>"
+    for c in courses:
+        output += f"<p>ID: {c.id}, Name: {c.name}, Code: {c.code}</p>"
+    
+    output += "<h3>Enrollments:</h3>"
+    for e in enrollments:
+        output += f"<p>Student ID: {e.student_id}, Course ID: {e.course_id}</p>"
+        
+    output += "<h3>Users:</h3>"
+    for u in users:
+        output += f"<p>ID: {u.id}, Code: {u.code}, Role: {u.role}</p>"
+        
+    return output
+
 @main.route('/enroll/<int:course_id>')
 @login_required
 def enroll(course_id):
