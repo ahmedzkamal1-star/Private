@@ -19,9 +19,6 @@ class User(UserMixin, db.Model):
     # Master key for secure password resets
     master_key = db.Column(db.String(100), nullable=True)
     
-    # Master key for secure password resets
-    master_key = db.Column(db.String(100), nullable=True)
-    
     # Relationships
     enrollments = db.relationship('Enrollment', backref='student', lazy=True, cascade="all, delete-orphan")
     
@@ -104,50 +101,36 @@ class SystemSettings(db.Model):
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # NULL means to Admin
-    subject = db.Column(db.String(200))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # None for admin
+    subject = db.Column(db.String(100))
     body = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     is_read = db.Column(db.Boolean, default=False)
 
-    # Relationships are now defined in the User model for better cascade control
-    # sender, recipient backrefs are automatically created
-    pass
-
 class ActivityLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    action = db.Column(db.String(200), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    action = db.Column(db.String(100), nullable=False)
     details = db.Column(db.Text)
-
-    # user backref is now defined in User model
-    pass
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 class HomePost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    content = db.Column(db.Text)
-    image_filename = db.Column(db.String(255))
+    content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-    likes = db.relationship('PostLike', backref='post', lazy='dynamic', cascade="all, delete-orphan")
-    views = db.relationship('PostView', backref='post', lazy='dynamic', cascade="all, delete-orphan")
+    
+    # Relationships
+    likes = db.relationship('PostLike', backref='post', cascade="all, delete-orphan")
+    views = db.relationship('PostView', backref='post', cascade="all, delete-orphan")
 
 class PostLike(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('home_post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # user backref is now defined in User model
-    pass
 
 class PostView(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('home_post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # user backref is now defined in User model
-    pass
