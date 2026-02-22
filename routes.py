@@ -127,15 +127,11 @@ def view_pdf(filename):
 @login_required
 def course_details(course_id):
     course = Course.query.get_or_404(course_id)
-    # Fetch lessons and exams related to the course
+    # Fetch lessons and exams related to the course explicitly
     lessons = Lesson.query.filter_by(course_id=course_id).order_by(Lesson.id).all()
     exams = Exam.query.filter_by(course_id=course_id).order_by(Exam.id).all()
     
-    # Attach to course object for template access
-    course.lessons = lessons
-    course.exams = exams
-    
-    return render_template('course.html', course=course)
+    return render_template('course.html', course=course, lessons=lessons, exams=exams)
 
 @main.route('/profile')
 @login_required

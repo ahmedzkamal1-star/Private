@@ -18,14 +18,14 @@
                 <i class="fas fa-book-open" style="color: #10b981;"></i>
             </div>
             <div class="stat-label-v2">الدروس</div>
-            <div class="stat-value-v2">{{ course.lessons|length }}</div>
+            <div class="stat-value-v2">{{ lessons|length }}</div>
         </div>
         <div class="stat-card-v2" style="border-right: 4px solid #f59e0b;">
             <div class="stat-icon-dahih" style="background: #fffbeb;">
                 <i class="fas fa-file-alt" style="color: #f59e0b;"></i>
             </div>
             <div class="stat-label-v2">الامتحانات</div>
-            <div class="stat-value-v2">{{ course.exams|length }}</div>
+            <div class="stat-value-v2">{{ exams|length }}</div>
         </div>
     </div>
 
@@ -47,9 +47,9 @@
 
         <!-- Lessons Tab -->
         <div id="Lessons" class="tab-content-v2" style="display: block; padding: 25px;">
-            {% if course.lessons %}
+            {% if lessons %}
             <div class="lecture-list-v2">
-                {% for lesson in course.lessons %}
+                {% for lesson in lessons %}
                 <div class="lecture-item-v2 animate-fade-in" style="animation-delay: {{ loop.index0 * 0.1 }}s">
                     <div class="lecture-info">
                         <div class="lecture-num">0{{ loop.index }}</div>
@@ -74,9 +74,9 @@
 
         <!-- Exams Tab -->
         <div id="Exams" class="tab-content-v2" style="display: none; padding: 25px;">
-            {% if course.exams %}
+            {% if exams %}
             <div class="lecture-list-v2">
-                {% for exam in course.exams %}
+                {% for exam in exams %}
                 <div class="lecture-item-v2">
                     <div class="lecture-info">
                         <div class="lecture-num" style="background: #fee2e2; color: #ef4444;">E</div>
