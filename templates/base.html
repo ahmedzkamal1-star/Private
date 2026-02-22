@@ -45,26 +45,13 @@
 
 
     <div class="app-viewport">
-        <!-- Pomodoro Timer Overlay -->
-        <div class="pomodoro-overlay-v2" id="pomodoroTimer">
-            <div class="pomo-content-dahih">
-                <div class="pomo-header-v2">
-                    <span>مؤقت المذاكرة</span>
-                    <button onclick="togglePomodoro()"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="pomo-display-v2" id="pomoTimeDisplay">25:00</div>
-                <div class="pomo-controls-v2">
-                    <button onclick="startPomodoro()" id="pomoStartBtn" class="pomo-btn-main">ابدأ</button>
-                    <button onclick="resetPomodoro()" class="pomo-btn-alt">إعادة</button>
-                </div>
-            </div>
-        </div>
-        <button class="pomodoro-fab-v2" onclick="togglePomodoro()" title="مؤقت المذاكرة">
+        <!-- Pomodoro FAB (Hidden if causing issues) -->
+        <button class="pomodoro-fab-v2" onclick="togglePomodoro()" title="مؤقت المذاكرة" style="display: none;">
             <i class="fas fa-stopwatch"></i>
         </button>
 
         <!-- Modern Header -->
-        <header class="header" style="z-index: 1001;">
+        <header class="header" style="z-index: 5000; position: sticky; top: 0; background: white;">
             <div class="user-info-section">
                 <!-- Fluid Back Button - Only for sub-pages -->
                 {% if request.endpoint not in ['main.dashboard', 'main.login', 'main.register'] %}

@@ -1,34 +1,45 @@
-/* === Modern Student UI Layout (v33 Core Fixes) === */
+/* === Modern Student UI Deep Fix (v35) === */
+:root {
+    --primary-dahih: #0ea5e9;
+}
+
 .app-viewport {
     display: flex !important;
     flex-direction: column !important;
     min-height: 100vh !important;
-    background: #f8fafc !important;
     position: relative !important;
+    background: #f8fafc !important;
     overflow-x: hidden !important;
+}
+
+.header {
+    height: 70px !important;
+    z-index: 9999 !important;
+    /* Extremely high to stay above any accidental overlays */
+    position: sticky !important;
+    top: 0 !important;
+    pointer-events: auto !important;
+}
+
+.user-info-section,
+.header-actions {
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 10000 !important;
+}
+
+.avatar-initial {
+    cursor: pointer !important;
+    display: flex !important;
+    pointer-events: auto !important;
+    z-index: 10001 !important;
 }
 
 .app-content-minimal {
     flex: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
     padding-bottom: 100px !important;
-}
-
-.header {
-    z-index: 2000 !important;
-}
-
-.user-info-section {
-    display: flex !important;
-    align-items: center !important;
-    gap: 15px !important;
-    position: relative !important;
-    z-index: 2001 !important;
-}
-
-.avatar-initial {
-    position: relative !important;
-    z-index: 2002 !important;
-    cursor: pointer !important;
     pointer-events: auto !important;
 }
 
@@ -38,41 +49,26 @@
     left: 0 !important;
     width: 100% !important;
     height: 75px !important;
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
+    z-index: 9999 !important;
+    background: white !important;
     display: flex !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-    z-index: 3000 !important;
-    padding-bottom: env(safe-area-inset-bottom) !important;
+    pointer-events: auto !important;
 }
 
 .nav-link-v2 {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 4px !important;
-    text-decoration: none !important;
-    color: #94a3b8 !important;
-    flex: 1 !important;
+    pointer-events: auto !important;
     cursor: pointer !important;
 }
 
-.nav-link-v2.active {
-    color: #0ea5e9 !important;
-}
-
+/* Fix for Tabs Content */
 .tab-content-v2 {
-    display: none;
-    animation: fadeIn v33 0.3s ease;
+    animation: fadeInV35 0.4s ease;
 }
 
-@keyframes fadeInV33 {
+@keyframes fadeInV35 {
     from {
         opacity: 0;
-        transform: translateY(5px);
+        transform: translateY(10px);
     }
 
     to {
@@ -81,11 +77,17 @@
     }
 }
 
-/* Fix for Course interactivity */
+/* Ensure course clicks are top-priority */
+.lecture-item-v2,
 .lecture-item-v2 a,
 .lecture-item-v2 button {
-    position: relative !important;
-    z-index: 10 !important;
-    cursor: pointer !important;
     pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 20 !important;
+}
+
+/* Hide ghost overlays */
+#pomodoroTimer {
+    display: none !important;
+    pointer-events: none !important;
 }
