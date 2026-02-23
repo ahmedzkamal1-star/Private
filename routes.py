@@ -341,13 +341,14 @@ def admin_demote_user(user_id):
     
     user = User.query.get_or_404(user_id)
     
-    # Check if current user has authority to demote
+    # Protected Super Admin logic (123456)
+    if user.code == '123456':
+        flash('لا يمكن تخفيض رتبة المشرف الرئيسي للنظام.', 'danger')
+        return redirect(url_for('main.admin_moderators'))
+
+    # Only Super Admin or the creator can demote
     if current_user.code != '123456' and user.created_by_id != current_user.id:
         flash('ليس لديك صلاحية لتخفيض رتبة هذا المشرف.', 'danger')
-        return redirect(url_for('main.admin_moderators'))
-    
-    if user.code == '123456':
-        flash('لا يمكن تخفيض رتبة المشرف الرئيسي.', 'danger')
         return redirect(url_for('main.admin_moderators'))
 
     user.role = 'student'
@@ -401,15 +402,18 @@ def admin_edit_student(user_id):
         student.department = request.form.get('department')
         student.year = request.form.get('year')
         
-        old_role = student.role
         new_role = request.form.get('role')
         if new_role:
-            if student.role != new_role:
-                log_activity("تغيير صلاحية", f"تم تغيير دور {student.full_name} من {student.role} إلى {new_role}")
-            student.role = new_role
-            # Hierarchy fix: if promoted to admin and doesn't have a creator, set current admin as creator
-            if new_role == 'admin' and not student.created_by_id:
-                student.created_by_id = current_user.id
+            # Protect Super Admin from role changes
+            if student.code == '123456' and new_role != 'admin':
+                flash('لا يمكن تغيير رتبة المشرف الرئيسي للنظام.', 'warning')
+            else:
+                if student.role != new_role:
+                    log_activity("تغيير صلاحية", f"تم تغيير دور {student.full_name} من {student.role} إلى {new_role}")
+                student.role = new_role
+                # Hierarchy fix: if promoted to admin and doesn't have a creator, set current admin as creator
+                if new_role == 'admin' and not student.created_by_id:
+                    student.created_by_id = current_user.id
         
         # Update password only if provided
         new_password = request.form.get('password')

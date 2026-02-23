@@ -1,18 +1,22 @@
 /* Base Styles & Premium Design System */
 :root {
-    /* Light Mode Palette (Default) */
-    --p-primary: #6366f1;
-    --p-secondary: #a855f7;
-    --p-accent: #ec4899;
+    /* Premium Blue Palette (Vibrant) */
+    --p-primary: #2563eb;
+    /* Vivid Blue */
+    --p-secondary: #3b82f6;
+    /* Sky Blue */
+    --p-accent: #0ea5e9;
+    /* Cyan-ish Blue */
     --p-bg: #f8fafc;
-    --p-card-bg: rgba(255, 255, 255, 0.7);
-    --p-text: #1e293b;
-    --p-text-muted: #64748b;
-    --p-border: rgba(255, 255, 255, 0.3);
-    --p-glass-blur: 20px;
+    --p-card-bg: rgba(255, 255, 255, 0.75);
+    --p-glass-bg: rgba(255, 255, 255, 0.4);
+    --p-text: #0f172a;
+    --p-text-muted: #475569;
+    --p-border: rgba(255, 255, 255, 0.5);
+    --p-glass-blur: 25px;
 
-    --grad-main: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    --shadow-premium: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
+    --grad-main: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    --shadow-premium: 0 20px 40px -12px rgba(37, 99, 235, 0.12);
 
     /* Legacy compatibility */
     --primary-color: var(--p-primary);
@@ -20,14 +24,17 @@
     --background-color: var(--p-bg);
 }
 
-/* Dark Mode Palette Overlay */
+/* Premium Deep Blue Dark Mode */
 [data-theme='dark'] {
-    --p-bg: #0f172a;
-    --p-card-bg: rgba(30, 41, 59, 0.7);
-    --p-text: #f8fafc;
+    --p-bg: #030712;
+    /* Very dark blue-black */
+    --p-card-bg: rgba(17, 24, 39, 0.65);
+    --p-glass-bg: rgba(31, 41, 55, 0.3);
+    --p-text: #f1f5f9;
     --p-text-muted: #94a3b8;
     --p-border: rgba(255, 255, 255, 0.05);
-    --p-glass-blur: 25px;
+    --p-glass-blur: 35px;
+    --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -52,57 +59,70 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    filter: blur(80px);
-    opacity: 0.5;
+    /* Ensure it's behind content */
+    filter: blur(100px);
+    opacity: 0.7;
     pointer-events: none;
     transition: opacity 0.5s ease;
 }
 
 [data-theme='dark'] .mesh-background {
-    opacity: 0.3;
+    opacity: 0.4;
+    filter: blur(120px);
 }
 
 .mesh-blob {
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--p-primary), var(--p-secondary));
-    animation: float-mesh 20s infinite alternate;
+    background: linear-gradient(135deg, var(--p-primary), var(--p-accent));
+    animation: float-mesh 25s infinite alternate;
 }
 
 .blob-1 {
-    width: 600px;
-    height: 600px;
-    top: -100px;
-    right: -100px;
-    background: #818cf8;
+    width: 800px;
+    height: 800px;
+    top: -200px;
+    right: -150px;
+    background: #3b82f6;
+    /* Blueish */
+    opacity: 0.8;
 }
 
 .blob-2 {
-    width: 500px;
-    height: 500px;
-    bottom: -50px;
-    left: -100px;
-    background: #c084fc;
-    animation-delay: -5s;
+    width: 600px;
+    height: 600px;
+    bottom: -100px;
+    left: -150px;
+    background: #0ea5e9;
+    /* Sky Blue */
+    animation-delay: -7s;
 }
 
 .blob-3 {
-    width: 400px;
-    height: 400px;
-    top: 40%;
-    left: 30%;
-    background: #f472b6;
-    animation-delay: -10s;
+    width: 500px;
+    height: 500px;
+    top: 30%;
+    left: 20%;
+    background: #2563eb;
+    /* Cobalt Blue */
+    animation-delay: -12s;
 }
 
 @keyframes float-mesh {
     0% {
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0) scale(1) rotate(0deg);
     }
 
     100% {
-        transform: translate(50px, 100px) scale(1.1);
+        transform: translate(100px, 150px) scale(1.2) rotate(15deg);
     }
+}
+
+/* Container for all page content to sit above background */
+.app-viewport {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
 }
 
 /* Layout */
