@@ -16,6 +16,10 @@ class User(UserMixin, db.Model):
     is_approved = db.Column(db.Boolean, default=False)
     last_seen = db.Column(db.DateTime)
     
+    # Hierarchy: Track who appointed this user
+    created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    moderators_created = db.relationship('User', backref=db.backref('creator', remote_side=[id]), lazy='dynamic')
+    
     # Master key for secure password resets
     master_key = db.Column(db.String(100), nullable=True)
     
@@ -81,6 +85,17 @@ class Exam(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     questions = db.Column(db.Text) # JSON string or text content
+    
+    # Relationships
+    results = db.relationship('ExamResult', backref='exam', cascade="all, delete-orphan")
+
+class ExamResult(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    exam_id = db.Column(db.Integer, db.ForeignKey('exam.id'), nullable=False)
+    score = db.Column(db.Float, nullable=False)
+    total_questions = db.Column(db.Integer, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

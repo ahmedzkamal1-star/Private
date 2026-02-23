@@ -10,15 +10,27 @@
 </div>
 
 <div class="card pdf-viewer-container"
-    style="position: relative; overflow: hidden; padding: 0; border-radius: var(--border-radius-lg); background: #525659; min-height: 80vh;">
+    style="position: relative; overflow: hidden; padding: 0; border-radius: var(--border-radius-lg); background: #525659; min-height: calc(100vh - 150px);">
     <!-- Anti-Screenshot Overlay -->
     <div id="protection-overlay"
         style="position: absolute; top:0; left:0; width:100%; height:100%; z-index: 100; pointer-events: none; background: rgba(255,255,255,0.01);">
     </div>
 
-    <div id="pdf-viewer-wrapper" style="overflow-y: auto; height: 80vh; padding: 20px 0;">
+    <div id="pdf-viewer-wrapper"
+        style="overflow-y: auto; height: calc(100vh - 150px); padding: 20px 0; transition: filter 0.3s ease;">
         <canvas id="pdf-canvas"
-            style="display: block; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.3); max-width: 100%;"></canvas>
+            style="display: block; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.3); max-width: 100%; transition: transform 0.2s ease;"></canvas>
+    </div>
+
+    <!-- Zoom Controls Overlay -->
+    <div
+        style="position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 102;">
+        <button onclick="zoom(0.2)" class="btn" style="width: 40px; height: 40px; padding: 0; border-radius: 50%;"><i
+                class="fas fa-search-plus"></i></button>
+        <button onclick="zoom(-0.2)" class="btn" style="width: 40px; height: 40px; padding: 0; border-radius: 50%;"><i
+                class="fas fa-search-minus"></i></button>
+        <button onclick="resetZoom()" class="btn" style="width: 40px; height: 40px; padding: 0; border-radius: 50%;"><i
+                class="fas fa-undo"></i></button>
     </div>
 
     <!-- Controls -->
@@ -176,7 +188,28 @@
         alert('لا يمكن تحميل الملف حالياً أو أن الرابط غير صحيح.');
     });
 
+    /** ZOOM LOGIC **/
+    let currentZoom = 1;
+    const zoom = (delta) => {
+        currentZoom = Math.max(0.5, Math.min(3, currentZoom + delta));
+        canvas.style.transform = `scale(${currentZoom})`;
+        canvas.style.transformOrigin = 'top center';
+    };
+
+    const resetZoom = () => {
+        currentZoom = 1;
+        canvas.style.transform = 'scale(1)';
+    };
+
     /** SECURITY MEASURES **/
+
+    // Blur on focus loss (Protect against external recording/screenshots)
+    window.addEventListener('blur', () => {
+        document.getElementById('pdf-viewer-wrapper').style.filter = 'blur(15px)';
+    });
+    window.addEventListener('focus', () => {
+        document.getElementById('pdf-viewer-wrapper').style.filter = 'none';
+    });
 
     // Disable Right Click
     document.addEventListener('contextmenu', e => e.preventDefault());

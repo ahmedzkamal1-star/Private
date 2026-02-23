@@ -85,9 +85,10 @@
                             <p>{{ exam.questions[:100] }}...</p>
                         </div>
                     </div>
-                    <button class="pomo-btn-alt" style="padding: 10px 20px; font-size: 0.85rem;">
+                    <a href="{{ url_for('main.view_exam', exam_id=exam.id) }}" class="pomo-btn-alt"
+                        style="padding: 10px 20px; font-size: 0.85rem; text-decoration: none;">
                         <i class="fas fa-play"></i> ابدأ الاختبار
-                    </button>
+                    </a>
                 </div>
                 {% endfor %}
             </div>

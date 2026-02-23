@@ -3,7 +3,9 @@ import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
-from models import User, Course, Enrollment, Friend, Lesson, Exam, SystemSettings, Message, ActivityLog, HomePost, db
+from models import User, Course, Enrollment, Friend, Lesson, Exam, SystemSettings, Message, ActivityLog, HomePost, ExamResult, db
+import json
+import random
 
 main = Blueprint('main', __name__)
 
@@ -122,6 +124,74 @@ def dashboard():
 def view_pdf(filename):
     # This route will serve the pdf viewer page
     return render_template('view_pdf.html', filename=filename)
+
+@main.route('/exam/<int:exam_id>')
+@login_required
+def view_exam(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+    
+    # Check if user is enrolled in the course
+    enrollment = Enrollment.query.filter_by(student_id=current_user.id, course_id=exam.course_id).first()
+    if not enrollment and current_user.role != 'admin':
+        flash('يجب التسجيل في المادة أولاً لدخول الامتحان.', 'warning')
+        return redirect(url_for('main.course_details', course_id=exam.course_id))
+
+    try:
+        questions_list = json.loads(exam.questions) if exam.questions else []
+    except:
+        questions_list = []
+        
+    if not questions_list:
+        flash('لا توجد أسئلة في هذا الامتحان حالياً.', 'info')
+        return redirect(url_for('main.course_details', course_id=exam.course_id))
+
+    # Shuffle for randomization
+    random.shuffle(questions_list)
+    
+    return render_template('view_exam.html', exam=exam, questions=questions_list)
+
+@main.route('/exam/<int:exam_id>/submit', methods=['POST'])
+@login_required
+def submit_exam(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+    data = request.get_json()
+    answers = data.get('answers', {})
+    
+    try:
+        original_questions = json.loads(exam.questions)
+    except:
+        return {"success": False, "message": "Error parsing questions"}, 400
+        
+    score = 0
+    total = len(original_questions)
+    
+    for q in original_questions:
+        q_id = str(q.get('id'))
+        user_ans = str(answers.get(q_id, '')).strip().lower()
+        correct_ans = str(q.get('answer', '')).strip().lower()
+        
+        if user_ans == correct_ans:
+            score += 1
+            
+    # Save result
+    result = ExamResult(user_id=current_user.id, exam_id=exam.id, score=score, total_questions=total)
+    db.session.add(result)
+    db.session.commit()
+    
+    log_activity("أداء امتحان", f"أتم الطالب {current_user.full_name} امتحان: {exam.title} بنتيجة {score}/{total}")
+    
+    return {"success": True, "score": score, "total": total}
+
+@main.route('/admin/exam/<int:exam_id>/results')
+@login_required
+def admin_view_exam_results(exam_id):
+    if current_user.role != 'admin':
+        return redirect(url_for('main.dashboard'))
+        
+    exam = Exam.query.get_or_404(exam_id)
+    results = ExamResult.query.filter_by(exam_id=exam_id).order_by(ExamResult.timestamp.desc()).all()
+    
+    return render_template('admin_exam_results.html', exam=exam, results=results)
 
 @main.route('/course/<int:course_id>')
 @login_required
@@ -246,6 +316,46 @@ def admin_students():
     students = User.query.filter_by(role='student').all()
     return render_template('admin_students.html', students=students)
 
+@main.route('/admin/moderators')
+@login_required
+def admin_moderators():
+    if current_user.role != 'admin':
+        flash('Access denied.', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    # Super Admin sees everyone
+    if current_user.code == '123456':
+        moderators = User.query.filter_by(role='admin').all()
+    else:
+        # Normal admins see only those they appointed
+        moderators = User.query.filter_by(role='admin', created_by_id=current_user.id).all()
+        
+    return render_template('admin_moderators.html', moderators=moderators)
+
+@main.route('/admin/moderator/<int:user_id>/demote', methods=['POST'])
+@login_required
+def admin_demote_user(user_id):
+    if current_user.role != 'admin':
+        flash('Access denied.', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    user = User.query.get_or_404(user_id)
+    
+    # Check if current user has authority to demote
+    if current_user.code != '123456' and user.created_by_id != current_user.id:
+        flash('ليس لديك صلاحية لتخفيض رتبة هذا المشرف.', 'danger')
+        return redirect(url_for('main.admin_moderators'))
+    
+    if user.code == '123456':
+        flash('لا يمكن تخفيض رتبة المشرف الرئيسي.', 'danger')
+        return redirect(url_for('main.admin_moderators'))
+
+    user.role = 'student'
+    db.session.commit()
+    log_activity("تخفيض رتبة", f"تم تخفيض رتبة {user.full_name} إلى طالب")
+    flash(f'تم تخفيض رتبة {user.full_name} بنجاح.', 'success')
+    return redirect(url_for('main.admin_moderators'))
+
 @main.route('/admin/student/new', methods=['GET', 'POST'])
 @login_required
 def admin_add_student():
@@ -265,7 +375,8 @@ def admin_add_student():
         else:
             role = request.form.get('role', 'student')
             new_student = User(code=code, full_name=full_name, phone=phone, 
-                               department=department, year=year, role=role)
+                               department=department, year=year, role=role,
+                               created_by_id=current_user.id)
             new_student.set_password(password)
             db.session.add(new_student)
             db.session.commit()

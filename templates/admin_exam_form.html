@@ -19,13 +19,22 @@
             </div>
 
             <div class="form-field-v2">
-                <label>الأسئلة / التعليمات</label>
-                <textarea name="questions" rows="10"
-                    style="width: 100%; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; outline: none; transition: 0.3s; box-sizing: border-box;"
-                    placeholder="اكتب الأسئلة هنا بالتفصيل أو ضع روابط الملفات المساعدة..."></textarea>
+                <label>الأسئلة (بتنسيق JSON)</label>
+                <div
+                    style="background: #1e293b; color: #cbd5e1; padding: 15px; border-radius: 12px; font-family: monospace; font-size: 12px; margin-bottom: 10px; direction: ltr;">
+                    Example Format:<br>
+                    [<br>
+                    &nbsp;&nbsp;{ "id": 1, "text": "هل الأرض مستديرة؟", "type": "tf", "answer": "صح" },<br>
+                    &nbsp;&nbsp;{ "id": 2, "text": "ما هو ناتج 5*5؟", "type": "mcq", "options": ["20", "25", "30"],
+                    "answer": "25" }<br>
+                    ]
+                </div>
+                <textarea name="questions" rows="15" required
+                    style="width: 100%; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; font-family: monospace; outline: none; transition: 0.3s; box-sizing: border-box;"
+                    placeholder="ضع الأسئلة هنا بتنسيق JSON كما موضح في المثال أعلاه..."></textarea>
                 <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
-                    <i class="fas fa-info-circle" style="margin-left: 5px;"></i> نصيحة: يمكنك استخدام التنسيق لكتابة
-                    الأسئلة بوضوح.
+                    <i class="fas fa-info-circle" style="margin-left: 5px;"></i> تأكد من صحة تنسيق JSON ليعمل نظام
+                    التصحيح التلقائي.
                 </p>
             </div>
         </div>
