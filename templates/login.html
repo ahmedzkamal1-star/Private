@@ -1,277 +1,72 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
-{% block title %}تسجيل الدخول - Al-dahih{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - منصة الدحيح</title>
+    <!-- Google Cairo Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20.0">
+</head>
 
-{% block content %}
-<div class="login-wrapper animate-slide-up">
-    <div class="login-glass-card-v3">
-        <div class="login-brand">
-            <div class="logo-box">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
-            </div>
-            <h2>أهلاً بك يا دحيح!</h2>
-            <p>سجل دخولك لتستكمل رحلة التفوق</p>
+<body class="login-page">
+    <!-- Premium Mesh Background -->
+    <div class="mesh-background">
+        <div class="mesh-blob blob-1"></div>
+        <div class="mesh-blob blob-2"></div>
+        <div class="mesh-blob blob-3"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <!-- الشعار -->
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="شعار المنصة" class="logo"
+                style="width: 120px; margin-bottom: 1rem; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));">
+            <h2>تسجيل الدخول</h2>
+            <p>أهلاً بك مجدداً! يرجى إدخال بياناتك</p>
         </div>
 
-        <form method="POST" action="{{ url_for('main.login') }}" class="modern-form">
-            <div class="form-group-v3">
-                <label>الكود الجامعي</label>
-                <div class="input-focus-group">
-                    <i class="fas fa-fingerprint"></i>
-                    <input type="text" name="code" placeholder="أدخل كود الطالب" required autofocus>
-                </div>
+        <div class="flash-messages-login" style="margin-bottom: 1.5rem;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}"
+                style="padding: 12px; border-radius: 12px; background: rgba(255,0,0,0.1); color: #ef4444; font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <form class="login-form" method="POST" action="{{ url_for('main.login') }}">
+            <!-- في مشروعك يستخدم كود الطالب (Code) -->
+            <div class="input-group">
+                <input type="text" name="code" placeholder="الكود الجامعي الخاص بك" required autocomplete="off">
             </div>
 
-            <div class="form-group-v3">
-                <label>كلمة المرور</label>
-                <div class="input-focus-group">
-                    <i class="fas fa-shield-alt"></i>
-                    <input type="password" name="password" placeholder="••••••••" required>
-                </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="كلمة المرور" required>
             </div>
 
-            <div class="form-actions-v3">
-                <div class="remember-me">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">تذكرني</label>
-                </div>
-                <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                <label style="color: var(--sky-dark); cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                    <input type="checkbox" name="remember" style="width: auto; margin-bottom: 0;"> تذكرني
+                </label>
+                <a href="#" style="color: var(--sky-primary); text-decoration: none; font-weight: 700;">نسيت كلمة
+                    المرور؟</a>
             </div>
 
-            <button type="submit" class="premium-btn">
-                <span>دخول المنصة</span>
-                <i class="fas fa-rocket"></i>
-            </button>
-
-            <div class="register-hint">
-                ليس لديك حساب؟ <a href="{{ url_for('main.register') }}">انضم إلينا الآن</a>
-            </div>
+            <button type="submit" class="login-btn">دخول المنصة</button>
         </form>
+
+        <div style="text-align: center; margin-top: 2rem; border-top: 1px solid #eee; padding-top: 1.5rem;">
+            <p style="color: #666; font-size: 0.95rem;">ليس لديك حساب؟ <a href="{{ url_for('main.register') }}"
+                    style="color: var(--sky-primary); text-decoration: none; font-weight: 900;">إنشاء حساب جديد</a></p>
+        </div>
     </div>
+</body>
 
-    <!-- Bottom Decoration -->
-    <div class="login-footer-tags">
-        <span>حقوق المحتوى محفوظة © 2026</span>
-        <span>•</span>
-        <span>منصة الدحيح التعليمية</span>
-    </div>
-</div>
-
-<style>
-    /* Login Page Layout */
-    .login-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 70vh;
-        padding: 20px;
-        max-width: 420px;
-        margin: 0 auto;
-    }
-
-    .login-glass-card-v3 {
-        background: var(--p-card-bg);
-        backdrop-filter: blur(var(--p-glass-blur));
-        -webkit-backdrop-filter: blur(var(--p-glass-blur));
-        border: 1px solid var(--p-border);
-        border-radius: 28px;
-        padding: 40px 30px;
-        box-shadow: var(--shadow-premium);
-        width: 100%;
-    }
-
-    .login-brand {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .logo-box {
-        width: 75px;
-        height: 75px;
-        background: var(--p-card-bg);
-        border-radius: 18px;
-        margin: 0 auto 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-        transform: rotate(-5deg);
-        transition: 0.5s;
-        border: 1px solid var(--p-border);
-    }
-
-    .logo-box:hover {
-        transform: rotate(0deg) scale(1.1);
-    }
-
-    .logo-box img {
-        width: 50px;
-    }
-
-    .login-brand h2 {
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: var(--p-text);
-        margin-bottom: 6px;
-    }
-
-    .login-brand p {
-        color: var(--p-text-muted);
-        font-size: 0.9rem;
-    }
-
-    /* Form */
-    .modern-form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .form-group-v3 label {
-        display: block;
-        font-weight: 700;
-        color: var(--p-text);
-        margin-bottom: 8px;
-        font-size: 0.85rem;
-        margin-right: 5px;
-    }
-
-    .input-focus-group {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-
-    .input-focus-group i {
-        position: absolute;
-        right: 16px;
-        color: var(--p-text-muted);
-        font-size: 1rem;
-        transition: 0.3s;
-    }
-
-    .input-focus-group input {
-        width: 100%;
-        padding: 14px 45px 14px 16px;
-        background: var(--p-card-bg);
-        border: 2px solid var(--p-border);
-        border-radius: 14px;
-        font-size: 0.95rem;
-        color: var(--p-text);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        outline: none;
-        font-family: 'Cairo', sans-serif;
-    }
-
-    .input-focus-group input:focus {
-        border-color: var(--p-primary);
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-    }
-
-    .input-focus-group input:focus~i,
-    .input-focus-group input:focus+i {
-        color: var(--p-primary);
-        transform: scale(1.15);
-    }
-
-    /* Actions */
-    .form-actions-v3 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 3px;
-    }
-
-    .remember-me {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-    }
-
-    .remember-me label {
-        font-size: 0.8rem;
-        color: var(--p-text-muted);
-        cursor: pointer;
-    }
-
-    .remember-me input {
-        cursor: pointer;
-        width: 16px;
-        height: 16px;
-        accent-color: var(--p-primary);
-    }
-
-    .forgot-link {
-        font-size: 0.8rem;
-        color: var(--p-primary);
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    /* Button */
-    .premium-btn {
-        background: var(--grad-main);
-        color: white;
-        padding: 15px;
-        border: none;
-        border-radius: 14px;
-        font-size: 1rem;
-        font-weight: 800;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: all 0.3s;
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-        font-family: 'Cairo', sans-serif;
-    }
-
-    .premium-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4);
-        filter: brightness(1.05);
-    }
-
-    .premium-btn:active {
-        transform: translateY(0);
-    }
-
-    .register-hint {
-        text-align: center;
-        margin-top: 8px;
-        font-size: 0.85rem;
-        color: var(--p-text-muted);
-    }
-
-    .register-hint a {
-        color: var(--p-primary);
-        text-decoration: none;
-        font-weight: 800;
-    }
-
-    .login-footer-tags {
-        margin-top: 25px;
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        color: var(--p-text-muted);
-        font-size: 0.75rem;
-    }
-
-    /* Mobile: Keep glass and mesh, just tighten padding */
-    @media (max-width: 500px) {
-        .login-wrapper {
-            padding: 15px;
-            max-width: 100%;
-        }
-
-        .login-glass-card-v3 {
-            padding: 30px 20px;
-            border-radius: 22px;
-        }
-    }
-</style>
-{% endblock %}
+</html>

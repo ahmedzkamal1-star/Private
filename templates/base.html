@@ -6,188 +6,156 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>{% block title %}{{ settings.system_name }}{% endblock %}</title>
-    <!-- Google Fonts: Cairo & Outfit for English numbers/accents -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;700&display=swap"
-        rel="stylesheet">
+    <!-- Google Cairo Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=18.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20.0">
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
 
     <!-- PWA -->
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#00b4d8">
 
     <script>
-        // Dark Mode Initialization (Run before body to prevent flash)
+        // التحقق السريع من الثيم قبل تحميل الصفحة لمنع الوميض الأبيض
         (function () {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('darkMode') === 'enabled' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
-
-        // Anti-copy & Security
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'PrintScreen' || (e.ctrlKey && (e.key === 's' || e.key === 'c' || e.key === 'p' || e.key === 'u'))) {
-                e.preventDefault();
-            }
-        });
     </script>
 </head>
 
-<body>
-    <!-- Premium Global Background -->
+<body class="{{ 'dark-mode' if request.cookies.get('theme') == 'dark' else '' }}">
+    <!-- Premium Mesh Background -->
     <div class="mesh-background">
         <div class="mesh-blob blob-1"></div>
         <div class="mesh-blob blob-2"></div>
         <div class="mesh-blob blob-3"></div>
     </div>
 
-    <div class="app-viewport">
-        <!-- Modern Header -->
-        <header class="header card">
-            <div class="user-info-section">
-                {% if request.endpoint not in ['main.dashboard', 'main.login', 'main.register'] %}
-                <a href="javascript:history.back()" class="header-action-btn back-btn-v2">
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-                {% endif %}
-
-                <a href="{{ url_for('main.profile') if current_user.is_authenticated else '#' }}"
-                    class="avatar-initial">
-                    {% if current_user.is_authenticated %}
-                    {{ current_user.full_name[0] }}
-                    {% else %}
-                    <i class="fas fa-user"></i>
-                    {% endif %}
-                </a>
-                <div class="user-text-box">
-                    <span class="user-name-header">
-                        {% if current_user.is_authenticated %}
-                        {{ current_user.full_name }}
-                        {% else %}
-                        زائر
-                        {% endif %}
-                    </span>
-                    <span class="user-role-badge">
-                        {% if current_user.is_authenticated %}
-                        {{ 'مدير النظام' if current_user.role|lower == 'admin' else 'طالب' }}
-                        {% else %}
-                        يرجى تسجيل الدخول
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
-
-            <div class="header-actions">
-                <!-- Dark Mode Toggle -->
-                <button onclick="toggleTheme()" class="header-action-btn" id="theme-toggle" title="تبديل الوضع">
-                    <i class="fas fa-moon"></i>
-                </button>
-
+    <!-- User's Modern Sidebar -->
+    {% if request.endpoint not in ['main.login', 'main.register', 'main.splash'] %}
+    <div class="sidebar" id="sidebar">
+        <div class="user-info">
+            <div class="user-avatar">
                 {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.logout') }}" class="header-action-btn logout-btn-v2" title="خروج">
-                    <i class="fas fa-power-off"></i>
-                </a>
+                {{ current_user.full_name[0] }}
                 {% else %}
-                <a href="{{ url_for('main.login') }}" class="header-action-btn" title="دخول">
-                    <i class="fas fa-sign-in-alt"></i>
-                </a>
+                <i class="fas fa-user"></i>
                 {% endif %}
             </div>
-        </header>
+            <h3 class="user-name">
+                {% if current_user.is_authenticated %}
+                {{ current_user.full_name }}
+                {% else %}
+                زائر خارجي
+                {% endif %}
+            </h3>
+            <p class="user-role">
+                {% if current_user.is_authenticated %}
+                {{ 'System Administrator' if current_user.role|lower == 'admin' else 'Student Account' }}
+                {% else %}
+                يرجى تسجيل الدخول
+                {% endif %}
+            </p>
 
-        <!-- Main Content Area -->
-        <main class="app-content-minimal">
-            <div class="flash-messages" style="padding: 0 20px;">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }} animate-fade-in card">
-                    <i class="fas {{ 'fa-check-circle' if category == 'success' else 'fa-exclamation-circle' }}"></i>
-                    {{ message }}
+            <!-- إحصائيات المستخدم (User Stats) -->
+            <div class="user-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{% if current_user.is_authenticated %}{{ current_user.enrollments|length
+                        }}{% else %}0{% endif %}</span>
+                    <span class="stat-label">المواد</span>
                 </div>
-                {% endfor %}
-                {% endif %}
-                {% endwith %}
+                <div class="stat-item">
+                    <span class="stat-number">{% if current_user.role|lower == 'admin' %}{{ pending_count|default(0)
+                        }}{% else %}--{% endif %}</span>
+                    <span class="stat-label">تنبيهات</span>
+                </div>
             </div>
 
-            <div style="padding-bottom: 100px;">
-                {% block content %}{% endblock %}
+            <!-- مربع البحث (Search Box) -->
+            <div class="search-box">
+                <input type="text" placeholder="ابحث في المنصة...">
             </div>
-        </main>
+        </div>
 
-        <!-- Reorganized Bottom Navigation -->
-        {% if current_user.is_authenticated %}
-        <nav class="bottom-nav-v2 card">
-            <a href="{{ url_for('main.dashboard') }}" class="nav-link-v2">
-                <i class="fas fa-home"></i>
-                <span>الرئيسية</span>
+        <nav class="nav-menu">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.dashboard') }}"
+                class="nav-item {{ 'active' if request.endpoint == 'main.dashboard' }}">
+                <i class="fas fa-home"></i> <span>الرئيسية</span>
             </a>
 
             {% if current_user.role|lower == 'admin' %}
-            <a href="{{ url_for('main.admin_pending_users') }}" class="nav-link-v2">
-                <i class="fas fa-clock"></i>
-                <span>الطلبات</span>
+            <a href="{{ url_for('main.admin_students') }}" class="nav-item">
+                <i class="fas fa-user-graduate"></i> <span>الطلاب</span>
             </a>
-            <a href="{{ url_for('main.admin_students') }}" class="nav-link-v2">
-                <i class="fas fa-user-graduate"></i>
-                <span>الطلاب</span>
+            <a href="{{ url_for('main.admin_courses') }}" class="nav-item">
+                <i class="fas fa-book"></i> <span>المواد</span>
             </a>
-            <a href="{{ url_for('main.admin_settings') }}" class="nav-link-v2">
-                <i class="fas fa-sliders-h"></i>
-                <span>الإعدادات</span>
+            <a href="{{ url_for('main.admin_settings') }}" class="nav-item">
+                <i class="fas fa-cogs"></i> <span>الإعدادات</span>
             </a>
             {% else %}
-            <a href="{{ url_for('main.index') }}" class="nav-link-v2">
-                <i class="fas fa-newspaper"></i>
-                <span>الأخبار</span>
+            <a href="{{ url_for('main.index') }}" class="nav-item">
+                <i class="fas fa-newspaper"></i> <span>النشرات</span>
             </a>
-            <a href="{{ url_for('main.friends') }}" class="nav-link-v2">
-                <i class="fas fa-users"></i>
-                <span>الزملاء</span>
+            <a href="{{ url_for('main.friends') }}" class="nav-item">
+                <i class="fas fa-users"></i> <span>الزملاء</span>
             </a>
-            <a href="{{ url_for('main.profile') }}" class="nav-link-v2">
-                <i class="fas fa-user-circle"></i>
-                <span>حسابي</span>
+            <a href="{{ url_for('main.profile') }}" class="nav-item">
+                <i class="fas fa-id-card"></i> <span>ملفي الشخصي</span>
+            </a>
+            {% endif %}
+
+            <a href="{{ url_for('main.logout') }}" class="logout-btn-sidebar" style="margin-top: 2rem;">
+                <i class="fas fa-sign-out-alt"></i> <span>تسجيل الخروج</span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('main.login') }}" class="nav-item">
+                <i class="fas fa-sign-in-alt"></i> <span>دخول</span>
             </a>
             {% endif %}
         </nav>
-        {% endif %}
     </div>
+    {% endif %}
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script>
-        // Theme Toggle Logic
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const target = current === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', target);
-            localStorage.setItem('theme', target);
-            updateThemeIcon();
-        }
+    <!-- Main Content Area -->
+    <main class="main-content" {% if request.endpoint in ['main.login', 'main.register' , 'main.splash' ]
+        %}style="margin-right:0;" {% endif %}>
+        {% if request.endpoint not in ['main.login', 'main.register', 'main.splash'] %}
+        <header class="mobile-header card">
+            <button class="menu-toggle-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div style="font-weight: 900; color: var(--sky-primary); font-size: 1.2rem;">{{ settings.system_name }}
+            </div>
+        </header>
+        {% endif %}
 
-        function updateThemeIcon() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const icon = document.querySelector('#theme-toggle i');
-            if (current === 'dark') {
-                icon.className = 'fas fa-sun';
-            } else {
-                icon.className = 'fas fa-moon';
-            }
-        }
-        updateThemeIcon();
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} card animate-slide-up">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
 
-        // Navigation Active State
-        const currentPath = window.location.pathname;
-        document.querySelectorAll('.nav-link-v2').forEach(item => {
-            if (item.getAttribute('href') === currentPath) {
-                item.style.color = 'var(--p-primary)';
-                item.style.transform = 'scale(1.1)';
-            }
-        });
-    </script>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Floating Dark Mode Toggle -->
+    <button class="dark-mode-toggle" title="تبديل الوضع">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=20.0"></script>
 </body>
 
 </html>
