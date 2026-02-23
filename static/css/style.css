@@ -1,30 +1,24 @@
 /* Base Styles & Premium Design System */
 :root {
-    /* Premium Blue Palette (Vibrant) */
+    /* Premium Blue Palette (Vibrant & Solid) */
     --p-primary: #2563eb;
     --p-secondary: #3b82f6;
     --p-accent: #0ea5e9;
-    --p-bg: #f8fafc;
-    --p-card-bg: rgba(255, 255, 255, 0.75);
-    --p-glass-bg: rgba(255, 255, 255, 0.4);
+    --p-bg: #f1f5f9;
+    /* Solid base */
+    --p-card-bg: #ffffff;
+    /* Solid White cards for better contrast */
+    --p-glass-bg: rgba(255, 255, 255, 0.9);
     --p-text: #0f172a;
-    --p-text-muted: #475569;
-    --p-border: rgba(255, 255, 255, 0.5);
-    --p-glass-blur: 25px;
+    --p-text-muted: #64748b;
+    --p-border: #e2e8f0;
+    --p-glass-blur: 10px;
 
     --grad-main: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-    --shadow-premium: 0 20px 40px -12px rgba(37, 99, 235, 0.12);
+    --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-    /* Sidebar Variables — ABSOLUTELY 0 to prevent layout gaps */
     --sidebar-width: 0px !important;
-    --header-height: 70px;
-    --white: #ffffff;
-    --danger: #ef4444;
-
-    /* Legacy compatibility */
-    --primary-color: var(--p-primary);
-    --secondary-color: var(--p-secondary);
-    --background-color: var(--p-bg);
+    --header-height: 80px;
 }
 
 /* Premium Deep Blue Dark Mode */
@@ -883,36 +877,33 @@ body {
 .header-actions {
     display: flex !important;
     flex-direction: row !important;
+    /* ABSOLUTE ROW */
     align-items: center !important;
     justify-content: flex-end !important;
     gap: 12px !important;
-    margin-right: auto !important;
-    /* Push to the opposite side if needed */
 }
 
 .header-action-btn {
-    background: var(--p-glass-bg);
-    border: 1px solid var(--p-border);
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 14px;
+    border-radius: 12px;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    color: var(--p-primary);
+    color: var(--p-text);
     text-decoration: none;
-    font-size: 20px;
-    /* Slightly larger icons */
+    font-size: 18px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    /* Subtle shadow on button */
+    transition: all 0.2s;
 }
 
 .header-action-btn:hover {
     background: var(--p-primary);
     color: white;
     border-color: var(--p-primary);
+    transform: translateY(-2px);
 }
 
 /* Search Box (Modern) */
