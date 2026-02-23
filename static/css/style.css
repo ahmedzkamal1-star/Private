@@ -48,20 +48,23 @@ body {
     min-height: 100vh;
     transition: background-color 0.4s ease, color 0.4s ease;
     overflow-x: hidden;
-    position: relative;
 }
 
-/* Global Mesh Background */
+[data-theme='dark'] body {
+    background-color: #030712 !important;
+    color: #f1f5f9 !important;
+}
+
+/* Global Mesh Background — MUST BE z-index: 0, body has no position so it goes behind content */
 .mesh-background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-    /* Ensure it's behind content */
+    z-index: 0;
     filter: blur(100px);
-    opacity: 0.7;
+    opacity: 0.6;
     pointer-events: none;
     transition: opacity 0.5s ease;
 }
@@ -118,11 +121,11 @@ body {
     }
 }
 
-/* Container for all page content to sit above background */
+/* Container for all page content — NO z-index set here to avoid trapping background */
 .app-viewport {
     position: relative;
-    z-index: 10;
     min-height: 100vh;
+    /* z-index intentionally NOT set — prevents stacking context that hides mesh */
 }
 
 /* Layout */

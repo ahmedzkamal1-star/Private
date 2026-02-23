@@ -54,9 +54,25 @@ def migrate():
     except Exception as e:
         print(f"Error creating tables: {e}")
 
+    # Remove test accounts (code = 'test' or full_name = 'test')
+    print("Looking for test accounts to remove...")
+    try:
+        cursor.execute("SELECT id, code, full_name FROM user WHERE LOWER(code) = 'test' OR LOWER(full_name) = 'test'")
+        test_accounts = cursor.fetchall()
+        if test_accounts:
+            for acc in test_accounts:
+                print(f"  Removing: ID={acc[0]}, code={acc[1]}, name={acc[2]}")
+                cursor.execute("DELETE FROM user WHERE id = ?", (acc[0],))
+            print(f"Removed {len(test_accounts)} test account(s).")
+        else:
+            print("No test accounts found.")
+    except Exception as e:
+        print(f"Error removing test accounts: {e}")
+
     conn.commit()
     conn.close()
     print("Migration complete.")
+
 
 if __name__ == '__main__':
     migrate()

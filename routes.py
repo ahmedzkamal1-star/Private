@@ -323,12 +323,18 @@ def admin_moderators():
         flash('Access denied.', 'danger')
         return redirect(url_for('main.dashboard'))
     
-    # Super Admin sees everyone
+    # Super Admin (123456) sees ALL admins in the system
     if current_user.code == '123456':
-        moderators = User.query.filter_by(role='admin').all()
+        moderators = User.query.filter(
+            User.role == 'admin',
+            User.code != 'test'  # exclude test accounts
+        ).all()
     else:
-        # Normal admins see only those they appointed
-        moderators = User.query.filter_by(role='admin', created_by_id=current_user.id).all()
+        # Each admin ONLY sees the moderators they personally appointed
+        moderators = User.query.filter_by(
+            role='admin',
+            created_by_id=current_user.id
+        ).all()
         
     return render_template('admin_moderators.html', moderators=moderators)
 
