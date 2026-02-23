@@ -1099,18 +1099,19 @@ body {
 
 /* Modern Form Styles (for Settings) */
 .settings-group {
-    background: white;
+    background: var(--p-card-bg);
+    backdrop-filter: blur(var(--p-glass-blur));
     padding: 24px;
     border-radius: 20px;
     margin: 0 20px 20px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--p-border);
+    box-shadow: var(--shadow-premium);
 }
 
 .settings-group h3 {
     font-size: 16px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--p-text);
     margin-bottom: 20px;
 }
 
@@ -1121,7 +1122,7 @@ body {
 .form-field-v2 label {
     display: block;
     font-size: 13px;
-    color: #64748b;
+    color: var(--p-text-muted);
     margin-bottom: 8px;
     font-weight: 700;
 }
@@ -1131,20 +1132,20 @@ body {
 .form-field-v2 input[type="password"] {
     width: 100%;
     padding: 14px 18px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--p-glass-bg);
+    border: 1px solid var(--p-border);
     border-radius: 14px;
     font-size: 15px;
-    color: #1e293b;
+    color: var(--p-text);
     outline: none;
     transition: 0.3s;
     box-sizing: border-box;
 }
 
 .form-field-v2 input:focus {
-    border-color: var(--primary-color);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+    border-color: var(--p-primary);
+    background: var(--p-card-bg);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 .check-field-v2 {
@@ -1229,44 +1230,45 @@ body {
     height: 100px;
 }
 
-/* Adjustments for Desktop */
+/* Adjustments for Desktop - No Sidebar Margins */
 @media (min-width: 992px) {
 
     .header,
     .bottom-nav-v2 {
-        padding-right: var(--sidebar-width);
+        padding-right: 0;
     }
 
     .app-content-minimal {
-        margin-right: var(--sidebar-width);
+        margin-right: 0;
     }
 }
 
 /* === Dahih v2 - Modern Premium Theme === */
 .main-container-v2 {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: var(--p-card-bg);
+    backdrop-filter: blur(var(--p-glass-blur));
     border-radius: 30px;
     padding: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-premium);
     margin: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--p-border);
 }
 
 .stat-icon-dahih {
     width: 45px;
     height: 45px;
-    background: #e0e7ff;
-    border-radius: 15px;
+    background: var(--p-glass-bg);
+    border: 1px solid var(--p-border);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
+    color: var(--p-primary);
 }
 
 .stat-icon-dahih i {
     font-size: 22px;
-    color: #667eea;
+    color: var(--p-primary);
 }
 
 .stat-badge-dahih {
@@ -1286,9 +1288,10 @@ body {
     align-items: center;
     gap: 15px;
     padding: 15px;
-    background: white;
+    background: var(--p-card-bg);
+    backdrop-filter: blur(var(--p-glass-blur));
     border-radius: 18px;
-    border: 1px solid #eef2f6;
+    border: 1px solid var(--p-border);
     transition: 0.3s;
     text-decoration: none;
     color: inherit;
@@ -1296,7 +1299,7 @@ body {
 
 .request-item-dahih:hover {
     transform: translateX(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-premium);
 }
 
 .student-avatar-dahih {
@@ -1318,12 +1321,12 @@ body {
 
 .student-name-dahih {
     font-weight: 700;
-    color: #1e293b;
+    color: var(--p-text);
     margin-bottom: 2px;
 }
 
 .student-meta-dahih {
-    color: #64748b;
+    color: var(--p-text-muted);
     font-size: 12px;
 }
 
@@ -1342,10 +1345,11 @@ body {
 /* Messages Preview Dahih */
 .messages-preview-dahih {
     margin-top: 20px;
-    background: white;
+    background: var(--p-card-bg);
+    backdrop-filter: blur(var(--p-glass-blur));
     border-radius: 25px;
     padding: 20px;
-    border: 1px solid #e0e7ff;
+    border: 1px solid var(--p-border);
 }
 
 .message-item-dahih {
@@ -1353,7 +1357,7 @@ body {
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: #f8fafc;
+    background: var(--p-glass-bg);
     border-radius: 16px;
     margin-bottom: 10px;
     transition: 0.3s;
@@ -1362,18 +1366,18 @@ body {
 }
 
 .message-item-dahih:hover {
-    background: #f1f5f9;
+    filter: brightness(0.95);
 }
 
 .message-icon-dahih {
     width: 40px;
     height: 40px;
-    background: white;
+    background: var(--p-card-bg);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary-color);
+    color: var(--p-primary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
@@ -1383,18 +1387,18 @@ body {
 
 .message-sender-dahih {
     font-weight: 700;
-    color: #1e293b;
+    color: var(--p-text);
     font-size: 14px;
 }
 
 .message-text-dahih {
     font-size: 12px;
-    color: #64748b;
+    color: var(--p-text-muted);
 }
 
 .message-time-dahih {
     font-size: 10px;
-    color: #94a3b8;
+    color: var(--p-text-muted);
 }
 
 /* === Pomodoro Premium System === */
@@ -1442,12 +1446,14 @@ body {
 }
 
 .pomo-content-dahih {
-    background: white;
+    background: var(--p-card-bg);
+    backdrop-filter: blur(var(--p-glass-blur));
     padding: 30px;
     border-radius: 30px;
     width: 300px;
     text-align: center;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-premium);
+    border: 1px solid var(--p-border);
 }
 
 .pomo-header-v2 {
