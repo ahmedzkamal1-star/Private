@@ -40,6 +40,16 @@
             {{ post.content }}
         </div>
 
+        {% if post.pdf_filename %}
+        <div style="margin-bottom: 1.5rem;">
+            <a href="{{ url_for('main.uploaded_file', filename=post.pdf_filename) }}" target="_blank"
+                class="premium-btn"
+                style="text-decoration: none; display: inline-flex; width: auto; padding: 0.6rem 1.5rem; gap: 8px; font-size: 0.9rem;">
+                <i class="fas fa-file-pdf" style="color: #ef4444;"></i> فتح / تحميل الملف المرفق
+            </a>
+        </div>
+        {% endif %}
+
         <div class="post-footer"
             style="padding-top: 1rem; border-top: 1px solid #f1f5f9; display: flex; gap: 1.5rem; align-items: center;">
             {% if current_user.is_authenticated and current_user.role == 'student' %}

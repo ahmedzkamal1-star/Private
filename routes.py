@@ -872,7 +872,17 @@ def admin_posts():
                 file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
                 image_filename = filename
         
-        new_post = HomePost(title=title, content=content, image_filename=image_filename)
+        pdf_filename = None
+        if 'pdf_file' in request.files:
+            file = request.files['pdf_file']
+            if file and file.filename != '':
+                import uuid
+                filename = secure_filename(file.filename)
+                filename = f"{uuid.uuid4().hex}_{filename}"
+                file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                pdf_filename = filename
+        
+        new_post = HomePost(title=title, content=content, image_filename=image_filename, pdf_filename=pdf_filename)
         db.session.add(new_post)
         db.session.commit()
         flash('تم نشر الخبر بنجاح على الصفحة الرئيسية.', 'success')

@@ -140,7 +140,8 @@ class HomePost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    image_filename = db.Column(db.String(255)) # Attachment for announcements
+    image_filename = db.Column(db.String(255)) # Image attachment
+    pdf_filename = db.Column(db.String(255))   # PDF attachment
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships

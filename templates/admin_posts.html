@@ -11,7 +11,7 @@
     </div>
 
     <div class="settings-group" style="margin: 0 0 30px 0; padding: 25px;">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" action="{{ url_for('main.admin_posts') }}" enctype="multipart/form-data">
             <div class="form-field-v2">
                 <label>العنوان</label>
                 <input type="text" name="title" required placeholder="مثلاً: شيت النهاردة الجديد">
@@ -25,6 +25,11 @@
             <div class="form-field-v2">
                 <label><i class="fas fa-image" style="margin-left: 5px;"></i>صورة (اختياري)</label>
                 <input type="file" name="image_file" accept="image/*" style="background: white; padding: 10px;">
+            </div>
+            <div class="form-field-v2">
+                <label><i class="fas fa-file-pdf" style="margin-left: 5px; color: #ef4444;"></i>ملف PDF
+                    (اختياري)</label>
+                <input type="file" name="pdf_file" accept=".pdf" style="background: white; padding: 10px;">
             </div>
             <button type="submit" class="save-btn-v2" style="width: 100%; margin: 10px 0 0 0;">🚀 نشر الخبر
                 الآن</button>
