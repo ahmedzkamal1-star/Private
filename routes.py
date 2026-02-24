@@ -134,8 +134,8 @@ def dashboard():
 @main.route('/view_pdf/<filename>')
 @login_required
 def view_pdf(filename):
-    # This route will serve the pdf viewer page
-    return render_template('view_pdf.html', filename=filename)
+    # Redirect directly to the file - most reliable across all devices
+    return redirect(url_for('main.uploaded_file', filename=filename))
 
 @main.route('/exam/<int:exam_id>')
 @login_required

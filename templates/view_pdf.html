@@ -133,7 +133,7 @@
         document.getElementById('pdf-viewer-wrapper').innerHTML =
             '<div style="text-align:center; padding: 4rem; color: white;">' +
             '<i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f59e0b; display: block; margin-bottom: 1rem;"></i>' +
-            '<p style="font-size: 1.1rem;">تعذر عرض الملف في المتصفح. <br><a href="{{ url_for(\'main.uploaded_file\', filename=filename) }}" target="_blank" style="color: var(--sky-primary); font-weight: 800;">اضغط هنا لتحميله مباشرة</a></p>' +
+            '<p style="font-size: 1.1rem;">تعذر عرض الملف في المتصفح. <br><a href="' + url + '" target="_blank" style="color: #63b3ed; font-weight: 800;">اضغط هنا لتحميله مباشرة</a></p>' +
             '</div>';
     });
 
