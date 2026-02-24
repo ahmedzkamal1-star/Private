@@ -30,12 +30,18 @@
                 <div style="position: absolute; bottom: 5px; right: 5px; width: 30px; height: 30px; background: #10b981; border: 4px solid var(--card-bg); border-radius: 50%;"
                     title="متصل الآن"></div>
             </div>
-            <h2 style="margin: 0; color: var(--text-primary); font-weight: 900; font-size: 1.8rem;">{{ user.full_name }}
+            <h2
+                style="margin: 0; color: var(--text-primary); font-weight: 900; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                {{ user.full_name }}
+                {% if user.points >= 500 %}
+                <i class="fas fa-crown" style="color: #ffd700; font-size: 1.2rem;" title="Gold Member"></i>
+                {% endif %}
             </h2>
             <div
                 style="display: inline-block; margin-top: 8px; padding: 6px 18px; background: var(--sky-light); color: var(--sky-primary); border-radius: 50px; font-weight: 800; font-size: 0.85rem;">
-                <i class="fas fa-certificate" style="margin-left: 5px;"></i>
-                {{ 'مدير النظام' if user.role == 'admin' else 'طالب دحيح' }}
+                <i class="fas fa-star" style="margin-left: 5px; color: #f59e0b;"></i>
+                {{ user.points }} نقطة
+                {% if user.points >= 500 %} | <span style="color: #d4af37;">عضو ذهبي 🏆</span> {% endif %}
             </div>
         </div>
 

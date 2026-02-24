@@ -58,13 +58,17 @@ def like_post(post_id):
     existing_like = PostLike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
     if existing_like:
         db.session.delete(existing_like)
-        db.session.commit()
-        return {"status": "unliked", "count": PostLike.query.filter_by(post_id=post_id).count()}
+        status = 'unliked'
+        # Optional: remove points? Better to leave them to avoid frustration
+    else:
+        new_like = PostLike(post_id=post_id, user_id=current_user.id)
+        db.session.add(new_like)
+        status = 'liked'
+        # Reward points for liking (+5)
+        current_user.points += 5
     
-    new_like = PostLike(post_id=post_id, user_id=current_user.id)
-    db.session.add(new_like)
     db.session.commit()
-    return {"status": "liked", "count": PostLike.query.filter_by(post_id=post_id).count()}
+    return jsonify({'status': status, 'count': PostLike.query.filter_by(post_id=post_id).count()})
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -158,37 +162,34 @@ def view_exam(exam_id):
     
     return render_template('view_exam.html', exam=exam, questions=questions_list)
 
-@main.route('/exam/<int:exam_id>/submit', methods=['POST'])
+@main.route('/submit_exam/<int:exam_id>', methods=['POST'])
 @login_required
 def submit_exam(exam_id):
+    import json
     exam = Exam.query.get_or_404(exam_id)
-    data = request.get_json()
-    answers = data.get('answers', {})
+    questions = json.loads(exam.questions) if exam.questions else []
     
-    try:
-        original_questions = json.loads(exam.questions)
-    except:
-        return {"success": False, "message": "Error parsing questions"}, 400
-        
     score = 0
-    total = len(original_questions)
+    total = len(questions)
     
-    for q in original_questions:
-        q_id = str(q.get('id'))
-        user_ans = str(answers.get(q_id, '')).strip().lower()
-        correct_ans = str(q.get('answer', '')).strip().lower()
-        
-        if user_ans == correct_ans:
+    for i, q in enumerate(questions):
+        answer = request.form.get(f'q{i}')
+        if answer == q.get('correct'):
             score += 1
             
+    final_score = (score / total * 100) if total > 0 else 0
+    
     # Save result
-    result = ExamResult(user_id=current_user.id, exam_id=exam.id, score=score, total_questions=total)
+    result = ExamResult(user_id=current_user.id, exam_id=exam.id, score=final_score, total_questions=total)
     db.session.add(result)
+    
+    # Reward points for passing (score >= 50%)
+    if final_score >= 50:
+        current_user.points += 50
+        flash('ممتاز! حصلت على 50 نقطة لاجتيازك الامتحان بنجاح. 🚀', 'success')
+    
     db.session.commit()
-    
-    log_activity("أداء امتحان", f"أتم الطالب {current_user.full_name} امتحان: {exam.title} بنتيجة {score}/{total}")
-    
-    return {"success": True, "score": score, "total": total}
+    return redirect(url_for('main.exam_result', result_id=result.id))
 
 @main.route('/admin/exam/<int:exam_id>/results')
 @login_required
@@ -237,19 +238,20 @@ def secure_reset():
 @main.route('/enroll/<int:course_id>')
 @login_required
 def enroll(course_id):
-    if current_user.role != 'student':
-        flash('Only students can enroll.', 'warning')
+    # Check if already enrolled
+    existing = Enrollment.query.filter_by(student_id=current_user.id, course_id=course_id).first()
+    if existing:
+        flash('أنت مسجل بالفعل في هذه المادة.', 'info')
         return redirect(url_for('main.dashboard'))
         
-    existing = Enrollment.query.filter_by(student_id=current_user.id, course_id=course_id).first()
-    if not existing:
-        enrollment = Enrollment(student_id=current_user.id, course_id=course_id)
-        db.session.add(enrollment)
-        db.session.commit()
-        flash('Enrolled successfully!', 'success')
-    else:
-        flash('Already enrolled.', 'info')
-        
+    enrollment = Enrollment(student_id=current_user.id, course_id=course_id)
+    db.session.add(enrollment)
+    
+    # Reward points for enrollment (+20)
+    current_user.points += 20
+    
+    db.session.commit()
+    flash('تم التسجيل في المادة بنجاح! حصلت على 20 نقطة. 🚀', 'success')
     return redirect(url_for('main.dashboard'))
 
 @main.route('/friends', methods=['GET', 'POST'])

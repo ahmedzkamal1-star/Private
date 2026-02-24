@@ -11,9 +11,16 @@
         {% if current_user.gender == 'female' %}✨{% else %}🚀{% endif %}
     </div>
     <div>
-        <h2 style="margin: 0; color: var(--text-primary); font-weight: 900;">
+        <h2
+            style="margin: 0; color: var(--text-primary); font-weight: 900; display: flex; align-items: center; gap: 10px;">
             أهلاً بك يا {% if current_user.gender == 'female' %}دحيحة{% else %}دحيح{% endif %} {{
             current_user.full_name.split()[0] if current_user.full_name else 'المجتهد' }}
+            {% if current_user.points >= 500 %}
+            <span
+                style="font-size: 0.7rem; background: linear-gradient(45deg, #ffd700, #ff8c00); color: white; padding: 4px 10px; border-radius: 50px; box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4); animation: pulse 2s infinite;">
+                <i class="fas fa-crown"></i> GOLD MEMBER
+            </span>
+            {% endif %}
         </h2>
         <p style="margin: 5px 0 0 0; opacity: 0.8; font-weight: 600;">جاهز لاستكمال رحلة النجاح اليوم؟</p>
     </div>
@@ -30,10 +37,16 @@
             <i class="fas fa-graduation-cap"></i>
         </div>
     </div>
-    <div class="card stat-card-v2" style="--sky-primary: #f59e0b;">
+    <div class="card stat-card-v2" style="--sky-primary: #f59e0b; position: relative; overflow: hidden;">
         <div>
             <div class="stat-label-v2">نقاطي الحالية</div>
-            <div class="stat-value-v2" style="font-family: 'Outfit';">120</div>
+            <div class="stat-value-v2" style="font-family: 'Outfit';">{{ current_user.points }}</div>
+            <div style="display: flex; gap: 3px; margin-top: 5px; color: #f59e0b; font-size: 0.8rem;">
+                {% set stars = (current_user.points // 100) %}
+                {% if stars > 5 %}{% set stars = 5 %}{% endif %}
+                {% for i in range(stars) %}<i class="fas fa-star"></i>{% endfor %}
+                {% for i in range(5 - stars) %}<i class="far fa-star" style="opacity: 0.3;"></i>{% endfor %}
+            </div>
         </div>
         <div class="stat-icon-v2" style="margin-right: auto; color: #f59e0b; font-size: 2rem;">
             <i class="fas fa-star"></i>

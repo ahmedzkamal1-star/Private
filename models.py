@@ -26,6 +26,9 @@ class User(UserMixin, db.Model):
     # Gender for personalized greetings
     gender = db.Column(db.String(10), default='male') # 'male' or 'female'
     
+    # Gamification: Points system
+    points = db.Column(db.Integer, default=0)
+    
     # Relationships
     enrollments = db.relationship('Enrollment', backref='student', lazy=True, cascade="all, delete-orphan")
     
