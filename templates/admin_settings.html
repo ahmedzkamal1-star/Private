@@ -9,7 +9,7 @@
         <h3><i class="fas fa-sliders-h" style="margin-left: 10px; color: var(--sky-primary);"></i> إعدادات النظام</h3>
     </div>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <!-- Basic Info -->
         <div class="card" style="border-right: 5px solid var(--sky-primary);">
             <h3 style="color: var(--sky-primary); margin-bottom: 1.5rem;">🔹 المعلومات الأساسية</h3>
@@ -51,6 +51,24 @@
             </div>
             <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary);">* وضع الصيانة يمنع وصول
                 الطلاب للنظام مؤقتاً.</p>
+        </div>
+
+        <!-- Platform Schedule -->
+        <div class="card" style="border-right: 5px solid var(--sky-secondary);">
+            <h3 style="color: var(--sky-secondary); margin-bottom: 1.5rem;">📅 الجدول الدراسي العام</h3>
+            <div class="form-field-v2">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700;">رفع ملف الجدول (صورة أو
+                    PDF)</label>
+                <input type="file" name="schedule_file" accept=".pdf,image/*"
+                    style="width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary);">
+            </div>
+            {% if settings.schedule_filename %}
+            <div style="margin-top: 15px; font-size: 0.9rem;">
+                <i class="fas fa-file-pdf" style="margin-left: 5px; color: var(--sky-primary);"></i>
+                الجدول الحالي: <a href="{{ url_for('static', filename='uploads/' + settings.schedule_filename) }}"
+                    target="_blank" style="color: var(--sky-primary); font-weight: 700;">عرض الملف</a>
+            </div>
+            {% endif %}
         </div>
 
         <!-- Security -->

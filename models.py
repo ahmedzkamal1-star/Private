@@ -112,6 +112,7 @@ class SystemSettings(db.Model):
     contact_phone = db.Column(db.String(20))
     allow_registration = db.Column(db.Boolean, default=True)
     maintenance_mode = db.Column(db.Boolean, default=False)
+    schedule_filename = db.Column(db.String(255)) # Platform-wide schedule file
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -133,6 +134,7 @@ class HomePost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    image_filename = db.Column(db.String(255)) # Attachment for announcements
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships

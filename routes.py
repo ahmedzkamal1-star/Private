@@ -772,6 +772,17 @@ def admin_settings():
             current_user.master_key = new_master
             flash('تم تحديث كود الأمان بنجاح.', 'success')
             
+        # Schedule Update
+        if 'schedule_file' in request.files:
+            file = request.files['schedule_file']
+            if file and file.filename != '':
+                import uuid
+                filename = secure_filename(file.filename)
+                filename = f"schedule_{uuid.uuid4().hex[:8]}_{filename}"
+                file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                settings.schedule_filename = filename
+                flash('تم رفع الجدول الدراسي بنجاح.', 'success')
+
         db.session.commit()
         flash('تم تحديث إعدادات النظام بنجاح!', 'success')
         return redirect(url_for('main.admin_settings'))

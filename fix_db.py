@@ -27,6 +27,20 @@ def fix_database():
             except sqlite3.OperationalError:
                 pass # Already exists
         
+        # 1.1 Add missing columns to 'home_post' table
+        try:
+            cursor.execute("ALTER TABLE home_post ADD COLUMN image_filename TEXT")
+            print("Successfully added 'image_filename' column to 'home_post' table.")
+        except sqlite3.OperationalError:
+            pass # Already exists
+
+        # 1.2 Add missing columns to 'system_settings' table
+        try:
+            cursor.execute("ALTER TABLE system_settings ADD COLUMN schedule_filename TEXT")
+            print("Successfully added 'schedule_filename' column to 'system_settings' table.")
+        except sqlite3.OperationalError:
+            pass # Already exists
+
         # 2. Ensure SystemSettings entry
         try:
             cursor.execute("SELECT id FROM system_settings LIMIT 1")
