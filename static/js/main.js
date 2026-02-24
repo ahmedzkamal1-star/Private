@@ -2,16 +2,12 @@
 // ===== إدارة Dark Mode والواجهة =====
 
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. التحقق من وجود الوضع المظلم محفوظ مسبقاً
-    const darkMode = localStorage.getItem('darkMode') === 'enabled';
-    if (darkMode) {
-        document.body.classList.add('dark-mode');
-        document.documentElement.setAttribute('data-theme', 'dark');
-        updateDarkModeIcon(true);
-    }
+    // 1. التحقق من وجود الوضع المختار محفوظ مسبقاً
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
 
-    // 2. إعداد زر Dark Mode
-    setupDarkModeToggle();
+    // 2. إعداد زر تبديل الأوضاع
+    setupThemeToggle();
 
     // 3. تفعيل القائمة الجانبية للجوال
     setupMobileSidebar();
@@ -20,31 +16,43 @@ document.addEventListener('DOMContentLoaded', function () {
     setupActiveNav();
 });
 
-// دالة إعداد زر Dark Mode
-function setupDarkModeToggle() {
+// دالة تطبيق السمة
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.classList.remove('dark-mode'); // Clean up old class approach
+
+    if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+
+    localStorage.setItem('theme', theme);
+    updateThemeIcon(theme);
+}
+
+// دالة إعداد زر تبديل السمات (دائري)
+function setupThemeToggle() {
     const toggle = document.querySelector('.dark-mode-toggle');
     if (!toggle) return;
 
     toggle.addEventListener('click', function () {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        let nextTheme = 'light';
 
-        // تحديث السمة في html للتوافق مع CSS
-        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        if (currentTheme === 'light') nextTheme = 'dark';
+        else if (currentTheme === 'dark') nextTheme = 'gold';
+        else nextTheme = 'light';
 
-        // حفظ الحالة في localStorage
-        localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-
-        // تحديث الأيقونة
-        updateDarkModeIcon(isDark);
+        applyTheme(nextTheme);
     });
 }
 
-// دالة تحديث أيقونة Dark Mode
-function updateDarkModeIcon(isDark) {
+// دالة تحديث الأيقونة
+function updateThemeIcon(theme) {
     const icon = document.querySelector('.dark-mode-toggle i');
     if (icon) {
-        icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        if (theme === 'light') icon.className = 'fas fa-sun';
+        else if (theme === 'dark') icon.className = 'fas fa-moon';
+        else if (theme === 'gold') icon.className = 'fas fa-crown';
     }
 }
 
