@@ -89,34 +89,99 @@
     --sky-light: #f3e5ab;
     --sky-dark: #8b6b00;
     --sky-gradient: linear-gradient(135deg, #d4af37, #8b6b00);
+    --gold-shine: linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.3) 50%, transparent 75%);
 }
 
-/* Elegant Gold Mode Refinement */
+/* Artistic Gold Mode Evolution (v33.0) */
 [data-theme='gold'] .card {
     border: 1px solid rgba(212, 175, 55, 0.3);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     animation: goldFloat 8s ease-in-out infinite alternate;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 3D Shine Effect for Cards */
+[data-theme='gold'] .card::after {
+    content: '';
+    position: absolute;
+    top: -150%;
+    left: -150%;
+    width: 300%;
+    height: 300%;
+    background: var(--gold-shine);
+    background-size: 200% 200%;
+    animation: shineFlow 10s linear infinite;
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+@keyframes shineFlow {
+    0% {
+        transform: rotate(45deg) translateY(-50%);
+    }
+
+    100% {
+        transform: rotate(45deg) translateY(50%);
+    }
+}
+
+/* Jeweled Icons */
+[data-theme='gold'] .nav-item i,
+[data-theme='gold'] .stat-icon-v2 i,
+[data-theme='gold'] .contact-icon i {
+    color: #fff8e1;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+    padding: 10px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Liquid Gold Background */
+[data-theme='gold'] .mesh-background {
+    opacity: 0.6;
+    background: #0c0b05;
+    background-image: radial-gradient(at 0% 0%, hsla(45, 100%, 50%, 0.1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(35, 100%, 50%, 0.1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(50, 100%, 50%, 0.1) 0, transparent 50%);
+    animation: liquidGold 15s ease infinite alternate;
+}
+
+@keyframes liquidGold {
+    0% {
+        filter: hue-rotate(0deg) brightness(1);
+    }
+
+    100% {
+        filter: hue-rotate(10deg) brightness(1.2);
+    }
 }
 
 [data-theme='gold'] .stat-value-v2,
 [data-theme='gold'] h1,
 [data-theme='gold'] h2,
 [data-theme='gold'] .stat-label-v2 {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    background: var(--sky-gradient);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #fff8e1 0%, #d4af37 50%, #8b6b00 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-weight: 900;
 }
 
 [data-theme='gold'] .premium-btn {
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
-    border: 1px solid rgba(212, 175, 55, 0.5);
-    background: var(--sky-gradient);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    background: linear-gradient(135deg, #d4af37, #8b6b00);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-[data-theme='gold'] .mesh-background {
-    opacity: 0.4;
+[data-theme='gold'] .premium-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4);
 }
 
 [data-theme='gold'] .blob-1 {
