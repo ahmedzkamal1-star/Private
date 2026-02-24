@@ -745,17 +745,25 @@ def uploaded_file(filename):
     import mimetypes
     directory = current_app.config['UPLOAD_FOLDER']
     
-    # Determine proper content type
+    # Determine proper content type and clean download name
     mime_type, _ = mimetypes.guess_type(filename)
+    download_name = filename
+    
     if not mime_type:
-        if filename.lower().endswith('.pdf') or filename.lower().endswith('pdf'):
+        # Old files saved as "uuid_pdf" or "uuid_jpg" without a dot
+        if filename.lower().endswith('pdf'):
             mime_type = 'application/pdf'
+            download_name = filename + '.pdf' if '.' not in filename else filename
+        elif filename.lower().endswith(('jpg', 'jpeg', 'png', 'gif')):
+            ext = filename.rsplit('_', 1)[-1] if '_' in filename else 'jpg'
+            mime_type = f'image/{ext}'
+            download_name = filename + f'.{ext}' if '.' not in filename else filename
         else:
             mime_type = 'application/octet-stream'
     
     response = send_from_directory(directory, filename)
     response.headers["Content-Type"] = mime_type
-    response.headers["Content-Disposition"] = f"inline; filename=\"{filename}\""
+    response.headers["Content-Disposition"] = f"inline; filename=\"{download_name}\""
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Cache-Control"] = "public, max-age=3600"
     return response
