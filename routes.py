@@ -725,14 +725,14 @@ def admin_view_student_messages(student_id):
         db.session.add(new_msg)
         
         # Mark student's messages as read
-        Message.query.filter_by(sender_id=student.id, recipient_id=None).update({Message.is_read: True})
+        Message.query.filter_by(sender_id=student.id).filter(Message.recipient_id.is_(None)).update({Message.is_read: True})
         
         db.session.commit()
         flash('تم إرسال الرد بنجاح!', 'success')
         return redirect(url_for('main.admin_view_student_messages', student_id=student.id))
 
     messages = Message.query.filter(
-        ((Message.sender_id == student.id) & (Message.recipient_id == None)) |
+        ((Message.sender_id == student.id) & (Message.recipient_id.is_(None))) |
         ((Message.sender_id == current_user.id) & (Message.recipient_id == student.id))
     ).order_by(Message.timestamp.asc()).all()
 
