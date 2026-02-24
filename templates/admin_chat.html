@@ -42,7 +42,8 @@
                 <h3 style="margin-top: 0; color: var(--sky-primary); font-size: 1.1rem; margin-bottom: 1.2rem;">
                     <i class="fas fa-paper-plane" style="margin-left: 8px;"></i>إرسال رسالة جديدة
                 </h3>
-                <form method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+                <form method="POST" action="{{ url_for('main.admin_chat') }}"
+                    style="display: flex; flex-direction: column; gap: 15px;">
                     <div class="form-field-v2">
                         <input type="text" name="subject" required placeholder="الموضوع"
                             style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); outline: none; transition: border-color 0.3s; font-weight: 700;">

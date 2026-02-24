@@ -705,7 +705,7 @@ def admin_messages():
         return redirect(url_for('main.dashboard'))
     
     # Get all students who have sent messages to admin (recipient_id is None)
-    student_ids = db.session.query(Message.sender_id).filter(Message.recipient_id == None).distinct().all()
+    student_ids = db.session.query(Message.sender_id).filter(Message.recipient_id.is_(None)).distinct().all()
     student_ids = [s[0] for s in student_ids]
     students = User.query.filter(User.id.in_(student_ids)).all()
     
