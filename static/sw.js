@@ -2,7 +2,9 @@ const CACHE_NAME = 'al-dahih-v1';
 const ASSETS = [
     '/',
     '/static/css/style.css',
-    '/static/manifest.json'
+    '/static/manifest.json',
+    '/static/images/icon-192.png',
+    '/static/images/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
