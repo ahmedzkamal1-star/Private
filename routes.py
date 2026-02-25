@@ -26,6 +26,17 @@ def log_activity(action, details=None):
         db.session.add(log)
         db.session.commit()
 
+@main.route('/manifest.json')
+def manifest():
+    return send_from_directory(os.path.join(current_app.root_path, 'static'), 'manifest.json')
+
+@main.route('/sw.js')
+def service_worker():
+    response = make_response(send_from_directory(os.path.join(current_app.root_path, 'static'), 'sw.js'))
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
+
 @main.route('/')
 def splash():
     # If the user is already logged in, we might skip the splash, 
