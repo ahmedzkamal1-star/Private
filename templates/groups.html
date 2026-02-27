@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}مجموعات الطلاب - {{ settings.system_name }}{% endblock %}
+
+{% block content %}
+<div class="main-container-v2 animate-fade-in" style="max-width: 900px; margin: 0 auto; padding-bottom: 120px;">
+
+    <div class="card"
+        style="margin-bottom: 2rem; border-bottom: 4px solid var(--sky-primary); text-align: center; padding: 2rem;">
+        <h2 style="color: var(--sky-primary); margin-bottom: 10px;">المجموعات الطلابية</h2>
+        <p style="opacity: 0.8;">تواصل، ناقش، وتعاون مع زملائك في مجموعات متخصصة.</p>
+
+        <button onclick="document.getElementById('create-group-modal').style.display='flex'" class="premium-btn"
+            style="margin-top: 1rem; width: auto; padding: 10px 30px;">
+            <i class="fas fa-plus-circle" style="margin-left: 10px;"></i>
+            إنشاء مجموعة جديدة
+        </button>
+    </div>
+
+    <!-- Groups Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        {% for group in groups %}
+        <div class="card animate-slide-up"
+            style="padding: 1.5rem; display: flex; flex-direction: column; gap: 12px; transition: transform 0.3s ease;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="user-avatar"
+                    style="width: 50px; height: 50px; background: var(--sky-primary); color: white; font-size: 1.2rem;">
+                    {{ group.name[0] }}
+                </div>
+                <div style="flex: 1;">
+                    <h3 style="margin: 0; color: var(--text-primary);">{{ group.name }}</h3>
+                    <small style="color: var(--text-secondary);">{{ group.members|length }} عضو</small>
+                </div>
+            </div>
+
+            <p style="font-size: 0.9rem; color: var(--text-secondary); min-height: 40px;">{{ group.description or 'لا
+                يوجد وصف للمجموعة.' }}</p>
+
+            {% if group.id in user_groups_ids %}
+            <a href="{{ url_for('main.group_chat', group_id=group.id) }}" class="premium-btn"
+                style="text-decoration: none; text-align: center; background: var(--sky-primary);">
+                دخول المحادثة
+            </a>
+            {% else %}
+            <a href="{{ url_for('main.join_group', group_id=group.id) }}" class="premium-btn"
+                style="text-decoration: none; text-align: center; background: white; color: var(--sky-primary); border: 2px solid var(--sky-primary);">
+                انضمام للمجموعة
+            </a>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+            <i class="fas fa-users-slash" style="font-size: 3rem; color: var(--border-color); margin-bottom: 1rem;"></i>
+            <p>لا توجد مجموعات حالياً، كن أول من ينشئ مجموعة!</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Create Group Modal -->
+    <div id="create-group-modal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+        <div class="card animate-pop-in" style="max-width: 500px; width: 100%; padding: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--sky-primary); text-align: center;">إنشاء مجموعة جديدة</h3>
+            <form method="POST">
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700;">اسم المجموعة</label>
+                    <input type="text" name="name" required placeholder="مثال: دفعة 2024 - قسم البرمجة"
+                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary);">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700;">وصف بسيط</label>
+                    <textarea name="description" rows="3" placeholder="عن ماذا تدور هذه المجموعة؟"
+                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary);"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="premium-btn" style="flex: 2;">إنشاء الآن</button>
+                    <button type="button" onclick="document.getElementById('create-group-modal').style.display='none'"
+                        class="premium-btn"
+                        style="flex: 1; background: var(--border-color); color: var(--text-primary);">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}

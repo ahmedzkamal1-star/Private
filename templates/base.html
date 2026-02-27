@@ -108,6 +108,9 @@
                 class="nav-item {{ 'active' if request.endpoint == 'main.friends' }}">
                 <i class="fas fa-users"></i> <span>الزملاء</span>
             </a>
+            <a href="{{ url_for('main.groups') }}" class="nav-item {{ 'active' if request.endpoint == 'main.groups' }}">
+                <i class="fas fa-comments"></i> <span>المجموعات</span>
+            </a>
             <a href="{{ url_for('main.admin_chat') }}"
                 class="nav-item {{ 'active' if request.endpoint == 'main.admin_chat' }}">
                 <i class="fas fa-comments"></i> <span>رسائل المدير</span>
@@ -212,6 +215,11 @@
             class="mobile-nav-item {{ 'active' if request.endpoint == 'main.friends' }}">
             <i class="fas fa-users"></i>
             <span>الزملاء</span>
+        </a>
+        <a href="{{ url_for('main.groups') }}"
+            class="mobile-nav-item {{ 'active' if request.endpoint == 'main.groups' }}">
+            <i class="fas fa-comments"></i>
+            <span>المجموعات</span>
         </a>
         <a href="{{ url_for('main.student_view_schedules') }}"
             class="mobile-nav-item {{ 'active' if request.endpoint == 'main.student_view_schedules' }}">

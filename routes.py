@@ -362,6 +362,75 @@ def private_chat(recipient_id):
 
     return render_template('student_chat.html', recipient=recipient, messages=messages)
 
+@main.route('/groups', methods=['GET', 'POST'])
+@login_required
+def groups():
+    if current_user.role != 'student':
+        return redirect(url_for('main.dashboard'))
+        
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        if name:
+            new_group = ChatGroup(name=name, description=description, created_by_id=current_user.id)
+            db.session.add(new_group)
+            db.session.flush() # Get ID
+            # Creator joins automatically
+            member = GroupMember(user_id=current_user.id, group_id=new_group.id)
+            db.session.add(member)
+            db.session.commit()
+            flash('تم إنشاء المجموعة بنجاح!', 'success')
+            return redirect(url_for('main.group_chat', group_id=new_group.id))
+
+    all_groups = ChatGroup.query.order_by(ChatGroup.timestamp.desc()).all()
+    user_groups_ids = [m.group_id for m in current_user.group_memberships]
+    
+    return render_template('groups.html', groups=all_groups, user_groups_ids=user_groups_ids)
+
+@main.route('/groups/join/<int:group_id>')
+@login_required
+def join_group(group_id):
+    if current_user.role != 'student':
+        return redirect(url_for('main.dashboard'))
+        
+    group = ChatGroup.query.get_or_404(group_id)
+    # Check if already a member
+    exists = GroupMember.query.filter_by(user_id=current_user.id, group_id=group.id).first()
+    if not exists:
+        new_member = GroupMember(user_id=current_user.id, group_id=group.id)
+        db.session.add(new_member)
+        db.session.commit()
+        flash(f'تم انضمامك لمجموعة {group.name}', 'success')
+    
+    return redirect(url_for('main.group_chat', group_id=group.id))
+
+@main.route('/groups/chat/<int:group_id>', methods=['GET', 'POST'])
+@login_required
+def group_chat(group_id):
+    if current_user.role != 'student':
+        return redirect(url_for('main.dashboard'))
+        
+    group = ChatGroup.query.get_or_404(group_id)
+    # Verify membership
+    membership = GroupMember.query.filter_by(user_id=current_user.id, group_id=group.id).first()
+    if not membership:
+        flash('يجب الانضمام للمجموعة أولاً.', 'warning')
+        return redirect(url_for('main.groups'))
+        
+    if request.method == 'POST':
+        body = request.form.get('message')
+        if body:
+            new_msg = GroupMessage(group_id=group.id, sender_id=current_user.id, body=body)
+            db.session.add(new_msg)
+            db.session.commit()
+            return redirect(url_for('main.group_chat', group_id=group.id))
+            
+    messages = GroupMessage.query.filter_by(group_id=group.id).order_by(GroupMessage.timestamp.asc()).all()
+    members_count = GroupMember.query.filter_by(group_id=group.id).count()
+    
+    return render_template('group_chat.html', group=group, messages=messages, members_count=members_count)
+
+
 # --- Admin Routes ---
 
 @main.route('/admin')
