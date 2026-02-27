@@ -37,17 +37,21 @@
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.4);
 
-    /* Ramadan Palette - Festive Layers (Refined v43) */
-    --ramadan-gold: #FFD700;
-    --ramadan-purple: #4A0E4E;
-    --ramadan-teal: #0D3B3B;
-    --ramadan-orange: #E67E22;
-    --ramadan-beige: #FCF3CF;
-    --ramadan-night: #060C1E;
-    --ramadan-star: #FFF9E3;
+    /* Ramadan Palette - Eye Comfort Refined (v44) */
+    --ramadan-gold: #C5A039;
+    /* Muted Champagne Gold */
+    --ramadan-purple: #2D1B33;
+    /* Soft Midnight Purple */
+    --ramadan-teal: #143D3D;
+    --ramadan-orange: #B36B2B;
+    --ramadan-beige: #E6D5B8;
+    --ramadan-night: #0F121C;
+    /* Darker but less "harsh" black */
+    --ramadan-star: #DED6C1;
+    /* Soft cream */
 }
 
-/* ===== Ramadan Mode Override (ALWAYS ON) ===== */
+/* ===== Ramadan Mode Override (PERMANENT & COMFORTABLE) ===== */
 [data-ramadan='enabled'] {
     --sky-primary: var(--ramadan-gold);
     --sky-secondary: var(--ramadan-purple);
@@ -55,7 +59,7 @@
     --sky-gradient: linear-gradient(135deg, var(--ramadan-purple), var(--ramadan-night));
 
     --bg-main: var(--ramadan-night);
-    --bg-sidebar: rgba(6, 12, 30, 0.98);
+    --bg-sidebar: rgba(15, 18, 28, 0.99);
     --text-primary: var(--ramadan-star);
     --text-secondary: var(--ramadan-gold);
     --card-bg: rgba(6, 12, 30, 0.88);
