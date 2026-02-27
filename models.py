@@ -178,30 +178,5 @@ class Schedule(db.Model):
     filename = db.Column(db.String(255)) # Image or PDF
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-class ChatGroup(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(255))
-    created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # Relationships
-    members = db.relationship('GroupMember', backref='group', cascade="all, delete-orphan")
-    messages = db.relationship('GroupMessage', backref='group', cascade="all, delete-orphan")
 
-class GroupMember(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey('chat_group.id'), nullable=False)
-    
-    user = db.relationship('User', backref=db.backref('group_memberships', lazy=True))
-
-class GroupMessage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    group_id = db.Column(db.Integer, db.ForeignKey('chat_group.id'), nullable=False)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    body = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    sender = db.relationship('User', backref=db.backref('group_messages', lazy=True))
 
