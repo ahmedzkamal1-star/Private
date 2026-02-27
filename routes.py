@@ -1034,8 +1034,3 @@ def admin_delete_schedule(sch_id):
     flash('تم حذف الجدول.', 'info')
     return redirect(url_for('main.admin_schedules'))
 
-@main.route('/schedules')
-@login_required
-def schedules():
-    all_schedules = Schedule.query.order_by(Schedule.timestamp.desc()).all()
-    return render_template('schedules.html', schedules=all_schedules)
