@@ -37,32 +37,34 @@
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.4);
 
-    /* Ramadan Palette - Eye Comfort Refined (v44) */
-    --ramadan-gold: #C5A039;
-    /* Muted Champagne Gold */
-    --ramadan-purple: #2D1B33;
-    /* Soft Midnight Purple */
-    --ramadan-teal: #143D3D;
-    --ramadan-orange: #B36B2B;
-    --ramadan-beige: #E6D5B8;
-    --ramadan-night: #0F121C;
-    /* Darker but less "harsh" black */
-    --ramadan-star: #DED6C1;
-    /* Soft cream */
+    /* Ramadan Palette - Midnight Navy Comfort (v45) */
+    --ramadan-gold: #D4AF37;
+    /* Balanced Metallic Gold */
+    --ramadan-purple: #1E2A44;
+    /* Deep Soft Blue instead of Purple */
+    --ramadan-teal: #16213E;
+    --ramadan-orange: #C6721B;
+    --ramadan-beige: #F0E6D2;
+    --ramadan-night: #0A1128;
+    /* Midnight Navy Background */
+    --ramadan-star: #ECECEC;
 }
 
-/* ===== Ramadan Mode Override (PERMANENT & COMFORTABLE) ===== */
+/* ===== Ramadan Mode Override (PERMANENT & ELITE COMFORT) ===== */
 [data-ramadan='enabled'] {
     --sky-primary: var(--ramadan-gold);
     --sky-secondary: var(--ramadan-purple);
     --sky-dark: var(--ramadan-night);
-    --sky-gradient: linear-gradient(135deg, var(--ramadan-purple), var(--ramadan-night));
+    --sky-gradient: linear-gradient(135deg, var(--ramadan-night), var(--ramadan-purple));
 
     --bg-main: var(--ramadan-night);
-    --bg-sidebar: rgba(15, 18, 28, 0.99);
-    --text-primary: var(--ramadan-star);
+    --bg-sidebar: rgba(10, 17, 40, 0.98);
+    --text-primary: var(--ramadan-beige);
     --text-secondary: var(--ramadan-gold);
-    --card-bg: rgba(6, 12, 30, 0.88);
+    --card-bg: rgba(10, 17, 40, 0.94);
+    /* Maximum readability */
+    --border-color: rgba(212, 175, 55, 0.2);
+    --hover-bg: rgba(212, 175, 55, 0.08);
     /* Increased opacity for elite readability */
     --border-color: rgba(255, 215, 0, 0.25);
     --hover-bg: rgba(255, 215, 0, 0.12);

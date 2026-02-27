@@ -165,7 +165,11 @@
     </button>
     {% endif %}
 
-    <script src="{{ url_for('static', filename='js/main.js') }}?v=44.0"></script>
+    <button class="dark-mode-toggle" title="تبديل الوضع">
+        <i class="fas fa-adjust"></i>
+    </button>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=45.0"></script>
     <script>
         // Cleanup old localStorage if present
         localStorage.removeItem('viewMode');
