@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
+    <meta id="viewport-meta" name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>{% block title %}{{ settings.system_name }}{% endblock %}</title>
     <!-- Google Cairo Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=22.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=23.0">
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
 
     <!-- PWA -->
@@ -27,6 +27,11 @@
             const viewMode = localStorage.getItem('viewMode');
             if (viewMode === 'desktop') {
                 document.documentElement.classList.add('desktop-view');
+                // Force fixed viewport for desktop mode - needs to happen after meta tag is parsed
+                window.addEventListener('DOMContentLoaded', () => {
+                    const vp = document.getElementById('viewport-meta');
+                    if (vp) vp.setAttribute('content', 'width=1200');
+                });
             }
         })();
     </script>

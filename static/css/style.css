@@ -782,6 +782,7 @@ body {
 
 /* Responsive Overrides & Desktop View Logic */
 @media (max-width: 1200px) {
+
     /* Standard Mobile Behavior */
     html:not(.desktop-view) .main-content {
         margin-right: 0 !important;
@@ -855,13 +856,15 @@ html.desktop-view .menu-toggle-btn {
 
 /* Portrait Mode Refinements */
 @media (max-width: 600px) {
-    .section-header-v2 h3 {
+    html:not(.desktop-view) .section-header-v2 h3 {
         font-size: 1.1rem;
     }
-    .post-card img {
+
+    html:not(.desktop-view) .post-card img {
         max-height: 350px;
     }
-    .main-container-v2 {
+
+    html:not(.desktop-view) .main-container-v2 {
         padding: 10px;
     }
 }
