@@ -250,7 +250,7 @@ def profile():
 
 @main.route('/schedules')
 @login_required
-def schedules():
+def view_schedules():
     from models import Schedule
     all_schedules = Schedule.query.order_by(Schedule.timestamp.desc()).all()
     return render_template('schedules.html', schedules=all_schedules)
