@@ -821,7 +821,94 @@ body {
         bottom: 110px;
         left: 25px;
     }
+
+    /* Floating Navigation Overrides */
+    html:not(.desktop-view) .mobile-bottom-nav {
+        display: flex;
+        bottom: 25px;
+        left: 20px;
+        right: 20px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 25px;
+        padding: 10px 15px;
+        box-shadow: 0 15px 35px var(--shadow-color);
+        justify-content: space-around;
+        align-items: center;
+        height: 75px;
+    }
+
+    html:not(.desktop-view) .mobile-nav-item {
+        flex: 1;
+        background: transparent;
+        color: var(--text-secondary);
+        border-radius: 18px;
+        padding: 8px 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: none;
+    }
+
+    html:not(.desktop-view) .mobile-nav-item i {
+        font-size: 1.3rem;
+    }
+
+    html:not(.desktop-view) .mobile-nav-item span {
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    html:not(.desktop-view) .mobile-nav-item.active {
+        background: var(--sky-primary);
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 180, 216, 0.4);
+    }
 }
+
+/* Segmented Control Switcher */
+.view-switcher-v2 {
+    display: flex;
+    background: var(--hover-bg);
+    padding: 5px;
+    border-radius: 15px;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.switcher-option {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.switcher-option.active {
+    background: white;
+    color: var(--sky-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .switcher-option.active {
+    background: var(--sky-primary);
+    color: white;
+}
+
 
 /* Forced Desktop View on Mobile */
 html.desktop-view {

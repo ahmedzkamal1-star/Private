@@ -121,13 +121,20 @@
                 <i class="fas fa-fingerprint"></i> <span>ملفي</span>
             </a>
 
-            <!-- View Mode Toggle -->
-            <div class="view-mode-section"
-                style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                <button onclick="toggleViewMode()" class="nav-item"
-                    style="width: 100%; border: none; background: none; cursor: pointer; text-align: right;">
-                    <i class="fas fa-desktop" id="view-icon"></i> <span id="view-text">عرض الكمبيوتر</span>
-                </button>
+            <!-- Premium View Mode Switcher -->
+            <div class="view-mode-container"
+                style="padding: 1rem 0; border-top: 1px solid var(--border-color); margin-top: 1rem;">
+                <label
+                    style="font-size: 0.8rem; font-weight: 800; opacity: 0.7; margin-bottom: 8px; display: block;">وضع
+                    العرض</label>
+                <div class="view-switcher-v2">
+                    <div class="switcher-option" id="mobile-opt" onclick="setViewMode('mobile')">
+                        <i class="fas fa-mobile-alt"></i> هاتف
+                    </div>
+                    <div class="switcher-option" id="desktop-opt" onclick="setViewMode('desktop')">
+                        <i class="fas fa-desktop"></i> كمبيوتر
+                    </div>
+                </div>
             </div>
             {% endif %}
 
@@ -225,34 +232,20 @@
     </script>
     <script src="{{ url_for('static', filename='js/main.js') }}?v=23.0"></script>
     <script>
-        function toggleViewMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('view-icon');
-            const text = document.getElementById('view-text');
+        <script>
+            function setViewMode(mode) {
+            const current = localStorage.getItem('viewMode') || 'mobile';
+            if (current === mode) return;
 
-            if (html.classList.contains('desktop-view')) {
-                html.classList.remove('desktop-view');
-                localStorage.setItem('viewMode', 'mobile');
-                if (icon) icon.className = 'fas fa-desktop';
-                if (text) text.innerText = 'عرض الكمبيوتر';
-                window.location.reload(); // Reload to reset viewport/layout properly
-            } else {
-                html.classList.add('desktop-view');
-                localStorage.setItem('viewMode', 'desktop');
-                if (icon) icon.className = 'fas fa-mobile-alt';
-                if (text) text.innerText = 'عرض الموبايل';
-                window.location.reload();
-            }
+            localStorage.setItem('viewMode', mode);
+            window.location.reload();
         }
 
-        // Initialize button text based on current mode
+        // Initialize Switcher UI
         document.addEventListener('DOMContentLoaded', () => {
-            const icon = document.getElementById('view-icon');
-            const text = document.getElementById('view-text');
-            if (document.documentElement.classList.contains('desktop-view')) {
-                if (icon) icon.className = 'fas fa-mobile-alt';
-                if (text) text.innerText = 'عرض الموبايل';
-            }
+            const mode = localStorage.getItem('viewMode') || 'mobile';
+            const opt = document.getElementById(mode + '-opt');
+            if (opt) opt.classList.add('active');
         });
     </script>
 </body>
