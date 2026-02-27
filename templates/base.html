@@ -165,17 +165,7 @@
     </button>
     {% endif %}
 
-    <button class="dark-mode-toggle" title="تبديل الوضع">
-        <i class="fas fa-moon"></i>
-    </button>
-
-
-
-    <!-- Scripts -->
-    <script>
-        window.userRole = "{{ current_user.role|lower if current_user.is_authenticated else 'guest' }}";
-    </script>
-    <script src="{{ url_for('static', filename='js/main.js') }}?v=42.2"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=44.0"></script>
     <script>
         // Cleanup old localStorage if present
         localStorage.removeItem('viewMode');
