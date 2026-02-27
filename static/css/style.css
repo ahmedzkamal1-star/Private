@@ -777,6 +777,11 @@ body {
     min-height: 100vh;
 }
 
+[data-ramadan='enabled'] .login-page {
+    background: url('../ramadan_bg.png') no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+
 .login-container {
     background: var(--card-bg);
     padding: 3rem;

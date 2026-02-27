@@ -21,8 +21,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // دالة تهيئة وضع رمضان
 function initRamadan() {
-    const isRamadan = localStorage.getItem('ramadanMode') === 'enabled';
-    if (isRamadan) {
+    let ramadanStatus = localStorage.getItem('ramadanMode');
+
+    // التفعيل التلقائي إذا لم يسبق للمستخدم اختيار شيء
+    if (ramadanStatus === null) {
+        ramadanStatus = 'enabled';
+        localStorage.setItem('ramadanMode', 'enabled');
+    }
+
+    if (ramadanStatus === 'enabled') {
         document.documentElement.setAttribute('data-ramadan', 'enabled');
         generateOrnaments();
     }
