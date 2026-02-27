@@ -8,14 +8,26 @@
     <h1 style="color: var(--sky-primary); margin-bottom: 10px; font-weight: 900;">{{ settings.system_name }}</h1>
     <p style="opacity: 0.8; font-weight: 600;">مرحباً بك في ساحة المشاركة الطلابية</p>
 
-    {% if settings.schedule_filename and settings.show_schedule %}
+    {% if settings.show_schedule %}
+    {% set display_sch = None %}
+    {% if latest_schedule %}
+    {% set display_sch = url_for('static', filename='uploads/' + latest_schedule.filename) if latest_schedule.filename
+    else None %}
+    {% set sch_title = latest_schedule.title or 'الجدول الدراسي الجديد' %}
+    {% elif settings.schedule_filename %}
+    {% set display_sch = url_for('main.uploaded_file', filename=settings.schedule_filename) %}
+    {% set sch_title = 'عرض الجدول الدراسي العام' %}
+    {% endif %}
+
+    {% if display_sch %}
     <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-color);">
-        <a href="{{ url_for('main.uploaded_file', filename=settings.schedule_filename) }}" target="_blank"
-            class="premium-btn" style="text-decoration: none; display: inline-flex; width: auto; padding: 0.8rem 2rem;">
+        <a href="{{ display_sch }}" target="_blank" class="premium-btn"
+            style="text-decoration: none; display: inline-flex; width: auto; padding: 0.8rem 2rem;">
             <i class="fas fa-calendar-alt" style="margin-left: 10px;"></i>
-            عرض الجدول الدراسي الجديد
+            {{ sch_title }}
         </a>
     </div>
+    {% endif %}
     {% endif %}
 
     {% if settings.telegram_link or settings.whatsapp_link %}
@@ -169,10 +181,13 @@
 
 <script>
     function toggleLike(postId) {
-        const btn = document.querySelector(`#post-${postId} .like-btn`);
+        const postCard = document.getElementById('post-' + postId);
+        if (!postCard) return;
+
+        const btn = postCard.querySelector('.like-btn');
         const countSpan = btn.querySelector('.like-count');
 
-        fetch(`/like_post/${postId}`, {
+        fetch('/like_post/' + postId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -181,17 +196,20 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'liked') {
-                    btn.style.color = 'var(--danger)';
-                    btn.style.borderColor = 'var(--danger)';
+                    btn.style.color = '#ef4444';
+                    btn.style.borderColor = '#ef4444';
                     btn.classList.add('active');
                 } else {
-                    btn.style.color = '#64748b';
-                    btn.style.borderColor = '#e2e8f0';
+                    btn.style.color = 'var(--text-secondary)';
+                    btn.style.borderColor = 'var(--border-color)';
                     btn.classList.remove('active');
                 }
                 countSpan.innerText = data.count;
             })
-            .catch(err => console.error('Error toggling like:', err));
+            .catch(err => {
+                console.error('Error toggling like:', err);
+                alert('حدث خطأ أثناء محاولة الإعجاب بالمنشور.');
+            });
     }
 </script>
 {% endblock %}

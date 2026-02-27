@@ -51,8 +51,9 @@ def splash():
 
 @main.route('/home')
 def index():
-    from models import HomePost, PostView
+    from models import HomePost, PostView, Schedule
     posts = HomePost.query.order_by(HomePost.timestamp.desc()).all()
+    latest_schedule = Schedule.query.order_by(Schedule.timestamp.desc()).first()
     
     if current_user.is_authenticated and current_user.role == 'student':
         # Track views for each post
@@ -63,7 +64,7 @@ def index():
                 db.session.add(view)
         db.session.commit()
         
-    return render_template('index.html', posts=posts)
+    return render_template('index.html', posts=posts, latest_schedule=latest_schedule)
 
 @main.route('/like_post/<int:post_id>', methods=['POST'])
 @login_required
@@ -422,7 +423,7 @@ def admin_pending_users():
     if current_user.role != 'admin':
         return redirect(url_for('main.dashboard'))
     pending_users = User.query.filter_by(is_approved=False).all()
-    return render_template('admin_pending_users.html', users=pending_users)
+    return render_template('admin_pending.html', pending=pending_users)
 
 @main.route('/admin/approve_user/<int:user_id>/<string:action>')
 @login_required
@@ -719,7 +720,7 @@ def admin_online_users():
     from datetime import timedelta
     five_minutes_ago = datetime.utcnow() - timedelta(minutes=5)
     online_users = User.query.filter(User.last_seen >= five_minutes_ago).all()
-    return render_template('admin_online_users.html', users=online_users)
+    return render_template('admin_online.html', students=online_users)
 
 @main.route('/admin/activity')
 @login_required
@@ -881,7 +882,6 @@ def admin_settings():
         settings.whatsapp_link = request.form.get('whatsapp_link', '').strip()
         settings.allow_registration = 'allow_registration' in request.form
         settings.maintenance_mode = 'maintenance_mode' in request.form
-        settings.show_schedule = 'show_schedule' in request.form
         settings.show_schedule = 'show_schedule' in request.form
         
         # Security Updates for Admin
