@@ -1151,3 +1151,13 @@ def admin_activate_webhook():
 
 @main.route('/admin/test_bot', methods=['POST'])
 @login_required
+def admin_test_bot():
+    if current_user.role != 'admin':
+        return jsonify({'success': False, 'message': 'Unauthorized'})
+        
+    from telegram_utils import send_telegram_notification
+    success = send_telegram_notification("🚀 تجربة ربط البوت من الإعدادات: ناجحة!")
+    if success:
+        return jsonify({'success': True, 'message': 'تم إرسال رسالة تجريبية بنجاح!'})
+    else:
+        return jsonify({'success': False, 'message': 'فشل إرسال الرسالة. تأكد من الرمز وChat ID.'})
