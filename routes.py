@@ -240,6 +240,7 @@ def api_login():
     user = User.query.filter_by(code=code).first()
     if user and user.check_password(password):
         if user.is_frozen:
+            print(f"DEBUG API: Login blocked for {code} - Account frozen")
             if user.freeze_until and user.freeze_until > datetime.utcnow():
                 return jsonify({"error": "Account frozen", "until": user.freeze_until.isoformat()}), 403
             else:
@@ -247,6 +248,7 @@ def api_login():
                 db.session.commit()
                 
         if user.pan_level >= 4:
+            print(f"DEBUG API: Login blocked for {code} - Permanently banned")
             return jsonify({"error": "Account permanently banned"}), 403
             
         # Device Binding (Optional security)
@@ -259,12 +261,14 @@ def api_login():
                 # return jsonify({"error": "Device mismatch"}), 403
             
         login_user(user)
+        print(f"DEBUG API: Login success for {code}")
         return jsonify({
             "status": "success",
             "token": user.enc_key,
             "full_name": user.full_name,
             "role": user.role
         })
+    print(f"DEBUG API: Login failed for {code} - Invalid credentials or user not found")
     return jsonify({"error": "Invalid credentials"}), 401
 
 @main.route('/api/report_violation', methods=['POST'])

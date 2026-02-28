@@ -3,7 +3,7 @@ import json
 import os
 
 # Base URL - Set to your PythonAnywhere URL
-BASE_URL = "https://your-username.pythonanywhere.com"
+BASE_URL = "https://Mr7Riko.pythonanywhere.com"
 
 class AuthManager:
     _instance = None
@@ -14,6 +14,7 @@ class AuthManager:
             cls._instance.token = None
             cls._instance.user_data = {}
             cls._instance.device_id = "MOBILE_DEMO_01" # In production, get real hardware ID
+            cls._instance.session = requests.Session()
         return cls._instance
 
     @staticmethod
@@ -27,20 +28,20 @@ class AuthManager:
                 "password": password,
                 "device_id": self.device_id
             }
-            response = requests.post(f"{BASE_URL}/api/login", json=payload, timeout=10)
+            response = self.session.post(f"{BASE_URL}/api/login", json=payload, timeout=10)
             
             if response.status_code == 200:
                 self.user_data = response.json()
                 self.token = self.user_data.get('token')
-                return True, "Success"
+                return True, "تم تسجيل الدخول"
             else:
                 try:
-                    error_msg = response.json().get('error', 'Login failed')
+                    error_msg = response.json().get('error', 'فشل تسجيل الدخول')
                 except:
-                    error_msg = f"Server Error: {response.status_code}"
+                    error_msg = f"خطأ في السيرفر: {response.status_code}"
                 return False, error_msg
         except Exception as e:
-            return False, f"Connection Error: {str(e)}"
+            return False, f"خطأ في الاتصال: {str(e)}"
 
     def report_violation(self, reason, details):
         if not self.token:
@@ -54,7 +55,7 @@ class AuthManager:
             # Use cookie-based or token-based auth (since we use login_user on server)
             # For simplicity in this demo, we assume the session is maintained or pass token
             headers = {"Authorization": f"Bearer {self.token}"}
-            response = requests.post(f"{BASE_URL}/api/report_violation", json=payload, headers=headers, timeout=5)
+            response = self.session.post(f"{BASE_URL}/api/report_violation", json=payload, headers=headers, timeout=5)
             return response.status_code == 200
         except:
             return False
