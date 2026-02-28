@@ -383,7 +383,7 @@ def admin_dashboard():
     enrollments_count = Enrollment.query.count()
     
     # New Stats for Online and Pending Students
-    pending_count = User.query.filter_by(role='student', is_approved=False).count()
+    pending_count = User.query.filter(User.role == 'student', db.or_(User.is_approved == False, User.is_approved == None)).count()
     fifteen_mins_ago = datetime.utcnow() - timedelta(minutes=15)
     online_count = User.query.filter(User.role == 'student', User.last_seen >= fifteen_mins_ago).count()
     
@@ -414,8 +414,8 @@ def admin_pending_users():
         flash('Access denied.', 'danger')
         return redirect(url_for('main.dashboard'))
     
-    pending_students = User.query.filter_by(role='student', is_approved=False).order_by(User.id.desc()).all()
-    return render_template('admin_pending.html', pending=pending_students)
+    pending_students = User.query.filter(User.role == 'student', db.or_(User.is_approved == False, User.is_approved == None)).order_by(User.id.desc()).all()
+    return render_template('admin_pending.html', pending=pending_students, students=pending_students)
 
 @main.route('/admin/approve_user/<int:user_id>', methods=['POST'])
 @login_required
