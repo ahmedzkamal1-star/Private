@@ -10,6 +10,7 @@ from models import (
     User, Course, Enrollment, Friend, Lesson, Exam, SystemSettings, 
     Message, ActivityLog, HomePost, ExamResult, Schedule, PostLike, PostComment, db
 )
+from telegram_utils import send_telegram_notification
 import json
 import random
 
@@ -980,6 +981,14 @@ def admin_posts():
         new_post = HomePost(title=title, content=content, image_filename=image_filename, pdf_filename=pdf_filename)
         db.session.add(new_post)
         db.session.commit()
+        
+        # Telegram Notification (v47)
+        try:
+            msg = f"<b>📢 منشور جديد: {title}</b>\n\n{content[:200]}..."
+            send_telegram_notification(msg, image_filename)
+        except:
+            pass
+            
         flash('تم نشر الخبر بنجاح على الصفحة الرئيسية.', 'success')
         return redirect(url_for('main.admin_posts'))
 
@@ -1019,6 +1028,14 @@ def admin_manage_schedules():
         new_sch = Schedule(title=title, content=content, filename=filename)
         db.session.add(new_sch)
         db.session.commit()
+        
+        # Telegram Notification (v47)
+        try:
+            msg = f"<b>📅 جدول جديد: {title}</b>\n\nتتوفر الآن تفاصيل الجدول الجديد على المنصة."
+            send_telegram_notification(msg)
+        except:
+            pass
+            
         flash('تم إضافة الجدول بنجاح.', 'success')
         return redirect(url_for('main.admin_manage_schedules'))
 

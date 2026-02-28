@@ -24,3 +24,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max limit
+    
+    # Telegram Bot Settings (v47)
+    TELEGRAM_BOT_TOKEN = "8796498767:AAGNNigOo1EY06BDCJlWgU9t0BzxKuxx4b0"
+    TELEGRAM_CHAT_ID = "@El_Dahih_bot" # Use channel/group username or ID
