@@ -3,26 +3,26 @@
         orientation: 'vertical'
         md_bg_color: self.theme_cls.bg_normal
 
-        # Top Header Decor
+        # Top Header Decor with Premium Sky Blue (#00A8E8)
         MDRelativeLayout:
-            size_hint_y: 0.35
+            size_hint_y: 0.40 # Slightly larger for better branding impact
             canvas.before:
                 Color:
-                    rgba: get_color_from_hex("#00B4D8")
+                    rgba: get_color_from_hex("#00A8E8")
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
-                    radius: [0, 0, 40, 40]
+                    radius: [0, 0, 50, 50] # Smoother curve
             
             MDBoxLayout:
                 orientation: 'vertical'
                 adaptive_height: True
-                pos_hint: {"center_x": .5, "center_y": .6}
-                spacing: "10dp"
+                pos_hint: {"center_x": .5, "center_y": .55}
+                spacing: "15dp"
                 
                 MDIcon:
-                    icon: "school"
-                    font_size: "80sp"
+                    icon: "school-outline" # Sleeker icon
+                    font_size: "85sp"
                     pos_hint: {"center_x": .5}
                     theme_text_color: "Custom"
                     text_color: get_color_from_hex("#FFD700") # GOLD
@@ -30,6 +30,7 @@
                 MDLabel:
                     text: app.get_text('login_title')
                     font_style: "H4"
+                    font_name: "Arabic" # Ensure title uses custom font if available
                     halign: "center"
                     bold: True
                     theme_text_color: "Custom"
@@ -40,54 +41,70 @@
                     font_name: "Arabic"
                     halign: "center"
                     theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 0.8
+                    text_color: 1, 1, 1, 0.9
 
-        # Login Form
+        # Premium Login Form
         MDBoxLayout:
             orientation: 'vertical'
-            padding: ["30dp", "40dp", "30dp", "20dp"]
+            padding: ["35dp", "40dp", "35dp", "20dp"]
             spacing: "25dp"
             
             MDTextField:
                 id: user_code
                 hint_text: app.get_text('student_code')
-                mode: "outlined"
-                icon_right: "account"
+                mode: "fill" # Fill mode looks more modern
+                fill_color_normal: self.theme_cls.bg_darkest if app.theme_cls.theme_style == "Dark" else get_color_from_hex("#F5F9FD")
+                icon_right: "account-circle-outline"
+                icon_right_color_normal: get_color_from_hex("#00A8E8")
                 font_name_hint_text: "Arabic"
                 halign: "right" if app.current_lang == 'ar' else "left"
             
             MDTextField:
                 id: password
                 hint_text: app.get_text('password')
-                mode: "outlined"
-                icon_right: "lock"
+                mode: "fill"
+                fill_color_normal: self.theme_cls.bg_darkest if app.theme_cls.theme_style == "Dark" else get_color_from_hex("#F5F9FD")
+                icon_right: "lock-outline"
+                icon_right_color_normal: get_color_from_hex("#00A8E8")
                 password: True
                 font_name_hint_text: "Arabic"
                 halign: "right" if app.current_lang == 'ar' else "left"
 
-            MDFillRoundFlatButton:
-                text: app.get_text('login_btn')
-                font_name: "Arabic"
-                font_size: "18sp"
-                size_hint_x: 1
-                md_bg_color: get_color_from_hex("#00B4D8")
-                on_release: root.do_login(user_code.text, password.text)
+            MDBoxLayout:
+                orientation: 'vertical'
+                adaptive_height: True
+                spacing: "15dp"
+                padding: [0, "15dp", 0, 0]
 
-            MDTextButton:
-                text: app.get_text('menu_lang_en') if app.current_lang == 'ar' else app.get_text('menu_lang_ar')
-                font_name: "Arabic"
-                theme_text_color: "Secondary"
-                pos_hint: {"center_x": .5}
-                on_release: app.change_language('en' if app.current_lang == 'ar' else 'ar')
+                MDFillRoundFlatButton:
+                    text: app.get_text('login_btn')
+                    font_name: "Arabic"
+                    font_size: "18sp"
+                    size_hint_x: 1
+                    md_bg_color: get_color_from_hex("#00A8E8")
+                    text_color: 1, 1, 1, 1
+                    elevation: 3
+                    on_release: root.do_login(user_code.text, password.text)
+
+                MDTextButton:
+                    text: app.get_text('menu_lang_en') if app.current_lang == 'ar' else app.get_text('menu_lang_ar')
+                    font_name: "Arabic"
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#00A8E8")
+                    pos_hint: {"center_x": .5}
+                    on_release: app.change_language('en' if app.current_lang == 'ar' else 'ar')
 
         # Footer
-        MDLabel:
-            text: app.get_text('footer_version')
-            halign: "center"
-            font_style: "Caption"
-            theme_text_color: "Hint"
+        MDBoxLayout:
             size_hint_y: None
-            height: "40dp"
+            height: "50dp"
+            padding: [0, 0, 0, "10dp"]
+            MDLabel:
+                text: app.get_text('footer_version')
+                halign: "center"
+                font_style: "Caption"
+                theme_text_color: "Hint"
+                font_name: "Arabic"
 
 <DashboardScreen>:
     MDBoxLayout:
@@ -97,69 +114,76 @@
         MDTopAppBar:
             title: app.get_text('dashboard_title')
             font_style: "H6"
-            elevation: 2
-            md_bg_color: get_color_from_hex("#00B4D8")
+            font_name: "Arabic"
+            elevation: 3
+            md_bg_color: get_color_from_hex("#00A8E8")
             right_action_items: [["dots-vertical", lambda x: app.show_settings_menu(x)], ["logout", lambda x: setattr(app.root, 'current', 'login')]]
 
         MDScrollView:
             MDBoxLayout:
                 orientation: 'vertical'
-                padding: "15dp"
-                spacing: "20dp"
+                padding: "20dp"
+                spacing: "25dp"
                 adaptive_height: True
 
-                # Stats Header
+                # Premium Stats Header Card
                 MDCard:
                     size_hint_y: None
-                    height: "100dp"
-                    padding: "15dp"
+                    height: "110dp"
+                    padding: "20dp"
                     radius: "15dp"
-                    md_bg_color: get_color_from_hex("#FFD700")
+                    elevation: 4
+                    canvas.before:
+                        Color:
+                            rgba: get_color_from_hex("#FFD700") # Premium Gold Background
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [15, 15, 15, 15]
                     
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        MDLabel:
-                            text: app.get_text('welcome_msg')
-                            font_name: "Arabic"
-                            bold: True
-                            theme_text_color: "Custom"
-                            text_color: 0, 0, 0, 1
-                        MDLabel:
-                            text: app.get_text('welcome_sub')
-                            font_name: "Arabic"
-                            theme_text_color: "Custom"
-                            text_color: 0, 0, 0, 0.7
-
-                # Sections Grid (Simplified for demo)
-                MDLabel:
-                    id: section_title
-                    text: app.get_text('courses_header')
-                    font_name: "Arabic"
-                    bold: True
-                    adaptive_height: True
-                    theme_text_color: "Primary"
-
-                MDList:
-                    id: courses_list
-                    spacing: "10dp"
-                    
-                    MDCard:
-                        size_hint_y: None
-                        height: "80dp"
-                        padding: "10dp"
-                        radius: "12dp"
-                        elevation: 1
-                        on_release: root.open_lesson(1)
-                        
+                    MDRelativeLayout:
                         MDBoxLayout:
-                            orientation: 'horizontal'
-                            MDIcon:
-                                icon: "book-open-page-variant"
-                                theme_text_color: "Custom"
-                                text_color: get_color_from_hex("#00B4D8")
-                                pos_hint: {"center_y": .5}
+                            orientation: 'vertical'
+                            spacing: "5dp"
+                            pos_hint: {"center_y": .5}
                             MDLabel:
-                                text: app.f_ar("رياضيات - الفرقة الأولى") # Keep f_ar for specific content
+                                text: app.get_text('welcome_msg')
                                 font_name: "Arabic"
-                                halign: "right" if app.current_lang == 'ar' else "left"
-                                pos_hint: {"center_y": .5}
+                                font_style: "H6"
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0.1, 0.1, 0.1, 1
+                            MDLabel:
+                                text: app.get_text('welcome_sub')
+                                font_name: "Arabic"
+                                font_style: "Caption"
+                                theme_text_color: "Custom"
+                                text_color: 0.2, 0.2, 0.2, 1
+                        
+                        MDIcon:
+                            icon: "crown"
+                            font_size: "48sp"
+                            pos_hint: {"right": 1, "center_y": .5}
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 0.9
+
+                # Sections Grid
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    spacing: "15dp"
+
+                    MDLabel:
+                        id: section_title
+                        text: app.get_text('courses_header')
+                        font_name: "Arabic"
+                        font_style: "Subtitle1"
+                        bold: True
+                        adaptive_height: True
+                        theme_text_color: "Custom"
+                        text_color: get_color_from_hex("#00A8E8")
+
+                    MDList:
+                        id: courses_list
+                        spacing: "12dp"
+                        # Items will be populated dynamically by main.py

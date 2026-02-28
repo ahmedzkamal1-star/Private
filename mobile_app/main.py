@@ -33,8 +33,15 @@ if platform.system() == 'Windows':
 # Translations Dictionary
 TRANSLATIONS = {
     'ar': {
+        'login_title': 'تسجيل الدخول',
+        'login_subtitle': 'الرجاء إدخال بياناتك للوصول للمواد',
+        'student_code': 'كود الطالب',
+        'footer_version': 'الإصدار 1.0.6 - منصة الداحي',
+        'dashboard_title': 'لوحة التحكم',
+        'welcome_msg': 'مرحباً بك يا بطل!',
+        'welcome_sub': 'الداحي معاك خطوة بخطوة',
         'welcome': 'مرحباً بك في منصة الداحي التعليمية',
-        'login_btn': 'تسجيل الدخول',
+        'login_btn': 'الدخول الان',
         'user_code': 'الكود الجامعي',
         'password': 'كلمة المرور',
         'courses_header': 'المواد الدراسية',
@@ -52,6 +59,13 @@ TRANSLATIONS = {
         'exit': 'خروج'
     },
     'en': {
+        'login_title': 'Student Login',
+        'login_subtitle': 'Please enter your credentials',
+        'student_code': 'Student ID',
+        'footer_version': 'Version 1.0.6 - El-Dahih',
+        'dashboard_title': 'Dashboard',
+        'welcome_msg': 'Welcome Hero!',
+        'welcome_sub': 'Ready to study today?',
         'welcome': 'Welcome to El-Dahih Platform',
         'login_btn': 'Login Now',
         'user_code': 'Student Code',
