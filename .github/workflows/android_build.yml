@@ -27,16 +27,11 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython==0.29.33
 
-    - name: Check structure
-      run: |
-        ls -R mobile_app/
-        [ -f mobile_app/buildozer.spec ] && echo "Spec found" || echo "Spec MISSING"
-
     - name: Build with Buildozer
       run: |
         cd mobile_app
-        # Force buildozer to be verbose and use a specific NDK/SDK if needed
-        export APP_ANDROID_ARCHS="arm64-v8a"
+        # Initializing or ensuring spec is there (it is)
+        # Using -v for verbose to see errors
         yes | buildozer -v android debug
       env:
         BUILDOZER_ALLOW_ORG_KIVY_ANDROID_PYTHONACTIVITY: 1
