@@ -415,7 +415,7 @@ def admin_pending_users():
         return redirect(url_for('main.dashboard'))
     
     pending_students = User.query.filter_by(role='student', is_approved=False).order_by(User.id.desc()).all()
-    return render_template('admin_pending_users.html', students=pending_students)
+    return render_template('admin_pending.html', pending=pending_students)
 
 @main.route('/admin/approve_user/<int:user_id>', methods=['POST'])
 @login_required

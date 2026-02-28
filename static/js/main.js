@@ -186,3 +186,37 @@ if ('serviceWorker' in navigator) {
         });
     });
 }
+
+// دالة تسجيل الإعجاب (Like)
+window.toggleLike = function (postId) {
+    fetch(`/like_post/${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            const btn = document.querySelector(`.like-btn[onclick="toggleLike(${postId})"]`);
+            if (!btn) return;
+
+            const countSpan = btn.querySelector('.like-count');
+            if (countSpan) countSpan.textContent = data.count;
+
+            if (data.status === 'liked') {
+                btn.classList.add('active');
+                btn.style.color = '#ef4444';
+                btn.style.borderColor = '#ef4444';
+            } else {
+                btn.classList.remove('active');
+                btn.style.color = 'var(--text-secondary)';
+                btn.style.borderColor = 'var(--border-color)';
+            }
+        })
+        .catch(err => console.error('Error toggling like:', err));
+};
