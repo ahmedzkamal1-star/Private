@@ -925,12 +925,20 @@ def admin_test_bot():
         return jsonify({'success': False, 'message': 'Unauthorized'})
     
     from telegram_utils import send_telegram_notification
+    settings = SystemSettings.query.first()
+    
+    if not settings or not settings.telegram_bot_token:
+        return jsonify({'success': False, 'message': 'التوكن غير موجود في الإعدادات.'})
+    
     success = send_telegram_notification("<b>🔔 رسالة اختبار من منصة الدحيح</b>\nالربط يعمل بنجاح! ✅")
     
     if success:
-        return jsonify({'success': True, 'message': 'تم إرسال رسالة الاختبار بنجاح! تفقد التليجرام.'})
+        msg = 'تم إرسال رسالة الاختبار بنجاح! تفقد التليجرام.'
+        if not settings.platform_url:
+            msg += ' (ملاحظة: رابط المنصة غير مضبوط في الإعدادات، لن يستطيع البوت توزيعه)'
+        return jsonify({'success': True, 'message': msg})
     else:
-        return jsonify({'success': False, 'message': 'فشل الإرسال. تأكد من التوكن والـ Chat ID.'})
+        return jsonify({'success': False, 'message': 'فشل الإرسال. تأكد من التوكن والـ Chat ID، وتأكد من بدء محادثة مع البوت أولاً.'})
 
 @main.route('/register', methods=['GET', 'POST'])
 def register():
