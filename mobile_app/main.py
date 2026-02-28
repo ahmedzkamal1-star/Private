@@ -47,11 +47,14 @@ Window.size = (360, 640)
 class LoginScreen(Screen):
     def on_enter(self, *args):
         # Initial device checks before allowing login
-        shield = SecurityShield()
-        if shield.check_root():
-            self.show_fatal_error(f_ar("عذراً، لا يمكن تشغيل التطبيق على أجهزة تحتوي على صلاحيات الروت لضمان الأمان."))
-        elif shield.is_emulator():
-            self.show_fatal_error(f_ar("عذراً، يمنع استخدام المحاكيات. يرجى استخدام هاتف حقيقي."))
+        try:
+            shield = SecurityShield()
+            if shield.check_root():
+                self.show_fatal_error(f_ar("عذراً، لا يمكن تشغيل التطبيق على أجهزة تحتوي على صلاحيات الروت لضمان الأمان."))
+            elif shield.is_emulator():
+                self.show_fatal_error(f_ar("عذراً، يمنع استخدام المحاكيات. يرجى استخدام هاتف حقيقي."))
+        except Exception as e:
+            print(f"Startup check bypass: {e}")
 
     def do_login(self, code, password):
         if not code or not password:
@@ -173,13 +176,24 @@ class SecurePlatformApp(MDApp):
         return f_ar(text)
 
     def build(self):
-        # Activate Screenshot & Screen Recording Protection
-        SecurityShield.enable_screenshot_protection()
+        try:
+            # Activate Screenshot & Screen Recording Protection
+            SecurityShield.enable_screenshot_protection()
+        except:
+            pass
+            
         print(f"DEBUG: Connecting to {AuthManager().base_url()}")
+        
+        try:
+            import certifi
+            os.environ['SSL_CERT_FILE'] = certifi.where()
+        except ImportError:
+            pass
 
+        # Branded Palette: Sky Blue (#00B4D8) and Gold (#FFD700)
         self.theme_cls.primary_palette = "LightBlue"
+        self.theme_cls.accent_palette = "Amber" # Gold-like
         self.theme_cls.theme_style = "Light"
-        # In KivyMD 1.2.0 primary_color is derived from primary_palette and is read-only
         
         # Load KV string or file
         Builder.load_file('app_ui.kv')
@@ -188,6 +202,9 @@ class SecurePlatformApp(MDApp):
         sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(DashboardScreen(name='dashboard'))
         return sm
+
+    def toggle_theme(self):
+        self.theme_cls.theme_style = "Dark" if self.theme_cls.theme_style == "Light" else "Light"
 
 if __name__ == '__main__':
     SecurePlatformApp().run()

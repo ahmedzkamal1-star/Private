@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = منصة الدحيح الآمنة
+title = El-Dahih
 
 # (str) Package name
-package.name = aldahid_secure
+package.name = el_dahih
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = com.ahmedzkamal
@@ -16,11 +16,11 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (str) Application version
-version = 1.0.1
+version = 1.0.2
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0,kivymd==1.2.0,requests,cryptography,pyjnius,android,arabic-reshaper,python-bidi
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,requests,cryptography,pyjnius,android,arabic-reshaper,python-bidi,openssl,certifi
 
 # (str) Custom source folders for requirements
 # packagelist.source_dirs = 

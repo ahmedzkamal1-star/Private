@@ -1,119 +1,163 @@
 <LoginScreen>:
     MDBoxLayout:
         orientation: 'vertical'
-        padding: "40dp"
-        spacing: "30dp"
-        md_bg_color: 1, 1, 1, 1
+        md_bg_color: self.theme_cls.bg_normal
 
-        MDBoxLayout:
-            orientation: 'vertical'
-            adaptive_height: True
-            spacing: "20dp"
+        # Top Header Decor
+        MDRelativeLayout:
+            size_hint_y: 0.35
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex("#00B4D8")
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [0, 0, 40, 40]
             
-            # Logo Placeholder
-            MDIcon:
-                icon: "shield-lock"
-                font_size: "100sp"
-                pos_hint: {"center_x": .5}
-                theme_text_color: "Custom"
-                text_color: 0, .7, .85, 1
+            MDBoxLayout:
+                orientation: 'vertical'
+                adaptive_height: True
+                pos_hint: {"center_x": .5, "center_y": .6}
+                spacing: "10dp"
+                
+                MDIcon:
+                    icon: "school"
+                    font_size: "80sp"
+                    pos_hint: {"center_x": .5}
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#FFD700") # GOLD
 
-            MDLabel:
-                text: app.f_ar("منصة الدحيح الآمنة")
-                font_name: "Arabic"
-                halign: "center"
-                font_style: "H4"
-                bold: True
-                theme_text_color: "Primary"
-                size_hint_y: None
-                height: self.texture_size[1] + dp(10)
+                MDLabel:
+                    text: "EL-DAHIH"
+                    font_style: "H4"
+                    halign: "center"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
 
-            MDLabel:
-                text: app.f_ar("سجل دخولك للوصول إلى المحتوى")
-                font_name: "Arabic"
-                halign: "center"
-                font_style: "Subtitle1"
-                theme_text_color: "Secondary"
-                size_hint_y: None
-                height: self.texture_size[1] + dp(10)
+                MDLabel:
+                    text: app.f_ar("منصتك التعليمية الآمنة")
+                    font_name: "Arabic"
+                    halign: "center"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 0.8
 
+        # Login Form
         MDBoxLayout:
             orientation: 'vertical'
-            spacing: "30dp"
-            adaptive_height: True
-
+            padding: ["30dp", "40dp", "30dp", "20dp"]
+            spacing: "25dp"
+            
             MDTextField:
                 id: user_code
-                hint_text: app.f_ar("الكود الجامعي")
-                helper_text: app.f_ar("تأكد من كتابة الكود بشكل صحيح")
-                helper_text_mode: "on_error"
+                hint_text: app.f_ar("كود الطالب")
+                mode: "outlined"
+                icon_right: "account"
                 font_name_hint_text: "Arabic"
-                mode: "round"
-                fill_color_normal: 0.95, 0.95, 0.95, 1
-                icon_right: "account-badge"
-                write_tab: False
                 halign: "right"
-                padding: "15dp"
-                on_text: self.error = False
-
+            
             MDTextField:
                 id: password
                 hint_text: app.f_ar("كلمة المرور")
-                helper_text: app.f_ar("كلمة المرور غير صحيحة")
-                helper_text_mode: "on_error"
-                font_name_hint_text: "Arabic"
-                mode: "round"
-                fill_color_normal: 0.95, 0.95, 0.95, 1
-                icon_right: "key"
+                mode: "outlined"
+                icon_right: "lock"
                 password: True
-                write_tab: False
+                font_name_hint_text: "Arabic"
                 halign: "right"
-                padding: "15dp"
-                on_text: self.error = False
 
-        MDRelativeLayout:
-            size_hint_y: None
-            height: "60dp"
-            
-            MDRoundFlatButton:
-                text: app.f_ar("تسجيل الدخول")
+            MDFillRoundFlatButton:
+                text: app.f_ar("دخول آمن")
                 font_name: "Arabic"
-                font_size: "20sp"
-                pos_hint: {"center_x": .5, "center_y": .5}
-                size_hint_x: 0.9
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                md_bg_color: 0, .7, .85, 1
+                font_size: "18sp"
+                size_hint_x: 1
+                md_bg_color: get_color_from_hex("#00B4D8")
                 on_release: root.do_login(user_code.text, password.text)
 
-        MDBoxLayout:
-            adaptive_height: True
-            padding: [0, dp(20), 0, 0]
-            MDLabel:
-                text: app.f_ar("جميع الحقوق محفوظة © 2026")
+            MDTextButton:
+                text: app.f_ar("هل تواجه مشكلة؟ تواصل مع الدعم")
                 font_name: "Arabic"
-                halign: "center"
-                font_style: "Caption"
-                theme_text_color: "Hint"
+                theme_text_color: "Secondary"
+                pos_hint: {"center_x": .5}
+
+        # Footer
+        MDLabel:
+            text: "v1.0.2 | Powered by ShieldCore"
+            halign: "center"
+            font_style: "Caption"
+            theme_text_color: "Hint"
+            size_hint_y: None
+            height: "40dp"
 
 <DashboardScreen>:
     MDBoxLayout:
         orientation: 'vertical'
-        md_bg_color: 0.96, 0.97, 0.99, 1
+        md_bg_color: self.theme_cls.bg_normal
 
         MDTopAppBar:
-            title: app.f_ar("المواد الدراسية")
-            font_name: "Arabic"
-            right_action_items: [["logout", lambda x: app.root.current == "login"]]
+            title: "EL-DAHIH"
+            font_style: "H6"
             elevation: 2
+            md_bg_color: get_color_from_hex("#00B4D8")
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()], ["logout", lambda x: setattr(app.root, 'current', 'login')]]
 
         MDScrollView:
-            MDList:
-                id: courses_list
-                # Courses will be injected here
-                TwoLineIconListItem:
-                    text: app.f_ar("رياضيات 1")
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "15dp"
+                spacing: "20dp"
+                adaptive_height: True
+
+                # Stats Header
+                MDCard:
+                    size_hint_y: None
+                    height: "100dp"
+                    padding: "15dp"
+                    radius: "15dp"
+                    md_bg_color: get_color_from_hex("#FFD700")
+                    
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        MDLabel:
+                            text: app.f_ar("مرحباً بك في منصة الدحيح")
+                            font_name: "Arabic"
+                            bold: True
+                            theme_text_color: "Custom"
+                            text_color: 0, 0, 0, 1
+                        MDLabel:
+                            text: app.f_ar("استمتع بتجربة تعليمية فريدة وآمنة")
+                            font_name: "Arabic"
+                            theme_text_color: "Custom"
+                            text_color: 0, 0, 0, 0.7
+
+                # Sections Grid (Simplified for demo)
+                MDLabel:
+                    text: app.f_ar("المواد المتاحة")
                     font_name: "Arabic"
-                    secondary_text: app.f_ar("د. علي - 3 دروس")
-                    IconLeftWidget:
-                        icon: "book-open-page-variant"
+                    bold: True
+                    adaptive_height: True
+                    theme_text_color: "Primary"
+
+                MDList:
+                    id: courses_list
+                    spacing: "10dp"
+                    
+                    MDCard:
+                        size_hint_y: None
+                        height: "80dp"
+                        padding: "10dp"
+                        radius: "12dp"
+                        elevation: 1
+                        on_release: root.open_lesson(1)
+                        
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            MDIcon:
+                                icon: "book-open-page-variant"
+                                theme_text_color: "Custom"
+                                text_color: get_color_from_hex("#00B4D8")
+                                pos_hint: {"center_y": .5}
+                            MDLabel:
+                                text: app.f_ar("رياضيات - الفرقة الأولى")
+                                font_name: "Arabic"
+                                halign: "right"
+                                pos_hint: {"center_y": .5}

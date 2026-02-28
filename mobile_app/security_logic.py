@@ -35,7 +35,10 @@ class SecurityShield:
     @staticmethod
     def check_root():
         """Checks for common root indicators (su binary, busybox, etc)."""
-        if is_android():
+        if not is_android():
+            return False
+            
+        try:
             paths = [
                 '/system/app/Superuser.apk',
                 '/sbin/su',
@@ -51,49 +54,69 @@ class SecurityShield:
             for path in paths:
                 if os.path.exists(path):
                     return True
+            
+            # Additional check via which
+            import subprocess
+            try:
+                result = subprocess.run(['which', 'su'], capture_output=True, text=True, timeout=1)
+                if result.returncode == 0:
+                    return True
+            except:
+                pass
+                
             return False
-        return False
+        except Exception as e:
+            print(f"Error checking root: {e}")
+            return False
 
     @staticmethod
     def is_emulator():
         """Detects if the app is running on an emulator."""
-        if is_android():
-            try:
-                from jnius import autoclass
-                Build = autoclass('android.os.Build')
-                model = Build.MODEL.lower()
-                hardware = Build.HARDWARE.lower()
-                fingerprint = Build.FINGERPRINT.lower()
-                
-                is_emu = (
-                    "google_sdk" in model or 
-                    "emulator" in model or 
-                    "android sdk built for x86" in model or
-                    "goldfish" in hardware or
-                    "ranchu" in hardware or
-                    "vbox" in hardware or
-                    fingerprint.startswith("generic")
-                )
-                return is_emu
-            except:
-                return False
-        return False
+        if not is_android():
+            return False
+            
+        try:
+            from jnius import autoclass
+            Build = autoclass('android.os.Build')
+            model = Build.MODEL.lower()
+            hardware = Build.HARDWARE.lower()
+            fingerprint = Build.FINGERPRINT.lower()
+            manufacturer = Build.MANUFACTURER.lower()
+            
+            is_emu = (
+                "google_sdk" in model or 
+                "emulator" in model or 
+                "android sdk built for x86" in model or
+                "goldfish" in hardware or
+                "ranchu" in hardware or
+                "vbox" in hardware or
+                "sdk" in model or
+                "genymotion" in manufacturer or
+                fingerprint.startswith("generic")
+            )
+            return is_emu
+        except Exception as e:
+            print(f"Error detecting emulator: {e}")
+            return False
 
     @staticmethod
     def check_vpn():
         """Detects if a VPN or Proxy is active."""
-        if is_android():
-            try:
-                from jnius import autoclass
-                Context = autoclass('org.kivy.android.PythonActivity').mActivity
-                ConnectivityManager = autoclass('android.net.ConnectivityManager')
-                cm = Context.getSystemService(Context.CONNECTIVITY_SERVICE)
-                networks = cm.getAllNetworks()
-                for network in networks:
-                    caps = cm.getNetworkCapabilities(network)
-                    # TRANSPORT_VPN = 4
-                    if caps.hasTransport(4):
-                        return True
-            except:
-                pass
-        return False
+        if not is_android():
+            return False
+            
+        try:
+            from jnius import autoclass
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            Context = PythonActivity.mActivity
+            ConnectivityManager = autoclass('android.net.ConnectivityManager')
+            cm = Context.getSystemService(Context.CONNECTIVITY_SERVICE)
+            networks = cm.getAllNetworks()
+            for network in networks:
+                caps = cm.getNetworkCapabilities(network)
+                if caps and caps.hasTransport(4): # TRANSPORT_VPN = 4
+                    return True
+            return False
+        except Exception as e:
+            print(f"Error checking VPN: {e}")
+            return False
