@@ -25,6 +25,6 @@ class Config:
     UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max limit
     
-    # Telegram Bot Settings (v47)
-    TELEGRAM_BOT_TOKEN = "8796498767:AAGNNigOo1EY06BDCJlWgU9t0BzxKuxx4b0"
-    TELEGRAM_CHAT_ID = "@El_Dahih_bot" # Use channel/group username or ID
+    # Telegram Bot Settings (v50)
+    TELEGRAM_BOT_TOKEN = "8796498767:AAHtI6nY354FObX5Wr7XHC0H524YCp6Jn8k"
+    TELEGRAM_CHAT_ID = "5266962858"
