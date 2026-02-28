@@ -98,8 +98,12 @@
                     <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
                         <span
                             style="font-size: 0.78rem; color: var(--text-secondary); font-family: 'Outfit'; display: flex; align-items: center; gap: 5px;">
-                            <i class="fas fa-calendar-alt" style="opacity: 0.6;"></i>{{
-                            post.timestamp.strftime('%Y/%m/%d - %H:%M') }}
+                            <i class="fas fa-calendar-alt" style="opacity: 0.6;"></i>
+                            {% if post.timestamp %}
+                            {{ post.timestamp.strftime('%Y/%m/%d - %H:%M') }}
+                            {% else %}
+                            غير محدد
+                            {% endif %}
                         </span>
                         <span
                             style="font-size: 0.82rem; color: #ef4444; font-weight: 700; display: flex; align-items: center; gap: 4px;">
