@@ -20,7 +20,7 @@ version = 1.0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0,kivymd==1.2.0,requests,cryptography,pyjnius,android,arabic_reshaper,python-bidi
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,requests,cryptography,pyjnius,android,arabic-reshaper,python-bidi
 
 # (str) Custom source folders for requirements
 # packagelist.source_dirs = 
@@ -50,13 +50,13 @@ android.minapi = 21
 # android.sdk = 20
 
 # (str) Android NDK version to use
-# android.ndk = 19b
+android.ndk = 25b
 
 # (bool) Use FLAG_SECURE for screenshot prevention (optional, we do it in code anyway)
 # android.meta_data = android.window.WindowManager.LayoutParams.FLAG_SECURE=1
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 # (bool) enables Android auto backup feature, false by default
 android.allow_backup = True
