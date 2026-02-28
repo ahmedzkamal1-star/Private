@@ -461,14 +461,6 @@ def admin_moderators():
         
     return render_template('admin_moderators.html', moderators=moderators)
 
-@main.route('/admin/pending_users')
-@login_required
-def admin_pending_users():
-    if current_user.role != 'admin':
-        return redirect(url_for('main.dashboard'))
-    pending_users = User.query.filter_by(is_approved=False).all()
-    return render_template('admin_pending.html', pending=pending_users)
-
 @main.route('/admin/approve_user/<int:user_id>/<string:action>')
 @login_required
 def admin_approve_user(user_id, action):
@@ -755,16 +747,6 @@ def admin_delete_exam(exam_id):
     flash('تم حذف الامتحان بنجاح.', 'info')
     return redirect(url_for('main.admin_course_content', course_id=course_id))
 
-@main.route('/admin/online')
-@login_required
-def admin_online_users():
-    if current_user.role != 'admin':
-        return redirect(url_for('main.dashboard'))
-    
-    from datetime import timedelta
-    five_minutes_ago = datetime.utcnow() - timedelta(minutes=5)
-    online_users = User.query.filter(User.last_seen >= five_minutes_ago).all()
-    return render_template('admin_online.html', students=online_users)
 
 @main.route('/admin/activity')
 @login_required
