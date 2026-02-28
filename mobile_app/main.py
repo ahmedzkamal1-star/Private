@@ -8,7 +8,29 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from auth_manager import AuthManager
 from security_logic import SecurityShield
+from kivy.core.text import LabelBase
+import arabic_reshaper
+from bidi.algorithm import get_display
 import os
+
+# Register Arabic font globally on Windows
+# We override 'Roboto' because it's the default font for Kivy/KivyMD
+arial_path = 'C:\\Windows\\Fonts\\arial.ttf'
+LabelBase.register(name='Roboto', 
+                   fn_regular=arial_path,
+                   fn_bold='C:\\Windows\\Fonts\\arialbd.ttf',
+                   fn_italic='C:\\Windows\\Fonts\\ariali.ttf',
+                   fn_bolditalic='C:\\Windows\\Fonts\\arialbi.ttf')
+
+# Fallback alias
+LabelBase.register(name='Arabic', fn_regular=arial_path)
+
+def f_ar(text):
+    """Reshapes and reorders Arabic text for Kivy labels on Windows."""
+    if not text: return ""
+    reshaped_text = arabic_reshaper.reshape(text)
+    bidi_text = get_display(reshaped_text)
+    return bidi_text
 
 # Standard phone resolution (approximate for desktop testing)
 Window.size = (360, 640)
@@ -18,13 +40,13 @@ class LoginScreen(Screen):
         # Initial device checks before allowing login
         shield = SecurityShield()
         if shield.check_root():
-            self.show_fatal_error("عذراً، لا يمكن تشغيل التطبيق على أجهزة تحتوي على صلاحيات الروت لضمان الأمان.")
+            self.show_fatal_error(f_ar("عذراً، لا يمكن تشغيل التطبيق على أجهزة تحتوي على صلاحيات الروت لضمان الأمان."))
         elif shield.is_emulator():
-            self.show_fatal_error("عذراً، يمنع استخدام المحاكيات. يرجى استخدام هاتف حقيقي.")
+            self.show_fatal_error(f_ar("عذراً، يمنع استخدام المحاكيات. يرجى استخدام هاتف حقيقي."))
 
     def do_login(self, code, password):
         if not code or not password:
-            self.show_error("يرجى إدخال البيانات كاملة")
+            self.show_error(f_ar("يرجى إدخال البيانات كاملة"))
             return
             
         auth = AuthManager()
@@ -34,20 +56,40 @@ class LoginScreen(Screen):
             MDApp.get_running_app().root.current = 'dashboard'
             MDApp.get_running_app().root.get_screen('dashboard').on_enter()
         else:
-            self.show_error(message)
+            # Show error in red and set textfield errors
+            self.ids.user_code.error = True
+            self.ids.password.error = True
+            self.show_error(f_ar(message))
+            
+            from kivymd.uix.snackbar import Snackbar
+            Snackbar(
+                text=f_ar(message),
+                font_name="Arabic",
+                bg_color=(1, 0, 0, 1),
+                duration=3
+            ).open()
 
     def show_error(self, text):
         self.dialog = MDDialog(
+            title=f_ar("خطأ في الدخول"),
             text=text,
-            buttons=[MDFlatButton(text="حسناً", on_release=lambda x: self.dialog.dismiss())],
+            radius=[20, 7, 20, 7],
+            buttons=[
+                MDFlatButton(
+                    text=f_ar("حسناً"),
+                    theme_text_color="Custom",
+                    text_color=self.theme_cls.primary_color,
+                    on_release=lambda x: self.dialog.dismiss()
+                )
+            ],
         )
         self.dialog.open()
         
     def show_fatal_error(self, text):
         self.dialog = MDDialog(
             text=text,
-            title="تحذير أمني!",
-            buttons=[MDFlatButton(text="خروج", on_release=lambda x: os._exit(0))],
+            title=f_ar("تحذير أمني!"),
+            buttons=[MDFlatButton(text=f_ar("خروج"), on_release=lambda x: os._exit(0))],
         )
         self.dialog.auto_dismiss = False
         self.dialog.open()
@@ -84,20 +126,22 @@ class DashboardScreen(Screen):
                     print(f"Success! Content {lesson_id} decrypted in memory ({len(decrypted_bytes)} bytes)")
                     # 3. Handle viewing (Phase 4 final)
                 else:
-                    self.show_error("فشل فك تشفير الملف")
+                    self.show_error(f_ar("فشل فك تشفير الملف"))
             else:
-                self.show_error("فشل جلب الملف من الموقع")
+                self.show_error(f_ar("فشل جلب الملف من الموقع"))
         except Exception as e:
-            self.show_error(f"خطأ في الاتصال: {str(e)}")
+            self.show_error(f_ar(f"خطأ في الاتصال: {str(e)}"))
 
     def monitor_security(self, dt):
         shield = SecurityShield()
         violation_reason = None
         
         if shield.check_vpn():
-            violation_reason = "VPN Detected"
+            violation_reason = f_ar("تم اكتشاف اتصال VPN")
         elif shield.check_root():
-            violation_reason = "Root Access Detected"
+            violation_reason = f_ar("تم اكتشاف صلاحيات روت")
+        elif shield.check_recording():
+             violation_reason = f_ar("تم اكتشاف محاولة تسجيل شاشة")
 
         if violation_reason:
             AuthManager().report_violation(violation_reason, "Real-time monitor caught unauthorized state")
@@ -108,21 +152,24 @@ class DashboardScreen(Screen):
 
     def show_violation_alert(self, reason):
         dialog = MDDialog(
-            title="تم رصد مخالفة أمنية!",
-            text=f"تم رصد {reason}. سيتم إغلاق التطبيق وتجميد حسابك.",
-            buttons=[MDFlatButton(text="إغلاق", on_release=lambda x: os._exit(0))],
+            title=f_ar("تم رصد مخالفة أمنية!"),
+            text=f_ar(f"تم رصد {reason}. سيتم إغلاق التطبيق وتجميد حسابك."),
+            buttons=[MDFlatButton(text=f_ar("إغلاق"), on_release=lambda x: os._exit(0))],
         )
         dialog.auto_dismiss = False
         dialog.open()
 
 class SecurePlatformApp(MDApp):
+    def f_ar(self, text):
+        return f_ar(text)
+
     def build(self):
         # Activate Screenshot & Screen Recording Protection
         SecurityShield.enable_screenshot_protection()
 
         self.theme_cls.primary_palette = "LightBlue"
         self.theme_cls.theme_style = "Light"
-        self.theme_cls.primary_color = get_color_from_hex("#00b4d8")
+        # In KivyMD 1.2.0 primary_color is derived from primary_palette and is read-only
         
         # Load KV string or file
         Builder.load_file('app_ui.kv')

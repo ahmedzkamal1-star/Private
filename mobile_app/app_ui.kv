@@ -1,66 +1,86 @@
 <LoginScreen>:
     MDBoxLayout:
         orientation: 'vertical'
-        padding: "30dp"
-        spacing: "20dp"
+        padding: "40dp"
+        spacing: "30dp"
         md_bg_color: 1, 1, 1, 1
 
         MDBoxLayout:
             orientation: 'vertical'
             adaptive_height: True
-            spacing: "10dp"
+            spacing: "20dp"
             
             # Logo Placeholder
             MDIcon:
                 icon: "shield-lock"
-                font_size: "80sp"
+                font_size: "100sp"
                 pos_hint: {"center_x": .5}
                 theme_text_color: "Custom"
                 text_color: 0, .7, .85, 1
 
             MDLabel:
-                text: "منصة الدحيح الآمنة"
+                text: app.f_ar("منصة الدحيح الآمنة")
+                font_name: "Arabic"
                 halign: "center"
-                font_style: "H5"
+                font_style: "H4"
                 bold: True
                 theme_text_color: "Primary"
+                size_hint_y: None
+                height: self.texture_size[1] + dp(10)
 
             MDLabel:
-                text: "سجل دخولك للوصول إلى المحتوى"
+                text: app.f_ar("سجل دخولك للوصول إلى المحتوى")
+                font_name: "Arabic"
                 halign: "center"
-                font_style: "Caption"
+                font_style: "Subtitle1"
                 theme_text_color: "Secondary"
+                size_hint_y: None
+                height: self.texture_size[1] + dp(10)
 
         MDBoxLayout:
             orientation: 'vertical'
-            spacing: "20dp"
+            spacing: "30dp"
             adaptive_height: True
 
             MDTextField:
                 id: user_code
-                hint_text: "الكود الجامعي"
+                hint_text: app.f_ar("الكود الجامعي")
+                helper_text: app.f_ar("تأكد من كتابة الكود بشكل صحيح")
+                helper_text_mode: "on_error"
+                font_name_hint_text: "Arabic"
                 mode: "round"
                 fill_color_normal: 0.95, 0.95, 0.95, 1
                 icon_right: "account-badge"
                 write_tab: False
+                halign: "right"
+                padding: "15dp"
+                on_text: self.error = False
 
             MDTextField:
                 id: password
-                hint_text: "كلمة المرور"
+                hint_text: app.f_ar("كلمة المرور")
+                helper_text: app.f_ar("كلمة المرور غير صحيحة")
+                helper_text_mode: "on_error"
+                font_name_hint_text: "Arabic"
                 mode: "round"
                 fill_color_normal: 0.95, 0.95, 0.95, 1
                 icon_right: "key"
                 password: True
                 write_tab: False
+                halign: "right"
+                padding: "15dp"
+                on_text: self.error = False
 
         MDRelativeLayout:
-            adaptive_height: True
+            size_hint_y: None
+            height: "60dp"
             
             MDRoundFlatButton:
-                text: "تسجيل الدخول"
-                font_size: "18sp"
-                pos_hint: {"center_x": .5}
-                size_hint_x: 1
+                text: app.f_ar("تسجيل الدخول")
+                font_name: "Arabic"
+                font_size: "20sp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                size_hint_x: 0.9
                 theme_text_color: "Custom"
                 text_color: 1, 1, 1, 1
                 md_bg_color: 0, .7, .85, 1
@@ -68,8 +88,10 @@
 
         MDBoxLayout:
             adaptive_height: True
+            padding: [0, dp(20), 0, 0]
             MDLabel:
-                text: "جميع الحقوق محفوظة © 2026"
+                text: app.f_ar("جميع الحقوق محفوظة © 2026")
+                font_name: "Arabic"
                 halign: "center"
                 font_style: "Caption"
                 theme_text_color: "Hint"
@@ -80,7 +102,8 @@
         md_bg_color: 0.96, 0.97, 0.99, 1
 
         MDTopAppBar:
-            title: "المواد الدراسية"
+            title: app.f_ar("المواد الدراسية")
+            font_name: "Arabic"
             right_action_items: [["logout", lambda x: app.root.current == "login"]]
             elevation: 2
 
@@ -89,7 +112,8 @@
                 id: courses_list
                 # Courses will be injected here
                 TwoLineIconListItem:
-                    text: "رياضيات 1"
-                    secondary_text: "د. علي - 3 دروس"
+                    text: app.f_ar("رياضيات 1")
+                    font_name: "Arabic"
+                    secondary_text: app.f_ar("د. علي - 3 دروس")
                     IconLeftWidget:
                         icon: "book-open-page-variant"
