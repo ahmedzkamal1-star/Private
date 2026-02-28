@@ -129,8 +129,8 @@
     {% endif %}
 
     <!-- Main Content Area -->
-    <main class="main-content" {% if request.endpoint in ['main.login', 'main.register' , 'main.splash' ]
-        %}style="margin-right:0;" {% endif %}>
+    <main class="main-content" {% if request.endpoint in ['main.login' , 'main.register' , 'main.splash' ] %}
+        style="margin-right:0;" {% endif %}>
         {% if request.endpoint not in ['main.login', 'main.register', 'main.splash'] %}
         <header class="mobile-header card">
             <button class="menu-toggle-btn">
