@@ -16,7 +16,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (str) Application version
-version = 1.0.2
+version = 1.0.6
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
@@ -29,10 +29,10 @@ requirements = python3,kivy==2.3.0,kivymd==1.2.0,requests,cryptography,pyjnius,a
 # garden_requirements = 
 
 # (str) Presplash of the application
-# presplash.filename = %(source.dir)s/data/presplash.png
+presplash.filename = %(source.dir)s/data/presplash.png
 
 # (str) Icon of the application
-# icon.filename = %(source.dir)s/data/icon.png
+icon.filename = %(source.dir)s/data/icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
