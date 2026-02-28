@@ -14,6 +14,20 @@ from bidi.algorithm import get_display
 import os
 
 import platform
+import logging
+
+# Set up logging to file for debugging crashes on real devices
+log_file = os.path.join(os.path.dirname(__file__), "app_debug.log")
+if platform.system() == 'Android':
+    from android.storage import app_storage_path
+    log_file = os.path.join(app_storage_path(), "app_debug.log")
+
+logging.basicConfig(
+    filename=log_file,
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logging.info("--- APP STARTING ---")
 
 # Register Arabic font globally
 if platform.system() == 'Windows':
@@ -176,19 +190,21 @@ class SecurePlatformApp(MDApp):
         return f_ar(text)
 
     def build(self):
+        logging.info("Building App UI...")
         try:
             # Activate Screenshot & Screen Recording Protection
             SecurityShield.enable_screenshot_protection()
-        except:
-            pass
+        except Exception as e:
+            logging.error(f"Screenshot protection failed: {e}")
             
-        print(f"DEBUG: Connecting to {AuthManager().base_url()}")
+        logging.info(f"Connecting to {AuthManager().base_url()}")
         
         try:
             import certifi
             os.environ['SSL_CERT_FILE'] = certifi.where()
-        except ImportError:
-            pass
+            logging.info("SSL Certs configured via certifi")
+        except Exception as e:
+            logging.error(f"Certifi config failed: {e}")
 
         # Branded Palette: Sky Blue (#00B4D8) and Gold (#FFD700)
         self.theme_cls.primary_palette = "LightBlue"
@@ -196,7 +212,12 @@ class SecurePlatformApp(MDApp):
         self.theme_cls.theme_style = "Light"
         
         # Load KV string or file
-        Builder.load_file('app_ui.kv')
+        try:
+            Builder.load_file('app_ui.kv')
+            logging.info("KV file loaded successfully")
+        except Exception as e:
+            logging.error(f"KV Load Failure: {e}")
+            return MDLabel(text=f"UI Error: {e}", halign="center")
         
         sm = ScreenManager()
         sm.add_widget(LoginScreen(name='login'))

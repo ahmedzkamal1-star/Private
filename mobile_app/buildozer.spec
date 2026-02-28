@@ -56,7 +56,7 @@ android.ndk = 25b
 # android.meta_data = android.window.WindowManager.LayoutParams.FLAG_SECURE=1
 
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
-android.archs = arm64-v8a
+android.archs = armeabi-v7a, arm64-v8a
 
 # (bool) enables Android auto backup feature, false by default
 android.allow_backup = True
