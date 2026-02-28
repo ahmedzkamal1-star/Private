@@ -1,0 +1,79 @@
+[app]
+
+# (str) Title of your application
+title = منصة الدحيح الآمنة
+
+# (str) Package name
+package.name = aldahid_secure
+
+# (str) Package domain (needed for android/ios packaging)
+package.domain = com.ahmedzkamal
+
+# (str) Source code where the main.py live
+source.dir = .
+
+# (list) Source files to include (let empty to include all the files)
+source.include_exts = py,png,jpg,kv,atlas
+
+# (list) Application requirements
+# comma separated e.g. requirements = sqlite3,kivy
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,requests,cryptography,pyjnius,android
+
+# (str) Custom source folders for requirements
+# packagelist.source_dirs = 
+
+# (list) Garden requirements
+# garden_requirements = 
+
+# (str) Presplash of the application
+# presplash.filename = %(source.dir)s/data/presplash.png
+
+# (str) Icon of the application
+# icon.filename = %(source.dir)s/data/icon.png
+
+# (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
+orientation = portrait
+
+# (list) Permissions
+android.permissions = INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+
+# (int) Android API to use
+android.api = 31
+
+# (int) Minimum API your APK will support
+android.minapi = 21
+
+# (int) Android SDK version to use
+# android.sdk = 20
+
+# (str) Android NDK version to use
+# android.ndk = 19b
+
+# (bool) Use FLAG_SECURE for screenshot prevention (optional, we do it in code anyway)
+# android.meta_data = android.window.WindowManager.LayoutParams.FLAG_SECURE=1
+
+# (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
+android.archs = arm64-v8a, armeabi-v7a
+
+# (bool) enables Android auto backup feature, false by default
+android.allow_backup = True
+
+# (str) Logcat filter to use
+android.logcat_filters = *:S python:D
+
+# (str) Path to a custom whitelist file
+# android.whitelist = 
+
+# (str) The format used to package the app for release mode (aab or apk)
+android.release_artifact = apk
+
+# (str) The format used to package the app for debug mode (apk or aab)
+android.debug_artifact = apk
+
+[buildozer]
+
+# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
+log_level = 2
+
+# (int) Display warning if buildozer is run as root (0 = off, 1 = on)
+warn_on_root = 1
