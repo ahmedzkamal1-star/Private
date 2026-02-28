@@ -86,42 +86,67 @@
                 الصفحة الرئيسية كأزرار تواصل.</p>
         </div>
 
-        <!-- Telegram Bot Management (v49) -->
-        <div class="card" style="border-right: 5px solid #229ED9; background: #f0f9ff;">
-            <h3 style="color: #229ED9; margin-bottom: 1.5rem;"><i class="fab fa-telegram-plane"></i> إعدادات بوت
-                التنبيهات (Admin Notifications)</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <!-- Telegram Bot Management (v53 - Sky Blue Evolution) -->
+        <div class="card"
+            style="border-right: 5px solid #229ED9; background: var(--hover-bg); position: relative; overflow: hidden;">
+            <div
+                style="position: absolute; top: -20px; left: -20px; font-size: 8rem; color: rgba(34, 158, 217, 0.05); transform: rotate(-15deg); pointer-events: none;">
+                <i class="fab fa-telegram-plane"></i>
+            </div>
+
+            <h3 style="color: #229ED9; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <i class="fab fa-telegram-plane" style="font-size: 1.4rem;"></i>
+                إعدادات بوت التنبيهات (Admin Notifications)
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; position: relative; z-index: 1;">
                 <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700;">Bot API Token</label>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">Bot
+                        API Token</label>
                     <input type="text" name="telegram_bot_token" value="{{ settings.telegram_bot_token or '' }}"
-                        placeholder="8796498767:AAGNN..."
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit';">
+                        placeholder="8796498767:AAHt..."
+                        style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit'; transition: all 0.3s ease;"
+                        onfocus="this.style.borderColor='#229ED9'; this.style.boxShadow='0 0 0 4px rgba(34, 158, 217, 0.1)';"
+                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
                 </div>
                 <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700;">Chat ID / Channel
-                        Handle</label>
+                    <label
+                        style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">Chat
+                        ID / Channel Handle</label>
                     <input type="text" name="telegram_chat_id" value="{{ settings.telegram_chat_id or '' }}"
                         placeholder="@MyChannel or ID"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit';">
+                        style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit'; transition: all 0.3s ease;"
+                        onfocus="this.style.borderColor='#229ED9'; this.style.boxShadow='0 0 0 4px rgba(34, 158, 217, 0.1)';"
+                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
                 </div>
             </div>
-            <div class="form-field-v2" style="margin-top: 15px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 700;">رابط المنصة (لتوزيعه
-                    تلقائياً)</label>
+
+            <div class="form-field-v2" style="margin-top: 20px; position: relative; z-index: 1;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">رابط
+                    المنصة (لتوزيعه تلقائياً)</label>
                 <input type="url" name="platform_url" value="{{ settings.platform_url or '' }}"
                     placeholder="https://yourname.pythonanywhere.com"
-                    style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit';">
+                    style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit'; transition: all 0.3s ease;"
+                    onfocus="this.style.borderColor='#229ED9'; this.style.boxShadow='0 0 0 4px rgba(34, 158, 217, 0.1)';"
+                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
             </div>
-            <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 15px;">
+
+            <div
+                style="margin-top: 2rem; display: flex; align-items: center; gap: 20px; position: relative; z-index: 1;">
                 <button type="button" onclick="testBot()" class="premium-btn"
-                    style="background: #229ED9; padding: 10px 20px; font-size: 0.9rem;">
-                    <i class="fas fa-paper-plane"></i> تجربة الربط
+                    style="background: linear-gradient(135deg, #229ED9, #1c84b5); padding: 12px 25px; font-size: 0.95rem; border: none; box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3);">
+                    <i class="fas fa-paper-plane" style="margin-left: 8px;"></i> تجربة الربط
                 </button>
-                <div id="bot-test-status" style="font-size: 0.85rem; font-weight: 700;"></div>
+                <div id="bot-test-status" style="font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease;"></div>
             </div>
-            <p style="margin-top: 15px; font-size: 0.8rem; color: var(--text-secondary);">
-                * ملحوظة: تأكد من إضافة البوت كمشرف في القناة/المجموعة قبل التجربة.
-            </p>
+
+            <div
+                style="margin-top: 20px; padding: 12px; border-radius: 10px; background: rgba(34, 158, 217, 0.05); border: 1px dashed rgba(34, 158, 217, 0.3);">
+                <p style="font-size: 0.85rem; color: #1c84b5; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-info-circle"></i>
+                    تأكد من إرسال "مرحباً" للبوت أولاً لكي يستطيع الربط بنجاح.
+                </p>
+            </div>
         </div>
 
         <script>
