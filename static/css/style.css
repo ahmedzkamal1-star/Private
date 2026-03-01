@@ -78,8 +78,7 @@
 }
 
 [data-ramadan='enabled'] .mesh-background {
-    background: url('../ramadan_bg.png') no-repeat center center fixed !important;
-    background-size: cover !important;
+    background: radial-gradient(circle at center, #0B2B40 0%, #051622 100%);
     opacity: 1;
 }
 
@@ -370,18 +369,6 @@
     box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4);
 }
 
-[data-theme='gold'] .blob-1 {
-    background: #bf953f;
-}
-
-[data-theme='gold'] .blob-2 {
-    background: #aa771c;
-}
-
-[data-theme='gold'] .blob-3 {
-    background: #b8860b;
-}
-
 @keyframes goldFloat {
     from {
         transform: translateY(0);
@@ -653,78 +640,44 @@ body {
     letter-spacing: 1px;
 }
 
-/* Global Premium Classes */
-.premium-card-glass {
-    background: rgba(15, 23, 42, 0.7) !important;
-    backdrop-filter: blur(20px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-    border: 1px solid rgba(0, 210, 255, 0.25) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45) !important;
-    transition: all 0.4s ease;
-}
-
-[data-theme='gold'] .premium-card-glass {
-    border-color: rgba(212, 175, 55, 0.3) !important;
-}
-
-.premium-card-glass:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55) !important;
-}
-
-/* Sidebar Fixes & Spacing */
-.sidebar {
-    width: 300px !important;
-    padding: 2.5rem 1.2rem !important;
-}
-
+/* Navigation */
 .nav-menu {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .nav-item {
-    display: flex !important;
-    align-items: center !important;
-    padding: 14px 20px !important;
-    gap: 15px !important;
-    border-radius: 16px !important;
-    text-decoration: none !important;
-    color: var(--text-primary) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-}
-
-.nav-item:hover {
-    background: rgba(212, 175, 55, 0.15) !important;
-    border-color: rgba(212, 175, 55, 0.3) !important;
-    transform: translateX(-5px) !important;
-}
-
-.nav-item.active {
-    background: linear-gradient(135deg, var(--ramadan-gold), #8B6B00) !important;
-    color: white !important;
-    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3) !important;
-    border: none !important;
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    border-radius: 18px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
 }
 
 .nav-item i {
-    margin-left: 12px !important;
-    font-size: 1.15rem !important;
-    width: 20px !important;
-    opacity: 0.8;
+    margin-left: 15px;
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
 }
 
-.nav-item span {
-    font-size: 0.95rem;
-    font-weight: 700;
+.nav-item:hover,
+.nav-item.active {
+    background: var(--sky-primary);
+    color: white;
+    box-shadow: 0 8px 15px var(--shadow-color);
 }
 
-/* Main Content Spacing */
+.nav-item.active i {
+    transform: scale(1.2);
+}
+
+/* Main Content - Fluid & Expansive (Spread Out) */
 .main-content {
     margin-right: 0;
     padding: 2.5rem;
@@ -732,19 +685,6 @@ body {
     min-height: 100vh;
     transition: all 0.4s ease;
     width: 100%;
-}
-
-@media (min-width: 1201px) {
-    .main-content {
-        margin-right: 320px !important;
-        /* Fixed sidebar width + margin */
-        width: calc(100% - 320px) !important;
-    }
-
-    .sidebar {
-        right: 30px !important;
-        transform: translateX(0) !important;
-    }
 }
 
 /* Glass Cards */
@@ -884,8 +824,8 @@ body {
 
 /* Mobile Header (Universal Header now) */
 .mobile-header {
-    display: none !important;
-    /* Hidden on desktop by default */
+    display: flex !important;
+    /* Show on all screens */
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem;
@@ -1047,101 +987,4 @@ body {
     .main-container-v2 {
         padding: 10px;
     }
-}
-
-/* ===== Admin UI Overhaul (Luxury Glassmorphism & Backgrounds) ===== */
-
-/* Section Backgrounds */
-body.bg-admin-dashboard {
-    background: url('../images/admin_bg_main.png') no-repeat center center fixed !important;
-    background-size: cover !important;
-}
-
-body.bg-admin-students {
-    background: url('../images/admin_bg_students.png') no-repeat center center fixed !important;
-    background-size: cover !important;
-}
-
-body.bg-admin-courses {
-    background: url('../images/admin_bg_courses.png') no-repeat center center fixed !important;
-    background-size: cover !important;
-}
-
-body.bg-admin-security {
-    background: url('../images/admin_bg_security.png') no-repeat center center fixed !important;
-    background-size: cover !important;
-}
-
-/* Glassmorphism Cards */
-.admin-card-glass {
-    background: rgba(15, 23, 42, 0.75) !important;
-    backdrop-filter: blur(25px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
-    border: 1px solid rgba(212, 175, 55, 0.3) !important;
-    border-radius: 30px !important;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5) !important;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.admin-card-glass:hover {
-    transform: translateY(-8px);
-    border-color: rgba(212, 175, 55, 0.6) !important;
-    box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6) !important;
-}
-
-/* Table Glassmorphism */
-.admin-table-glass {
-    background: rgba(15, 23, 42, 0.6) !important;
-    backdrop-filter: blur(15px) !important;
-    border-radius: 20px !important;
-    overflow: hidden;
-    border: 1px solid rgba(212, 175, 55, 0.2) !important;
-}
-
-.admin-table-glass th {
-    background: rgba(212, 175, 55, 0.15) !important;
-    color: #D4AF37 !important;
-    font-weight: 900 !important;
-    text-transform: uppercase;
-}
-
-.admin-table-glass tr {
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1) !important;
-}
-
-.admin-table-glass tr:hover {
-    background: rgba(212, 175, 55, 0.05) !important;
-}
-
-/* Golden Typography Enhancements */
-.admin-title-gold {
-    background: linear-gradient(135deg, #fff8e1 0%, #d4af37 50%, #8b6b00 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 900;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    letter-spacing: 1px;
-}
-
-.admin-stat-label {
-    color: #bdae82 !important;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
-
-/* Form Glassmorphism */
-.admin-input-glass {
-    background: rgba(0, 0, 0, 0.4) !important;
-    border: 1px solid rgba(212, 175, 55, 0.2) !important;
-    color: #fff !important;
-    border-radius: 12px !important;
-    padding: 12px 18px !important;
-}
-
-.admin-input-glass:focus {
-    border-color: #D4AF37 !important;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3) !important;
 }

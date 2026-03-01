@@ -28,113 +28,95 @@
             </div>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card admin-card-glass stat-card-v2" style="border-right: 5px solid #D4AF37;">
+        <!-- Global Stats Grid -->
+        <div class="stats-grid-v2">
+            <!-- Students Count -->
+            <div class="card stat-card-v2" style="border-right: 6px solid #D4AF37;">
+                <div class="flex-grow-1">
+                    <div class="admin-stat-label">إجمالي الطلاب</div>
+                    <div class="admin-title-gold" style="font-size: 2.22rem;">{{ students_count }}</div>
+                </div>
+                <div style="font-size: 2.5rem; color: #D4AF37; opacity: 0.5;"><i class="fas fa-user-graduate"></i></div>
+            </div>
+
+            <!-- Pending Requests -->
+            <a href="{{ url_for('main.admin_pending_users') }}" style="text-decoration: none;">
+                <div class="card stat-card-v2" style="border-right: 6px solid #f59e0b;">
                     <div class="flex-grow-1">
-                        <div class="admin-stat-label">إجمالي الطلاب</div>
-                        <div class="admin-title-gold" style="font-size: 2.5rem; line-height: 1;">{{ students_count }}
-                        </div>
+                        <div class="admin-stat-label" style="color: #f59e0b !important;">طلبات معلقة</div>
+                        <div class="admin-title-gold" style="font-size: 2.22rem;">{{ pending_count }}</div>
                     </div>
-                    <div style="font-size: 2.5rem; color: #D4AF37; opacity: 0.5;"><i class="fas fa-user-graduate"></i>
+                    <div style="font-size: 2.5rem; color: #f59e0b; opacity: 0.5;"><i
+                            class="fas fa-user-clock pulse-dahih"></i></div>
+                </div>
+            </a>
+
+            <!-- Online Now -->
+            <a href="{{ url_for('main.admin_online_users') }}" style="text-decoration: none;">
+                <div class="card stat-card-v2" style="border-right: 6px solid #10b981;">
+                    <div class="flex-grow-1">
+                        <div class="admin-stat-label" style="color: #10b981 !important;">متصل الآن</div>
+                        <div class="admin-title-gold" style="font-size: 2.22rem;">{{ online_count }}</div>
+                    </div>
+                    <div style="font-size: 2.5rem; color: #10b981; opacity: 0.5;"><i class="fas fa-tower-broadcast"></i>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ url_for('main.admin_pending_users') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass stat-card-v2" style="border-right: 5px solid #f59e0b;">
-                        <div class="flex-grow-1">
-                            <div class="admin-stat-label" style="color: #f59e0b !important;">طلبات معلقة</div>
-                            <div class="admin-title-gold" style="font-size: 2.5rem; line-height: 1;">{{ pending_count }}
-                            </div>
-                        </div>
-                        <div style="font-size: 2.5rem; color: #f59e0b; opacity: 0.5;"><i
-                                class="fas fa-clock-rotate-left pulse-dahih"></i></div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ url_for('main.admin_online_users') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass stat-card-v2" style="border-right: 5px solid #10b981;">
-                        <div class="flex-grow-1">
-                            <div class="admin-stat-label" style="color: #10b981 !important;">متصل الآن</div>
-                            <div class="admin-title-gold" style="font-size: 2.5rem; line-height: 1;">{{ online_count }}
-                            </div>
-                        </div>
-                        <div style="font-size: 2.5rem; color: #10b981; opacity: 0.5;"><i
-                                class="fas fa-tower-broadcast"></i></div>
-                    </div>
-                </a>
-            </div>
+            </a>
         </div>
 
-        <!-- Management Sections -->
-        <h2 class="admin-title-gold mb-4"><i class="fas fa-crown"></i> إدارة الأكاديمية</h2>
+        <!-- Management Sections Title -->
+        <h2 class="admin-title-gold mb-4 mt-5"><i class="fas fa-crown"></i> إدارة الأكاديمية</h2>
 
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <a href="{{ url_for('main.admin_students') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass menu-item-v2 h-100 text-center" style="padding: 40px;">
-                        <div class="mb-3" style="font-size: 3.5rem; color: #D4AF37;"><i class="fas fa-users-gear"></i>
-                        </div>
-                        <h3 class="admin-title-gold">شؤون الطلاب</h3>
-                        <p class="text-secondary" style="font-weight: 600;">إدارة الحسابات، الترقية، والتجميد</p>
-                    </div>
-                </a>
-            </div>
+        <!-- Operations Grid -->
+        <div class="stats-grid-v2">
+            <a href="{{ url_for('main.admin_students') }}" style="text-decoration: none;">
+                <div class="card text-center" style="padding: 35px; min-height: 220px;">
+                    <div class="mb-3" style="font-size: 3rem; color: #D4AF37;"><i class="fas fa-users-gear"></i></div>
+                    <h3 class="admin-title-gold" style="font-size: 1.4rem;">شؤون الطلاب</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem; font-weight: 600;">إدارة الحسابات والترقية</p>
+                </div>
+            </a>
 
-            <div class="col-md-4 mb-4">
-                <a href="{{ url_for('main.admin_courses') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass menu-item-v2 h-100 text-center" style="padding: 40px;">
-                        <div class="mb-3" style="font-size: 3.5rem; color: #10b981;"><i
-                                class="fas fa-book-sparkles"></i></div>
-                        <h3 class="admin-title-gold">المواد والحصص</h3>
-                        <p class="text-secondary" style="font-weight: 600;">إدارة الكورسات، الدروس والاختبارات</p>
+            <a href="{{ url_for('main.admin_courses') }}" style="text-decoration: none;">
+                <div class="card text-center" style="padding: 35px; min-height: 220px;">
+                    <div class="mb-3" style="font-size: 3rem; color: #10b981;"><i class="fas fa-book-sparkles"></i>
                     </div>
-                </a>
-            </div>
+                    <h3 class="admin-title-gold" style="font-size: 1.4rem;">المواد والحصص</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem; font-weight: 600;">الكورسات والاختبارات</p>
+                </div>
+            </a>
 
-            <div class="col-md-4 mb-4">
-                <a href="{{ url_for('main.admin_posts') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass menu-item-v2 h-100 text-center" style="padding: 40px;">
-                        <div class="mb-3" style="font-size: 3.5rem; color: #f59e0b;"><i class="fas fa-newspaper"></i>
-                        </div>
-                        <h3 class="admin-title-gold">المنشورات (Feed)</h3>
-                        <p class="text-secondary" style="font-weight: 600;">إضافة صور أو PDF للصفحة الرئيسية</p>
-                    </div>
-                </a>
-            </div>
-        </div>
+            <a href="{{ url_for('main.admin_posts') }}" style="text-decoration: none;">
+                <div class="card text-center" style="padding: 35px; min-height: 220px;">
+                    <div class="mb-3" style="font-size: 3rem; color: #f59e0b;"><i class="fas fa-newspaper"></i></div>
+                    <h3 class="admin-title-gold" style="font-size: 1.4rem;">المنشورات (Feed)</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem; font-weight: 600;">إدارة الصفحة الرئيسية</p>
+                </div>
+            </a>
 
-        <!-- Quick Actions Row -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <a href="{{ url_for('main.settings') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass d-flex align-items-center gap-4" style="padding: 25px;">
-                        <div style="font-size: 2rem; color: #64748b;"><i class="fas fa-gears"></i></div>
-                        <div class="flex-grow-1">
-                            <h4 class="mb-0 admin-title-gold" style="font-size: 1.2rem;">إعدادات المنصة</h4>
-                            <p class="text-secondary mb-0" style="font-size: 0.9rem;">تغيير الاسم، اللوجو، ووضع الصيانة
-                            </p>
-                        </div>
-                        <div><i class="fas fa-chevron-left text-secondary"></i></div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 mb-4">
-                <a href="{{ url_for('main.admin_activity') }}" style="text-decoration: none;">
-                    <div class="card admin-card-glass d-flex align-items-center gap-4" style="padding: 25px;">
-                        <div style="font-size: 2rem; color: #ef4444;"><i class="fas fa-shield-virus"></i></div>
-                        <div class="flex-grow-1">
-                            <h4 class="mb-0 admin-title-gold" style="font-size: 1.2rem;">الأمان والرقابة</h4>
-                            <p class="text-secondary mb-0" style="font-size: 0.9rem;">مراقبة محاولات الاختراق وسجل
-                                المخالفات</p>
-                        </div>
-                        <div><i class="fas fa-chevron-left text-secondary"></i></div>
-                    </div>
-                </a>
-            </div>
+            <a href="{{ url_for('main.admin_settings') }}" style="text-decoration: none;">
+                <div class="card text-center" style="padding: 35px; min-height: 220px;">
+                    <div class="mb-3" style="font-size: 3rem; color: #64748b;"><i class="fas fa-gears"></i></div>
+                    <h3 class="admin-title-gold" style="font-size: 1.4rem;">إعدادات المنصة</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem; font-weight: 600;">تغيير الاسم واللوجو</p>
+                </div>
+            </a>
+
+            <a href="{{ url_for('main.admin_penalties') }}" style="text-decoration: none;">
+                <div class="card text-center" style="padding: 35px; min-height: 220px;">
+                    <div class="mb-3" style="font-size: 3rem; color: #ef4444;"><i class="fas fa-shield-virus"></i></div>
+                    <h3 class="admin-title-gold" style="font-size: 1.4rem;">الأمان والرقابة</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem; font-weight: 600;">سجل المخالفات والأمان</p>
+                </div>
+            </a>
+
+            <a href="/" target="_blank" style="text-decoration: none;">
+                <div class="card text-center" style="padding: 35px; min-height: 220px;">
+                    <div class="mb-3" style="font-size: 3rem; color: #0ea5e9;"><i class="fas fa-eye"></i></div>
+                    <h3 class="admin-title-gold" style="font-size: 1.4rem;">عرض المنصة</h3>
+                    <p class="text-secondary" style="font-size: 0.9rem; font-weight: 600;">مشاهدة شكل الطلاب</p>
+                </div>
+            </a>
         </div>
 
     </div>
