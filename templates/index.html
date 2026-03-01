@@ -78,7 +78,7 @@
 
         <div style="padding: 2rem;">
             <div class="post-content mb-4"
-                style="line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap; color: #e2e8f0;">
+                style="line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap; color: var(--text-primary);">
                 {{ post.content }}
             </div>
 
@@ -120,7 +120,7 @@
                 <div class="comments-list mb-4" style="max-height: 250px; overflow-y: auto; padding-left: 10px;">
                     {% for comment in post.comments %}
                     <div class="comment-item mb-2 p-3"
-                        style="background: rgba(0,0,0,0.2); border-radius: 15px; border-right: 3px solid var(--sky-primary);">
+                        style="background: var(--hover-bg); border-radius: 15px; border-right: 3px solid var(--sky-primary);">
                         <div class="d-flex justify-content-between mb-1">
                             <span style="font-weight: 800; color: var(--sky-primary); font-size: 0.85rem;">{{
                                 comment.user.full_name }}</span>

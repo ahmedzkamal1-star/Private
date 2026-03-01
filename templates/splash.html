@@ -1,25 +1,322 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-ramadan="enabled">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مرحباً بكم - منصة الدحيح</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/splash.css') }}?v=19.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0A1128;
+            color: #F0E6D2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Starfield */
+        .stars-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star-bg {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--d) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.4);
+            }
+        }
+
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: orbFloat 20s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: #D4AF37;
+            top: -10%;
+            right: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: #1E2A44;
+            bottom: -15%;
+            left: -10%;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: #C6721B;
+            top: 50%;
+            left: 40%;
+            animation-delay: 10s;
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(50px, -30px) scale(1.1);
+            }
+
+            100% {
+                transform: translate(-30px, 50px) scale(0.9);
+            }
+        }
+
+        /* Hanging Lanterns */
+        .lantern {
+            position: fixed;
+            top: 0;
+            z-index: 2;
+            width: 26px;
+            height: 44px;
+            background: #D4AF37;
+            clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            animation: swing 3s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+
+        .lantern::before {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            width: 2px;
+            height: 18px;
+            background: rgba(255, 215, 0, 0.4);
+            transform: translateX(-50%);
+        }
+
+        .l1 {
+            left: 12%;
+            animation-delay: 0s;
+        }
+
+        .l2 {
+            left: 32%;
+            animation-delay: 0.8s;
+        }
+
+        .l3 {
+            right: 32%;
+            animation-delay: 1.2s;
+        }
+
+        .l4 {
+            right: 12%;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes swing {
+            0% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(5deg);
+            }
+        }
+
+        /* Crescent Moon */
+        .crescent {
+            position: fixed;
+            top: 50px;
+            left: 8%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            box-shadow: 18px 18px 0 0 #D4AF37;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.7));
+            opacity: 0.85;
+            z-index: 1;
+        }
+
+        /* Splash Content */
+        .splash-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            animation: fadeSlideUp 1.2s ease-out;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-img {
+            width: 220px;
+            max-width: 60vw;
+            filter: drop-shadow(0 10px 30px rgba(212, 175, 55, 0.4));
+            animation: logoPulse 3s ease-in-out infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 10px 30px rgba(212, 175, 55, 0.4));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 15px 40px rgba(212, 175, 55, 0.6));
+            }
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff8e1 0%, #D4AF37 50%, #8B6B00 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(240, 230, 210, 0.7);
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        /* Loader */
+        .loader-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .loader-bar::after {
+            content: '';
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, #D4AF37, #fff8e1, #D4AF37);
+            border-radius: 10px;
+            animation: loadSlide 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadSlide {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(350%);
+            }
+        }
+
+        .loading-text {
+            font-size: 0.9rem;
+            color: rgba(240, 230, 210, 0.5);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="splash-container">
-        <div class="logo-container">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="شعار الموقع" class="logo">
-            <h1 class="site-name">منصة الدحيح</h1>
-        </div>
-        <div class="loader"></div>
+    <!-- Stars -->
+    <div class="stars-container" id="stars"></div>
+
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Lanterns -->
+    <div class="lantern l1"></div>
+    <div class="lantern l2"></div>
+    <div class="lantern l3"></div>
+    <div class="lantern l4"></div>
+
+    <!-- Crescent -->
+    <div class="crescent"></div>
+
+    <!-- Content -->
+    <div class="splash-content">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="شعار المنصة" class="logo-img">
+        <h1>منصة الدحيح</h1>
+        <p class="subtitle">El-Dahih Educational Platform</p>
+        <div class="loader-bar"></div>
         <p class="loading-text">يتم تجهيز المنصة الرقمية...</p>
     </div>
 
     <script>
-        // بعد 3 ثوانٍ، انتقل إلى صفحة تسجيل الدخول
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.className = 'star-bg';
+            const size = Math.random() * 2.5 + 0.5;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Redirect after 3 seconds
         setTimeout(function () {
             window.location.href = "{{ url_for('main.login') }}";
         }, 3000);

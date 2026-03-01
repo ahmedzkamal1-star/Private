@@ -168,6 +168,14 @@
         <i class="fas fa-crown"></i>
     </button>
 
+    <!-- Back to Home Button -->
+    {% if request.endpoint not in ['main.login', 'main.register', 'main.splash', 'main.index'] %}
+    <a href="{{ url_for('main.index') }}" class="premium-back-v2" aria-label="العودة للرئيسية"
+        style="position:fixed; bottom:30px; left:100px; width:60px; height:60px; border-radius:20px; background:var(--glass-bg); backdrop-filter:blur(15px); border:1px solid var(--glass-border); color:var(--sky-primary); display:flex; align-items:center; justify-content:center; font-size:1.3rem; z-index:3000; box-shadow:0 10px 20px var(--shadow-color); text-decoration:none; transition:all 0.3s ease;">
+        <i class="fas fa-home"></i>
+    </a>
+    {% endif %}
+
     <script src="{{ url_for('static', filename='js/main.js') }}?v=51.0"></script>
     <script>
         // Cleanup old localStorage if present
