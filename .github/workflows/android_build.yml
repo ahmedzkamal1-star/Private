@@ -1,10 +1,10 @@
-name: Build Android APK (Buildozer)
+name: Build El-Dahih Pro APK
 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - 'mobile_app/**'
+      - 'el_dahih_pro_app/**'
       - '.github/workflows/android_build.yml'
   workflow_dispatch:
 
@@ -20,7 +20,7 @@ jobs:
 
     - name: Build with Buildozer
       run: |
-        cd mobile_app
+        cd el_dahih_pro_app
         # Buildozer is pre-installed in this image
         yes | buildozer -v android debug
       env:
@@ -31,7 +31,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: aldahid-secure-apk
+        name: el-dahih-pro-apk
         path: |
-          mobile_app/bin/*.apk
-          mobile_app/.buildozer/android/platform/build-*/build/logs/*.log
+          el_dahih_pro_app/bin/*.apk
+          el_dahih_pro_app/.buildozer/android/platform/build-*/build/logs/*.log
