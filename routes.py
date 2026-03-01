@@ -154,15 +154,26 @@ def dashboard():
                                lessons_count=lessons_count,
                                enrollments_count=enrollments_count)
     
-    # For students, show enrolled courses
-    enrollments = Enrollment.query.filter_by(student_id=current_user.id).all()
-    enrolled_course_ids = [e.course_id for e in enrollments]
+    # Auto-enroll student in all available courses instantly
+    all_courses = Course.query.all()
+    existing_enrollments = Enrollment.query.filter_by(student_id=current_user.id).all()
+    enrolled_course_ids = [e.course_id for e in existing_enrollments]
     
-    if enrolled_course_ids:
-        available_courses = Course.query.filter(Course.id.notin_(enrolled_course_ids)).all()
-    else:
-        available_courses = Course.query.all()
+    new_enrollments = False
+    for course in all_courses:
+        if course.id not in enrolled_course_ids:
+            new_enrollment = Enrollment(student_id=current_user.id, course_id=course.id)
+            db.session.add(new_enrollment)
+            new_enrollments = True
+            
+    if new_enrollments:
+        db.session.commit()
+        # Refresh enrollments list after auto-enroll
+        existing_enrollments = Enrollment.query.filter_by(student_id=current_user.id).order_by(Enrollment.id.desc()).all()
         
+    enrollments = existing_enrollments
+    available_courses = [] # No more available courses, they are all instantly enrolled
+    
     return render_template('dashboard.html', enrollments=enrollments, available_courses=available_courses)
 
 @main.route('/view_pdf/<filename>')

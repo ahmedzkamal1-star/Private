@@ -133,29 +133,24 @@ function updateBackground(theme) {
 }
 
 // إعداد زر تبديل السمات: فاتح → مظلم → ذهبي → فاتح
-function setupThemeToggle() {
-    const toggle = document.querySelector('.dark-mode-toggle');
-    if (!toggle) return;
+window.toggleTheme = function () {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'gold';
+    let nextTheme;
 
-    toggle.addEventListener('click', function () {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'gold';
-        let nextTheme;
+    if (currentTheme === 'light') {
+        nextTheme = 'dark';
+    } else if (currentTheme === 'dark') {
+        nextTheme = 'gold';
+    } else {
+        // gold → light
+        nextTheme = 'light';
+    }
 
-        if (currentTheme === 'light') {
-            nextTheme = 'dark';
-        } else if (currentTheme === 'dark') {
-            nextTheme = 'gold';
-        } else {
-            // gold → light
-            nextTheme = 'light';
-        }
+    applyTheme(nextTheme);
 
-        applyTheme(nextTheme);
-
-        // Show theme name toast
-        showThemeToast(nextTheme);
-    });
-}
+    // Show theme name toast
+    showThemeToast(nextTheme);
+};
 
 function showThemeToast(theme) {
     // Remove old toast
