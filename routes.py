@@ -523,7 +523,7 @@ def get_secure_content(content_type, content_id):
     watermark_text = f"{current_user.full_name} | {current_user.code}"
     try:
         if original_filename.lower().endswith('.pdf'):
-            processed_data = add_watermark_to_pdf(file_data, watermark_text)
+            processed_data = file_data # Skip PyPDF2 to preserve text clarity, handled by frontend PDF.js
         elif original_filename.lower().endswith(('.png', '.jpg', '.jpeg')):
             processed_data = add_watermark_to_image(file_data, watermark_text)
         else:

@@ -14,7 +14,9 @@
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/mobile_app/styles.css">
-</head>
+    <!-- PDF.js for secure in-app rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';</script>
 
 <body>
     <!-- Splash Screen -->
@@ -261,7 +263,7 @@
             <div class="pdf-viewer-container">
                 <!-- Watermark overlay -->
                 <div class="watermark-overlay" id="watermark-overlay"></div>
-                <iframe id="pdf-frame" class="pdf-frame"></iframe>
+                <div id="pdf-render-container" class="pdf-render-container"></div>
                 <!-- Anti-screenshot overlay -->
                 <div class="anti-screenshot-overlay" id="anti-screenshot"></div>
             </div>

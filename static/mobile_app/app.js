@@ -550,21 +550,101 @@ async function loadProfile() {
     `;
 }
 
-// === PDF Viewer ===
-function openPdf(url, title) {
+// === Crypto Utilities for Secure PDF ===
+async function decryptAESCBC(encryptedBuffer, keyHex) {
+    // Convert hex key to Uint8Array
+    function hexToBytes(hex) {
+        let bytes = new Uint8Array(hex.length / 2);
+        for (let i = 0; i < hex.length; i += 2)
+            bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+        return bytes;
+    }
+
+    // The first 16 bytes are the IV
+    const encryptedArray = new Uint8Array(encryptedBuffer);
+    const iv = encryptedArray.slice(0, 16);
+    const ciphertext = encryptedArray.slice(16);
+
+    // Import the key
+    const rawKey = hexToBytes(keyHex);
+    const cryptoKey = await window.crypto.subtle.importKey(
+        "raw", rawKey, { name: "AES-CBC" }, false, ["decrypt"]
+    );
+
+    // Decrypt (Web Crypto handles PKCS7 automatically)
+    const decrypted = await window.crypto.subtle.decrypt(
+        { name: "AES-CBC", iv: iv }, cryptoKey, ciphertext
+    );
+
+    return decrypted;
+}
+
+// === Secure PDF Viewer ===
+async function openPdf(url, title) {
     showScreen('screen-pdf');
     document.getElementById('pdf-title').textContent = title || t('view_pdf');
+    const container = document.getElementById('pdf-render-container');
+    container.innerHTML = '<div style="color:white;text-align:center;padding:50px;"><i class="fas fa-spinner fa-spin fa-3x"></i><p style="margin-top:15px;font-family:Cairo;">جار الفتح وفك التشفير بصيغة آمنة...</p></div>';
 
-    const frame = document.getElementById('pdf-frame');
-    frame.src = url;
-
-    // Setup watermark with user's name
     setupWatermark();
+
+    try {
+        // Fetch encrypted PDF
+        const response = await fetch(url, {
+            headers: { 'X-Auth-Token': authToken }
+        });
+
+        if (!response.ok) throw new Error('فشل تحميل الملف');
+
+        const encryptedBytes = await response.arrayBuffer();
+
+        // Decrypt using authToken (which is the AES key)
+        const decryptedBytes = await decryptAESCBC(encryptedBytes, authToken);
+
+        // Render with PDF.js
+        const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(decryptedBytes) });
+        const pdf = await loadingTask.promise;
+
+        container.innerHTML = ''; // clear loading
+
+        // Render all pages
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+
+            // Set scale to match device width for clarity
+            const viewport = page.getViewport({ scale: 1.5 });
+            const screenWidth = window.innerWidth;
+            const scale = (screenWidth * 0.95) / viewport.width;
+            const scaledViewport = page.getViewport({ scale: scale > 1 ? scale : 1.5 });
+
+            const canvas = document.createElement('canvas');
+            canvas.style.display = 'block';
+            canvas.style.margin = '0 auto 15px auto';
+            canvas.style.width = '100%';
+            canvas.style.maxWidth = '800px';
+            canvas.style.borderRadius = '8px';
+
+            const context = canvas.getContext('2d');
+            canvas.height = scaledViewport.height;
+            canvas.width = scaledViewport.width;
+
+            container.appendChild(canvas);
+
+            await page.render({
+                canvasContext: context,
+                viewport: scaledViewport
+            }).promise;
+        }
+
+    } catch (err) {
+        console.error('PDF Decryption/Render Error:', err);
+        container.innerHTML = `<div style="color:#ff6b6b;text-align:center;padding:50px;font-family:Cairo;"><i class="fas fa-exclamation-triangle fa-3x"></i><p style="margin-top:15px;">حدث خطأ أثناء فتح الملف: ${err.message}</p></div>`;
+    }
 }
 
 function closePdfViewer() {
-    const frame = document.getElementById('pdf-frame');
-    frame.src = '';
+    const container = document.getElementById('pdf-render-container');
+    container.innerHTML = '';
     showScreen('screen-main');
 }
 
