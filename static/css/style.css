@@ -78,7 +78,8 @@
 }
 
 [data-ramadan='enabled'] .mesh-background {
-    background: radial-gradient(circle at center, #0B2B40 0%, #051622 100%);
+    background: url('../ramadan_bg.png') no-repeat center center fixed !important;
+    background-size: cover !important;
     opacity: 1;
 }
 
@@ -678,27 +679,37 @@ body {
     padding: 2.5rem 1.2rem !important;
 }
 
+.nav-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-top: 1.5rem;
+}
+
 .nav-item {
     display: flex !important;
     align-items: center !important;
     padding: 14px 20px !important;
-    margin-bottom: 8px !important;
     gap: 15px !important;
     border-radius: 16px !important;
     text-decoration: none !important;
     color: var(--text-primary) !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
 .nav-item:hover {
-    background: var(--hover-bg) !important;
+    background: rgba(212, 175, 55, 0.15) !important;
+    border-color: rgba(212, 175, 55, 0.3) !important;
     transform: translateX(-5px) !important;
 }
 
 .nav-item.active {
-    background: var(--sky-gradient) !important;
+    background: linear-gradient(135deg, var(--ramadan-gold), #8B6B00) !important;
     color: white !important;
-    box-shadow: 0 10px 20px var(--shadow-color) !important;
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3) !important;
+    border: none !important;
 }
 
 .nav-item i {
@@ -731,8 +742,8 @@ body {
     }
 
     .sidebar {
+        right: 30px !important;
         transform: translateX(0) !important;
-        right: 20px !important;
     }
 }
 
