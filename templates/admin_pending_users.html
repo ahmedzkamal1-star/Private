@@ -5,65 +5,64 @@
 {% block body_class %}bg-admin-dashboard{% endblock %}
 
 {% block content %}
-<div class="main-content">
-    <div class="container-fluid animate-fade-in" style="padding: 20px;">
+<div class="container-fluid animate-fade-in" style="padding: 20px;">
+    <div class="section-header-v2 mb-5 text-center">
+        <h1 class="admin-title-gold mb-0" style="font-size: 2.5rem;"><i class="fas fa-user-clock"></i> طلبات الالتحاق
+            المعلقة</h1>
+        <p class="text-secondary mb-0" style="font-weight: 700; opacity: 0.8;">حسابات مسجلة جديدة تحتاج للمراجعة
+            والموافقة.</p>
+    </div>
 
-        <div class="section-header-v2 mb-4">
-            <h1 class="admin-title-gold mb-0"><i class="fas fa-user-clock"></i> بانتظار المراجعة</h1>
-            <p class="text-secondary mb-0" style="font-weight: 700; opacity: 0.8;">حسابات مسجلة جديدة تحتاج للموافقة
-                للدخول إلى المنصة.</p>
-        </div>
-
-        <div class="card admin-card-glass" style="padding: 2rem;">
-            <div class="table-responsive">
-                <table class="modern-table-v2 admin-table-glass">
-                    <thead>
-                        <tr>
-                            <th style="color: #D4AF37;">الاسم</th>
-                            <th style="color: #D4AF37;">الكود</th>
-                            <th style="color: #D4AF37;">القسم</th>
-                            <th style="color: #D4AF37;">الفرقة</th>
-                            <th style="color: #D4AF37;">رقم الهاتف</th>
-                            <th style="text-align: center; color: #D4AF37;">الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for student in students %}
-                        <tr id="row-{{ student.id }}" style="border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
-                            <td style="font-weight: 800; color: #fff;">{{ student.full_name }}</td>
-                            <td style="font-family: 'Outfit'; color: #D4AF37; font-weight: 700;">{{ student.code }}</td>
-                            <td class="text-secondary">{{ student.department or '-' }}</td>
-                            <td class="text-secondary">{{ student.year or '-' }}</td>
-                            <td style="font-family: 'Outfit'; color: #fff;">{{ student.phone or '-' }}</td>
-                            <td style="text-align: center;">
-                                <div class="d-flex gap-2 justify-content-center">
-                                    <a href="{{ url_for('main.admin_approve_user', user_id=student.id, action='approve') }}"
-                                        class="premium-btn"
-                                        style="padding: 8px 15px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">
-                                        <i class="fas fa-check"></i> موافقة
-                                    </a>
-                                    <a href="{{ url_for('main.admin_approve_user', user_id=student.id, action='reject') }}"
-                                        class="premium-btn"
-                                        style="padding: 8px 15px; font-size: 0.85rem; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);"
-                                        onclick="return confirm('هل أنت متأكد من رفض طلب هذا الطالب؟ سيتم حذف بياناته.');">
-                                        <i class="fas fa-xmark"></i> رفض
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 5rem;">
-                                <div style="font-size: 4rem; opacity: 0.2; margin-bottom: 1.5rem;">⏳</div>
-                                <h3 class="text-secondary" style="font-weight: 600;">لا توجد حسابات جديدة بانتظار
-                                    المراجعة.</h3>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <div class="card premium-card-glass" style="padding: 2rem; border: 1px solid rgba(255,255,255,0.1) !important;">
+        <div class="table-responsive">
+            <table class="modern-table-v2 admin-table-glass">
+                <thead>
+                    <tr>
+                        <th style="color: #D4AF37;">الاسم</th>
+                        <th style="color: #D4AF37;">الكود</th>
+                        <th style="color: #D4AF37;">القسم</th>
+                        <th style="color: #D4AF37;">الفرقة</th>
+                        <th style="color: #D4AF37;">رقم الهاتف</th>
+                        <th style="text-align: center; color: #D4AF37;">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr id="row-{{ student.id }}" style="border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+                        <td style="font-weight: 800; color: #fff;">{{ student.full_name }}</td>
+                        <td style="font-family: 'Outfit'; color: #D4AF37; font-weight: 700;">{{ student.code }}</td>
+                        <td class="text-secondary">{{ student.department or '-' }}</td>
+                        <td class="text-secondary">{{ student.year or '-' }}</td>
+                        <td style="font-family: 'Outfit'; color: #fff;">{{ student.phone or '-' }}</td>
+                        <td style="text-align: center;">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ url_for('main.admin_approve_user', user_id=student.id, action='approve') }}"
+                                    class="premium-btn"
+                                    style="padding: 8px 15px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">
+                                    <i class="fas fa-check"></i> موافقة
+                                </a>
+                                <a href="{{ url_for('main.admin_approve_user', user_id=student.id, action='reject') }}"
+                                    class="premium-btn"
+                                    style="padding: 8px 15px; font-size: 0.85rem; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);"
+                                    onclick="return confirm('هل أنت متأكد من رفض طلب هذا الطالب؟ سيتم حذف بياناته.');">
+                                    <i class="fas fa-xmark"></i> رفض
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 5rem;">
+                            <div style="font-size: 4rem; opacity: 0.2; margin-bottom: 1.5rem;">⏳</div>
+                            <h3 class="text-secondary" style="font-weight: 600;">لا توجد حسابات جديدة بانتظار
+                                المراجعة.</h3>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

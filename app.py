@@ -12,6 +12,16 @@ def create_app():
 
     db.init_app(app)
 
+    # CORS support for mobile app
+    @app.after_request
+    def after_request(response):
+        origin = response.headers.get('Origin', '*')
+        response.headers['Access-Control-Allow-Origin'] = origin
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Auth-Token'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        return response
+
     # Ensure upload folder exists
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
@@ -26,6 +36,14 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+    # Allow API login without redirect
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        from flask import request, jsonify, redirect, url_for
+        if request.path.startswith('/api/') or request.headers.get('X-Auth-Token'):
+            return jsonify({"error": "Authentication required"}), 401
+        return redirect(url_for('main.login'))
 
     with app.app_context():
         # Import parts of our application

@@ -652,44 +652,52 @@ body {
     letter-spacing: 1px;
 }
 
-/* Navigation */
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* Global Premium Classes */
+.premium-card-glass {
+    background: rgba(15, 23, 42, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+    border: 1px solid rgba(0, 210, 255, 0.25) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45) !important;
+    transition: all 0.4s ease;
+}
+
+[data-theme='gold'] .premium-card-glass {
+    border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+.premium-card-glass:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Sidebar Fixes & Spacing */
+.sidebar {
+    width: 300px !important;
+    padding: 2.5rem 1.2rem !important;
 }
 
 .nav-item {
-    display: flex;
-    align-items: center;
-    padding: 14px 20px;
-    border-radius: 18px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-weight: 700;
-    position: relative;
-    overflow: hidden;
+    padding: 15px 18px !important;
+    margin-bottom: 5px;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-item i {
-    margin-left: 15px;
-    font-size: 1.2rem;
-    width: 24px;
-    text-align: center;
+    margin-left: 12px !important;
+    font-size: 1.15rem !important;
+    width: 20px !important;
+    opacity: 0.8;
 }
 
-.nav-item:hover,
-.nav-item.active {
-    background: var(--sky-primary);
-    color: white;
-    box-shadow: 0 8px 15px var(--shadow-color);
+.nav-item span {
+    font-size: 0.95rem;
+    font-weight: 700;
 }
 
-.nav-item.active i {
-    transform: scale(1.2);
-}
-
-/* Main Content - Fluid & Expansive (Spread Out) */
+/* Main Content Spacing */
 .main-content {
     margin-right: 0;
     padding: 2.5rem;
@@ -697,6 +705,19 @@ body {
     min-height: 100vh;
     transition: all 0.4s ease;
     width: 100%;
+}
+
+@media (min-width: 1201px) {
+    .main-content {
+        margin-right: 320px !important;
+        /* Fixed sidebar width + margin */
+        width: calc(100% - 320px) !important;
+    }
+
+    .sidebar {
+        transform: translateX(0) !important;
+        right: 20px !important;
+    }
 }
 
 /* Glass Cards */

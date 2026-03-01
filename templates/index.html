@@ -1,187 +1,157 @@
 {% extends "base.html" %}
 
-{% block title %}الرئيسية - {{ settings.system_name }}{% endblock %}
+{% block title %}الرئيسية | {{ settings.system_name }}{% endblock %}
+
+{% block body_class %}bg-student-home{% endblock %}
 
 {% block content %}
-<div class="card animate-fade-in"
-    style="text-align: center; border-bottom: 4px solid var(--sky-primary); padding: 2rem;">
-    <h1 style="color: var(--sky-primary); margin-bottom: 10px; font-weight: 900;">{{ settings.system_name }}</h1>
-    <p style="opacity: 0.8; font-weight: 600;">مرحباً بك في ساحة المشاركة الطلابية</p>
+<div class="container-fluid animate-fade-in" style="padding: 10px;">
 
-    {% if settings.show_schedule %}
-    {% set display_sch = None %}
-    {% if latest_schedule and latest_schedule.filename %}
-    {% set display_sch = url_for('static', filename='uploads/' + latest_schedule.filename) %}
-    {% set sch_title = latest_schedule.title or 'الجدول الدراسي الجديد' %}
-    {% elif settings.schedule_filename %}
-    {% set display_sch = url_for('main.uploaded_file', filename=settings.schedule_filename) %}
-    {% set sch_title = 'عرض الجدول الدراسي العام' %}
-    {% else %}
-    {% set display_sch = None %}
-    {% endif %}
+    <!-- Welcome Header Card -->
+    <div class="card premium-card-glass text-center mb-5"
+        style="padding: 3rem; border-bottom: 5px solid var(--sky-primary) !important;">
+        <h1 class="admin-title-gold" style="font-size: 3rem; margin-bottom: 15px;">{{ settings.system_name }}</h1>
+        <p class="text-secondary" style="font-size: 1.1rem; font-weight: 700; opacity: 0.9;">مرحباً بك في ساحة المشاركة
+            الطلابية الفاخرة</p>
 
-    {% if display_sch %}
-    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-color);">
-        <a href="{{ display_sch }}" target="_blank" class="premium-btn"
-            style="text-decoration: none; display: inline-flex; width: auto; padding: 0.8rem 2rem;">
-            <i class="fas fa-calendar-alt" style="margin-left: 10px;"></i>
-            {{ sch_title }}
-        </a>
-    </div>
-    {% endif %}
-    {% endif %}
-
-    {% if settings.telegram_link or settings.whatsapp_link %}
-    <div
-        style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-color); display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-        {% if settings.telegram_link %}
-        <a href="{{ settings.telegram_link }}" target="_blank" class="social-link-btn telegram-btn">
-            <i class="fab fa-telegram" style="font-size: 1.3rem;"></i>
-            <span>قناة التيليجرام</span>
-        </a>
+        {% if settings.show_schedule %}
+        {% set display_sch = None %}
+        {% if latest_schedule and latest_schedule.filename %}
+        {% set display_sch = url_for('static', filename='uploads/' + latest_schedule.filename) %}
+        {% set sch_title = latest_schedule.title or 'الجدول الدراسي الجديد' %}
+        {% elif settings.schedule_filename %}
+        {% set display_sch = url_for('main.uploaded_file', filename=settings.schedule_filename) %}
+        {% set sch_title = 'عرض الجدول الدراسي العام' %}
         {% endif %}
-        {% if settings.whatsapp_link %}
-        <a href="{{ settings.whatsapp_link }}" target="_blank" class="social-link-btn whatsapp-btn">
-            <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i>
-            <span>واتساب</span>
-        </a>
-        {% endif %}
-    </div>
-    {% endif %}
-</div>
 
-<style>
-    .social-link-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 28px;
-        border-radius: 14px;
-        font-weight: 800;
-        font-size: 0.95rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
-    }
-
-    .telegram-btn {
-        background: linear-gradient(135deg, #0088cc, #00aaee);
-        color: white;
-        box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
-    }
-
-    .telegram-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
-    }
-
-    .whatsapp-btn {
-        background: linear-gradient(135deg, #25d366, #128c7e);
-        color: white;
-        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-    }
-
-    .whatsapp-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-    }
-</style>
-
-{% for post in posts %}
-<div class="card post-card" id="post-{{ post.id }}" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
-    {% if post.image_filename %}
-    <div class="post-image-container"
-        style="width: 100%; height: 300px; overflow: hidden; position: relative; border-bottom: 1px solid var(--border-color);">
-        <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image"
-            style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
-    </div>
-    {% endif %}
-
-    <div style="padding: 1.5rem;">
-        <div class="post-header"
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h3 style="margin: 0; color: var(--sky-primary);">{{ post.title }}</h3>
-            <span class="badge"
-                style="background-color: var(--sky-light); color: var(--sky-primary); font-size: 0.8rem;">
-                {{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}
-            </span>
-        </div>
-
-        <div class="post-content" style="line-height: 1.6; white-space: pre-wrap; margin-bottom: 1.5rem;">
-            {{ post.content }}
-        </div>
-
-        {% if post.pdf_filename %}
-        <div style="margin-bottom: 1.5rem;">
-            <a href="{{ url_for('main.uploaded_file', filename=post.pdf_filename) }}" target="_blank"
-                class="premium-btn"
-                style="text-decoration: none; display: inline-flex; width: auto; padding: 0.6rem 1.5rem; gap: 8px; font-size: 0.9rem;">
-                <i class="fas fa-file-pdf" style="color: #ef4444;"></i> فتح / تحميل الملف المرفق
+        {% if display_sch %}
+        <div class="mt-4 pt-4" style="border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="{{ display_sch }}" target="_blank" class="premium-btn"
+                style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                <i class="fas fa-calendar-star" style="margin-left: 12px;"></i>
+                {{ sch_title }}
             </a>
         </div>
         {% endif %}
+        {% endif %}
 
-        <div class="post-footer"
-            style="padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1rem;">
-            {% if current_user.is_authenticated and current_user.role == 'student' %}
-            <button
-                class="like-btn {% if current_user.id in post.likes|map(attribute='user_id')|list %}active{% endif %}"
-                onclick="toggleLike({{ post.id }})"
-                style="background: none; border: 1px solid {% if current_user.id in post.likes|map(attribute='user_id')|list %}#ef4444{% else %}var(--border-color){% endif %}; 
-                           color: {% if current_user.id in post.likes|map(attribute='user_id')|list %}#ef4444{% else %}var(--text-secondary){% endif %}; 
-                           padding: 8px 16px; border-radius: 50px; cursor: pointer; transition: all 0.3s; font-weight: 600; font-family: inherit; font-size: 0.9rem;">
-                ❤️ <span class="like-count" style="margin-right: 4px;">{{ post.likes|length }}</span> إعجاب
-            </button>
-            {% else %}
-            <span style="color: var(--text-secondary); font-weight: 600;">❤️ {{ post.likes|length }} إعجاب</span>
+        {% if settings.telegram_link or settings.whatsapp_link %}
+        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            {% if settings.telegram_link %}
+            <a href="{{ settings.telegram_link }}" target="_blank" class="premium-btn"
+                style="background: #0088cc; border: none; padding: 0.8rem 1.8rem;">
+                <i class="fab fa-telegram" style="margin-left: 8px;"></i> قناة التليجرام
+            </a>
             {% endif %}
-
-            <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">👁️ {{ post.views|length }}
-                مشاهدة</span>
+            {% if settings.whatsapp_link %}
+            <a href="{{ settings.whatsapp_link }}" target="_blank" class="premium-btn"
+                style="background: #25d366; border: none; padding: 0.8rem 1.8rem;">
+                <i class="fab fa-whatsapp" style="margin-left: 8px;"></i> واتساب
+            </a>
+            {% endif %}
         </div>
+        {% endif %}
+    </div>
 
-        <!-- Comments Section -->
-        <div class="comments-section" style="padding-top: 1rem; border-top: 1px solid var(--border-color);">
-            <h4 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1rem;">💬 التعليقات ({{
-                post.comments|length }})</h4>
+    <!-- Posts Feed -->
+    <div class="section-header-v2 mb-4">
+        <h2 class="admin-title-gold"><i class="fas fa-bullhorn"></i> آخر الأخبار والمنشورات</h2>
+    </div>
 
-            <div class="comments-list" style="margin-bottom: 1rem; max-height: 200px; overflow-y: auto;">
-                {% for comment in post.comments %}
-                <div class="comment-item"
-                    style="margin-bottom: 10px; padding: 10px; border-radius: 10px; background: var(--bg-main);">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span style="font-weight: 700; font-size: 0.85rem; color: var(--sky-primary);">{{
-                            comment.user.full_name }}</span>
-                        <span style="font-size: 0.75rem; color: var(--text-secondary);">{{
-                            comment.timestamp.strftime('%H:%M') }}</span>
-                    </div>
-                    <p style="margin: 0; font-size: 0.9rem; color: var(--text-primary);">{{ comment.content }}</p>
-                </div>
-                {% else %}
-                <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">لا توجد تعليقات بعد.
-                </p>
-                {% endfor %}
+    {% for post in posts %}
+    <div class="card premium-card-glass post-card mb-5" id="post-{{ post.id }}"
+        style="padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1) !important;">
+        {% if post.image_filename %}
+        <div class="post-img-header" style="width: 100%; height: 350px; overflow: hidden; position: relative;">
+            <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}"
+                style="width: 100%; height: 100%; object-fit: cover;">
+            <div
+                style="position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; background: linear-gradient(to top, rgba(10,14,39,0.9), transparent);">
+                <h3 class="admin-title-gold" style="font-size: 1.8rem; margin: 0;">{{ post.title }}</h3>
+            </div>
+        </div>
+        {% else %}
+        <div style="padding: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <h3 class="admin-title-gold" style="font-size: 1.8rem; margin: 0;">{{ post.title }}</h3>
+        </div>
+        {% endif %}
+
+        <div style="padding: 2rem;">
+            <div class="post-content mb-4"
+                style="line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap; color: #e2e8f0;">
+                {{ post.content }}
             </div>
 
-            {% if current_user.is_authenticated and current_user.role == 'student' %}
-            <form action="{{ url_for('main.add_comment', post_id=post.id) }}" method="POST"
-                style="display: flex; gap: 10px;">
-                <input type="text" name="content" placeholder="اكتب تعليقاً..." required
-                    style="flex: 1; padding: 10px 15px; border-radius: 25px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-size: 0.9rem;">
-                <button type="submit"
-                    style="background: var(--sky-primary); color: white; border: none; padding: 8px 15px; border-radius: 25px; cursor: pointer; font-weight: 600;">
-                    نشر
-                </button>
-            </form>
+            {% if post.pdf_filename %}
+            <div class="mb-4">
+                <a href="{{ url_for('main.uploaded_file', filename=post.pdf_filename) }}" target="_blank"
+                    class="premium-btn"
+                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.8rem 1.5rem;">
+                    <i class="fas fa-file-pdf" style="margin-left: 10px;"></i> فتح الملف المرفق
+                </a>
+            </div>
             {% endif %}
+
+            <!-- Engagement Stats -->
+            <div class="d-flex align-items-center gap-4 py-3" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                {% if current_user.is_authenticated and current_user.role == 'student' %}
+                <button
+                    class="premium-btn like-btn {% if current_user.id in post.likes|map(attribute='user_id')|list %}active{% endif %}"
+                    onclick="toggleLike({{ post.id }})"
+                    style="background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 50px; padding: 8px 20px;">
+                    <i class="fas fa-heart"></i> <span class="like-count" style="margin-right: 5px;">{{
+                        post.likes|length }}</span>
+                </button>
+                {% else %}
+                <div class="admin-stat-label"><i class="fas fa-heart" style="color:#ef4444"></i> {{ post.likes|length }}
+                </div>
+                {% endif %}
+                <div class="admin-stat-label"><i class="fas fa-eye" style="color:var(--sky-primary)"></i> {{
+                    post.views|length }}</div>
+                <div class="admin-stat-label" style="font-family: 'Outfit'; font-size: 0.8rem; opacity: 0.6;">{{
+                    post.timestamp.strftime('%Y/%m/%d - %H:%M') }}</div>
+            </div>
+
+            <!-- Comments -->
+            <div class="mt-4 pt-4" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                <h5 class="admin-stat-label mb-3"><i class="fas fa-comments"></i> التعليقات ({{ post.comments|length }})
+                </h5>
+
+                <div class="comments-list mb-4" style="max-height: 250px; overflow-y: auto; padding-left: 10px;">
+                    {% for comment in post.comments %}
+                    <div class="comment-item mb-2 p-3"
+                        style="background: rgba(0,0,0,0.2); border-radius: 15px; border-right: 3px solid var(--sky-primary);">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span style="font-weight: 800; color: var(--sky-primary); font-size: 0.85rem;">{{
+                                comment.user.full_name }}</span>
+                            <span style="font-size: 0.7rem; opacity: 0.5;">{{ comment.timestamp.strftime('%H:%M')
+                                }}</span>
+                        </div>
+                        <p class="m-0" style="font-size: 0.95rem; line-height: 1.4;">{{ comment.content }}</p>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-secondary py-3">لا توجد تعليقات بعد. كن أول من يعلق!</p>
+                    {% endfor %}
+                </div>
+
+                {% if current_user.is_authenticated and current_user.role == 'student' %}
+                <form action="{{ url_for('main.add_comment', post_id=post.id) }}" method="POST" class="d-flex gap-2">
+                    <input type="text" name="content" placeholder="اكتب تعليقاً..." required
+                        class="premium-input-glass flex-grow-1">
+                    <button type="submit" class="premium-btn" style="padding: 10px 25px;">نشر</button>
+                </form>
+                {% endif %}
+            </div>
         </div>
     </div>
+    {% else %}
+    <div class="card premium-card-glass text-center" style="padding: 5rem;">
+        <i class="fas fa-newspaper" style="font-size: 4rem; opacity: 0.1; margin-bottom: 2rem;"></i>
+        <h3 class="text-secondary">لا توجد منشورات حالياً. ترقبوا الجديد!</h3>
+    </div>
+    {% endfor %}
+
 </div>
-{% else %}
-<div class="card" style="text-align: center; padding: 3rem;">
-    <p style="font-size: 1.2rem; color: #666;">لا توجد منشورات حالياً.</p>
-</div>
-{% endfor %}
 
 <script>
     function toggleLike(postId) {
@@ -193,26 +163,20 @@
 
         fetch('/like_post/' + postId, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
         })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'liked') {
                     btn.style.color = '#ef4444';
-                    btn.style.borderColor = '#ef4444';
+                    btn.style.background = 'rgba(239,68,68,0.2)';
                     btn.classList.add('active');
                 } else {
-                    btn.style.color = 'var(--text-secondary)';
-                    btn.style.borderColor = 'var(--border-color)';
+                    btn.style.color = 'rgba(239,68,68,0.8)';
+                    btn.style.background = 'rgba(239,68,68,0.1)';
                     btn.classList.remove('active');
                 }
                 countSpan.innerText = data.count;
-            })
-            .catch(err => {
-                console.error('Error toggling like:', err);
-                alert('حدث خطأ أثناء محاولة الإعجاب بالمنشور.');
             });
     }
 </script>

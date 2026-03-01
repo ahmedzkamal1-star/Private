@@ -1,0 +1,24 @@
+{
+    "name": "الدحيح - El Dahih",
+    "short_name": "الدحيح",
+    "description": "منصة الدحيح التعليمية - تطبيق إدارة الطلاب",
+    "start_url": "/mobile",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0a0e27",
+    "theme_color": "#0a0e27",
+    "lang": "ar",
+    "dir": "rtl",
+    "icons": [
+        {
+            "src": "/static/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

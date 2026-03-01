@@ -239,8 +239,10 @@ def api_login():
     
     user = User.query.filter_by(code=code).first()
     if user and user.check_password(password):
+        if not user.is_approved:
+            return jsonify({"error": "حسابك قيد المراجعة من قبل الإدارة", "pending": True}), 403
+        
         if user.is_frozen:
-            print(f"DEBUG API: Login blocked for {code} - Account frozen")
             if user.freeze_until and user.freeze_until > datetime.utcnow():
                 return jsonify({"error": "Account frozen", "until": user.freeze_until.isoformat()}), 403
             else:
@@ -248,28 +250,35 @@ def api_login():
                 db.session.commit()
                 
         if user.pan_level >= 4:
-            print(f"DEBUG API: Login blocked for {code} - Permanently banned")
             return jsonify({"error": "Account permanently banned"}), 403
             
-        # Device Binding (Optional security)
+        # Device Binding
         if device_id:
             if not user.device_id:
                 user.device_id = device_id
                 db.session.commit()
             elif user.device_id != device_id:
                 log_activity("Unauthorized Device Access", f"Attempt from {device_id}")
-                # return jsonify({"error": "Device mismatch"}), 403
             
         login_user(user)
-        print(f"DEBUG API: Login success for {code}")
         return jsonify({
             "status": "success",
             "token": user.enc_key,
-            "full_name": user.full_name,
-            "role": user.role
+            "user": {
+                "id": user.id,
+                "code": user.code,
+                "full_name": user.full_name,
+                "role": user.role,
+                "phone": user.phone or "",
+                "email": user.email or "",
+                "department": user.department or "",
+                "year": user.year or "",
+                "gender": user.gender or "male",
+                "points": user.points or 0,
+                "pan_level": user.pan_level or 0
+            }
         })
-    print(f"DEBUG API: Login failed for {code} - Invalid credentials or user not found")
-    return jsonify({"error": "Invalid credentials"}), 401
+    return jsonify({"error": "بيانات الدخول غير صحيحة"}), 401
 
 @main.route('/api/report_violation', methods=['POST'])
 @login_required
@@ -337,6 +346,126 @@ def api_get_courses():
                 "lessons_count": len(course.lessons)
             })
     return jsonify(courses_data)
+
+@main.route('/api/register', methods=['POST'])
+def api_register():
+    """Register a new student from mobile app"""
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+    
+    code = data.get('code', '').strip()
+    full_name = data.get('full_name', '').strip()
+    password = data.get('password', '')
+    phone = data.get('phone', '')
+    department = data.get('department', '')
+    year = data.get('year', '')
+    gender = data.get('gender', 'male')
+    
+    if not code or not full_name or not password:
+        return jsonify({"error": "يرجى إدخال البيانات المطلوبة"}), 400
+    
+    settings = SystemSettings.query.first()
+    if settings and not settings.allow_registration:
+        return jsonify({"error": "التسجيل مغلق حالياً"}), 403
+    
+    if User.query.filter_by(code=code).first():
+        return jsonify({"error": "هذا الكود مسجل بالفعل"}), 409
+    
+    new_student = User(
+        code=code, full_name=full_name, phone=phone,
+        department=department, year=year, role='student',
+        is_approved=False, gender=gender,
+        enc_key=generate_user_key()
+    )
+    new_student.set_password(password)
+    db.session.add(new_student)
+    db.session.commit()
+    
+    # Notify Admin via Telegram
+    try:
+        admin_msg = (
+            f"<b>📱 تسجيل جديد من التطبيق!</b>\n\n"
+            f"▪️ <b>الاسم:</b> {full_name}\n"
+            f"▪️ <b>الكود:</b> {code}\n"
+            f"▪️ <b>الفرقة:</b> {year}\n"
+            f"▪️ <b>القسم:</b> {department}\n"
+            f"▪️ <b>الهاتف:</b> {phone}\n\n"
+            f"يرجى الموافقة من لوحة التحكم. ✅"
+        )
+        send_telegram_notification(admin_msg)
+    except:
+        pass
+    
+    return jsonify({"status": "success", "message": "تم التسجيل بنجاح! يرجى انتظار موافقة الإدارة."})
+
+@main.route('/api/posts', methods=['GET'])
+def api_get_posts():
+    """Get home posts for mobile app"""
+    posts = HomePost.query.order_by(HomePost.timestamp.desc()).limit(50).all()
+    posts_data = []
+    for post in posts:
+        post_data = {
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "timestamp": post.timestamp.isoformat() if post.timestamp else "",
+            "likes_count": len(post.likes) if post.likes else 0,
+            "comments_count": len(post.comments) if post.comments else 0,
+            "views_count": len(post.views) if post.views else 0,
+            "image_url": f"/uploads/{post.image_filename}" if post.image_filename else None,
+            "pdf_url": f"/uploads/{post.pdf_filename}" if post.pdf_filename else None
+        }
+        posts_data.append(post_data)
+    return jsonify(posts_data)
+
+@main.route('/api/profile', methods=['GET'])
+@login_required
+def api_get_profile():
+    """Get current user profile"""
+    user = current_user
+    enrollments = Enrollment.query.filter_by(student_id=user.id).all()
+    courses = []
+    for en in enrollments:
+        course = Course.query.get(en.course_id)
+        if course:
+            courses.append({"id": course.id, "name": course.name, "code": course.code})
+    
+    return jsonify({
+        "id": user.id,
+        "code": user.code,
+        "full_name": user.full_name,
+        "phone": user.phone or "",
+        "email": user.email or "",
+        "department": user.department or "",
+        "year": user.year or "",
+        "gender": user.gender or "male",
+        "points": user.points or 0,
+        "pan_level": user.pan_level or 0,
+        "courses": courses,
+        "courses_count": len(courses)
+    })
+
+@main.route('/api/like/<int:post_id>', methods=['POST'])
+@login_required
+def api_like_post(post_id):
+    """Like/unlike a post from mobile app"""
+    existing = PostLike.query.filter_by(post_id=post_id, user_id=current_user.id).first()
+    if existing:
+        db.session.delete(existing)
+        status = 'unliked'
+    else:
+        new_like = PostLike(post_id=post_id, user_id=current_user.id)
+        db.session.add(new_like)
+        status = 'liked'
+        current_user.points += 5
+    db.session.commit()
+    return jsonify({"status": status, "count": PostLike.query.filter_by(post_id=post_id).count()})
+
+@main.route('/mobile')
+def mobile_app():
+    """Serve the mobile web application"""
+    return send_from_directory(os.path.join(current_app.root_path, 'static', 'mobile_app'), 'index.html')
 
 @main.route('/api/lessons/<int:course_id>', methods=['GET'])
 @login_required

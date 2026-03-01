@@ -5,74 +5,73 @@
 {% block body_class %}bg-admin-courses{% endblock %}
 
 {% block content %}
-<div class="main-content">
-    <div class="container-fluid animate-fade-in" style="padding: 20px;">
-
-        <div class="section-header-v2 mb-4 d-flex align-items-center justify-content-between">
-            <div>
-                <h1 class="admin-title-gold mb-0"><i class="fas fa-book-open"></i> إدارة المواد</h1>
-                <p class="text-secondary mb-0" style="font-weight: 700; opacity: 0.8;">إدارة الكورسات، الدروس، والمحتوى
-                    التعليمي بالكامل.</p>
-            </div>
-            <a href="{{ url_for('main.admin_add_course') }}" class="premium-btn">
-                <i class="fas fa-plus" style="margin-left: 8px;"></i> إضافة مادة جديدة
-            </a>
+<div class="container-fluid animate-fade-in" style="padding: 20px;">
+    <div class="section-header-v2 mb-5 d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="admin-title-gold mb-0"><i class="fas fa-book-open"></i> إدارة المواد التعليمية</h1>
+            <p class="text-secondary mb-0" style="font-weight: 700; opacity: 0.8;">إدارة الكورسات، الدروس، والمحتوى
+                التعليمي بالكامل.</p>
         </div>
-
-        <div class="row" style="margin-top: 2rem;">
-            {% for course in courses %}
-            <div class="col-md-4 mb-4">
-                <div class="card admin-card-glass h-100 d-flex flex-column" style="padding: 1.5rem;">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="premium-btn"
-                            style="padding: 5px 12px; border-radius: 10px; font-size: 0.8rem; font-family: 'Outfit'; opacity: 0.8; box-shadow: none;">{{
-                            course.code }}</span>
-                        <i class="fas fa-bookmark" style="color: #D4AF37; opacity: 0.6; font-size: 1.2rem;"></i>
-                    </div>
-
-                    <h3 class="admin-title-gold mb-2" style="font-size: 1.3rem;">{{ course.name }}</h3>
-                    <p class="text-secondary mb-4" style="font-size: 0.9rem; line-height: 1.6; flex-grow: 1;">{{
-                        course.description[:100] }}...</p>
-
-                    <div class="mb-4"
-                        style="background: rgba(212, 175, 55, 0.1); padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.15);">
-                        <div class="admin-stat-label" style="font-size: 0.7rem;">المحاضر</div>
-                        <div style="font-weight: 800; color: #fff;"><i class="fas fa-user-tie"
-                                style="color: #D4AF37; margin-left: 8px;"></i>{{ course.instructor }}</div>
-                    </div>
-
-                    <div class="d-flex gap-2">
-                        <a href="{{ url_for('main.admin_course_content', course_id=course.id) }}"
-                            class="premium-btn flex-grow-1 justify-content-center" title="المحتوى">
-                            <i class="fas fa-folder-open ml-2"></i> المحتوى
-                        </a>
-                        <a href="{{ url_for('main.admin_edit_course', course_id=course.id) }}" class="premium-btn"
-                            style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);"
-                            title="تعديل">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <form action="{{ url_for('main.admin_delete_course', course_id=course.id) }}" method="POST"
-                            onsubmit="return confirm('هل أنت متأكد من حذف هذه المادة؟');">
-                            <button type="submit" class="premium-btn"
-                                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);"
-                                title="حذف">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="col-12">
-                <div class="card admin-card-glass text-center" style="padding: 5rem;">
-                    <div style="font-size: 4rem; opacity: 0.2; margin-bottom: 2rem;">📚</div>
-                    <h3 class="text-secondary">لا توجد مواد متاحة حالياً.</h3>
-                    <a href="{{ url_for('main.admin_add_course') }}" class="admin-title-gold mt-3 d-inline-block"
-                        style="text-decoration: none;">إبدا بإضافة أول مادة الآن <i class="fas fa-arrow-left"></i></a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        <a href="{{ url_for('main.admin_add_course') }}" class="premium-btn" style="padding: 12px 25px;">
+            <i class="fas fa-plus" style="margin-left: 10px;"></i> إضافة مادة جديدة
+        </a>
     </div>
+
+    <div class="row" style="margin-top: 2rem;">
+        {% for course in courses %}
+        <div class="col-md-4 mb-4">
+            <div class="card premium-card-glass h-100 d-flex flex-column"
+                style="padding: 2rem; border: 1px solid rgba(255,255,255,0.1) !important;">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="premium-btn"
+                        style="padding: 5px 12px; border-radius: 10px; font-size: 0.8rem; font-family: 'Outfit'; opacity: 0.8; box-shadow: none;">{{
+                        course.code }}</span>
+                    <i class="fas fa-bookmark" style="color: #D4AF37; opacity: 0.6; font-size: 1.2rem;"></i>
+                </div>
+
+                <h3 class="admin-title-gold mb-2" style="font-size: 1.3rem;">{{ course.name }}</h3>
+                <p class="text-secondary mb-4" style="font-size: 0.9rem; line-height: 1.6; flex-grow: 1;">{{
+                    course.description[:100] }}...</p>
+
+                <div class="mb-4"
+                    style="background: rgba(212, 175, 55, 0.1); padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.15);">
+                    <div class="admin-stat-label" style="font-size: 0.7rem;">المحاضر</div>
+                    <div style="font-weight: 800; color: #fff;"><i class="fas fa-user-tie"
+                            style="color: #D4AF37; margin-left: 8px;"></i>{{ course.instructor }}</div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('main.admin_course_content', course_id=course.id) }}"
+                        class="premium-btn flex-grow-1 justify-content-center" title="المحتوى">
+                        <i class="fas fa-folder-open ml-2"></i> المحتوى
+                    </a>
+                    <a href="{{ url_for('main.admin_edit_course', course_id=course.id) }}" class="premium-btn"
+                        style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);"
+                        title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="{{ url_for('main.admin_delete_course', course_id=course.id) }}" method="POST"
+                        onsubmit="return confirm('هل أنت متأكد من حذف هذه المادة؟');">
+                        <button type="submit" class="premium-btn"
+                            style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);"
+                            title="حذف">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="card admin-card-glass text-center" style="padding: 5rem;">
+                <div style="font-size: 4rem; opacity: 0.2; margin-bottom: 2rem;">📚</div>
+                <h3 class="text-secondary">لا توجد مواد متاحة حالياً.</h3>
+                <a href="{{ url_for('main.admin_add_course') }}" class="admin-title-gold mt-3 d-inline-block"
+                    style="text-decoration: none;">إبدا بإضافة أول مادة الآن <i class="fas fa-arrow-left"></i></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 </div>
 {% endblock %}

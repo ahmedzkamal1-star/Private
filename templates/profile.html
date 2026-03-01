@@ -2,15 +2,18 @@
 
 {% block title %}الملف الشخصي - {{ settings.system_name }}{% endblock %}
 
+{% block body_class %}bg-student-home{% endblock %}
+
 {% block content %}
-<div class="main-container-v2 animate-fade-in">
-    <div class="section-header-v2" style="text-align: center; margin-bottom: 2rem;">
-        <h2 style="font-weight: 900; color: var(--sky-primary); font-size: 2rem;">👤 ملفي الشخصي</h2>
-        <p style="opacity: 0.8; font-weight: 600;">بياناتك الدراسية وحسابك في مكان واحد</p>
+<div class="container-fluid animate-fade-in" style="padding: 20px;">
+    <div class="section-header-v2 text-center mb-5">
+        <h1 class="admin-title-gold" style="font-size: 3rem;">👤 ملفي الشخصي</h1>
+        <p class="text-secondary" style="font-weight: 700; font-size: 1.1rem; opacity: 0.8;">البيانات التعليمية وحساب
+            الطالب</p>
     </div>
 
-    <div class="card profile-premium-card animate-slide-up"
-        style="max-width: 600px; margin: 0 auto; padding: 3rem 2rem; border-radius: 30px; border: 1px solid var(--border-color); background: var(--card-bg); position: relative; overflow: hidden;">
+    <div class="card premium-card-glass"
+        style="max-width: 700px; margin: 0 auto; padding: 4rem 2rem; border: 1px solid rgba(255,255,255,0.1) !important;">
 
         <!-- Abstract Background Decoration -->
         <div
@@ -46,36 +49,44 @@
         </div>
 
         <!-- Info Grid -->
-        <div style="display: grid; gap: 15px; position: relative; z-index: 1;">
-            <div class="info-row-premium">
-                <div class="info-icon"><i class="fas fa-fingerprint"></i></div>
+        <div style="display: grid; gap: 20px; position: relative; z-index: 1;">
+            <div class="info-row-premium"
+                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="info-icon" style="background: rgba(212, 175, 55, 0.1); color: #D4AF37;"><i
+                        class="fas fa-fingerprint"></i></div>
                 <div class="info-content">
-                    <span>الكود الجامعي</span>
-                    <strong>{{ user.code }}</strong>
+                    <span class="admin-stat-label">الكود الجامعي</span>
+                    <strong class="admin-title-gold">{{ user.code }}</strong>
                 </div>
             </div>
 
-            <div class="info-row-premium">
-                <div class="info-icon"><i class="fas fa-layer-group"></i></div>
+            <div class="info-row-premium"
+                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="info-icon" style="background: rgba(0, 210, 255, 0.1); color: var(--sky-primary);"><i
+                        class="fas fa-layer-group"></i></div>
                 <div class="info-content">
-                    <span>القسم التخصصي</span>
-                    <strong>{{ user.department or 'غير مسجل' }}</strong>
+                    <span class="admin-stat-label">القسم التخصصي</span>
+                    <strong style="color: #fff;">{{ user.department or 'غير مسجل' }}</strong>
                 </div>
             </div>
 
-            <div class="info-row-premium">
-                <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="info-row-premium"
+                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="info-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;"><i
+                        class="fas fa-calendar-check"></i></div>
                 <div class="info-content">
-                    <span>السنة الدراسية</span>
-                    <strong>السنة {{ user.year or 'غير محددة' }}</strong>
+                    <span class="admin-stat-label">السنة الدراسية</span>
+                    <strong style="color: #fff;">السنة {{ user.year or 'غير محددة' }}</strong>
                 </div>
             </div>
 
-            <div class="info-row-premium">
-                <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+            <div class="info-row-premium"
+                style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="info-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;"><i
+                        class="fas fa-phone-alt"></i></div>
                 <div class="info-content">
-                    <span>رقم التواصل</span>
-                    <strong>{{ user.phone or 'لا يوجد رقم' }}</strong>
+                    <span class="admin-stat-label">رقم التواصل</span>
+                    <strong style="color: #fff;">{{ user.phone or 'لا يوجد رقم' }}</strong>
                 </div>
             </div>
         </div>
