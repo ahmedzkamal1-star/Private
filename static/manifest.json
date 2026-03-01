@@ -1,62 +1,48 @@
 {
-    "name": "Al-Dahih Student Management",
-    "short_name": "Al-Dahih",
-    "description": "نظام إدارة الطلاب والدروس المتكامل للتفاعل التعليمي المنظم",
-    "start_url": "/",
+    "name": "الدحيح - El Dahih",
+    "short_name": "الدحيح",
+    "description": "منصة الدحيح التعليمية - تطبيق إدارة الطلاب والمحتوى التعليمي بأعلى جودة.",
+    "start_url": "/mobile",
     "display": "standalone",
-    "display_override": [
-        "standalone"
-    ],
-    "background_color": "#ffffff",
-    "theme_color": "#0ea5e9",
     "orientation": "portrait",
+    "background_color": "#0a0e27",
+    "theme_color": "#0a0e27",
+    "lang": "ar",
+    "dir": "rtl",
     "categories": [
         "education",
         "productivity"
     ],
     "icons": [
         {
-            "src": "/static/images/icon-192.png",
+            "src": "/static/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any"
+            "purpose": "any maskable"
         },
         {
-            "src": "/static/images/icon-512.png",
+            "src": "/static/icon-512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any"
-        },
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
         {
-            "src": "/static/images/icon-192.png",
-            "sizes": "192x192",
+            "src": "/static/screenshot1.png",
+            "sizes": "1024x1792",
             "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "/static/images/icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            "form_factor": "narrow",
+            "label": "لوحة التحكم الرئيسية"
         }
     ],
     "shortcuts": [
         {
-            "name": "المنشورات",
-            "url": "/",
+            "name": "المحاضرات",
+            "url": "/mobile#lessons",
             "icons": [
                 {
-                    "src": "/static/images/logo.png",
-                    "sizes": "192x192"
-                }
-            ]
-        },
-        {
-            "name": "حصصي",
-            "url": "/dashboard",
-            "icons": [
-                {
-                    "src": "/static/images/logo.png",
+                    "src": "/static/icon-192.png",
                     "sizes": "192x192"
                 }
             ]
