@@ -1,86 +1,92 @@
 {% extends "base.html" %}
 
-{% block title %}إدارة الطلاب - Al-dahih{% endblock %}
+{% block title %}إدارة الطلاب | {{ settings.system_name }}{% endblock %}
+
+{% block body_class %}bg-admin-students{% endblock %}
 
 {% block content %}
+<div class="main-content">
+    <div class="container-fluid animate-fade-in" style="padding: 20px;">
 
-<div class="main-container-v2 animate-slide-up">
-    <div class="section-header-v2">
-        <h3><i class="fas fa-user-graduate" style="color: var(--sky-primary); margin-left: 10px;"></i> إدارة الطلاب</h3>
-        <a href="{{ url_for('main.admin_add_student') }}" class="premium-btn"
-            style="padding: 10px 20px; font-size: 0.85rem;">
-            <i class="fas fa-user-plus" style="margin-left: 8px;"></i> إضافة طالب جديد
-        </a>
-    </div>
-    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; font-weight: 600;">إدارة بيانات
-        الطلاب المسجلين بالكامل، بما في ذلك التعديل والحذف.</p>
+        <div class="section-header-v2 mb-4 d-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="admin-title-gold mb-0"><i class="fas fa-user-graduate"></i> إدارة الطلاب</h1>
+                <p class="text-secondary mb-0" style="font-weight: 700; opacity: 0.8;">إدارة بيانات الطلاب المسجلين
+                    بالكامل، بما في ذلك التعديل والحذف.</p>
+            </div>
+            <a href="{{ url_for('main.admin_add_student') }}" class="premium-btn">
+                <i class="fas fa-user-plus" style="margin-left: 8px;"></i> إضافة طالب جديد
+            </a>
+        </div>
 
-    <div class="card" style="padding: 1rem;">
-        <div class="table-responsive">
-            <table class="modern-table-v2">
-                <thead>
-                    <tr>
-                        <th style="font-family: 'Outfit';">الكود الجامعي</th>
-                        <th>اسم الطالب بالكامل</th>
-                        <th style="text-align: center;">إدارة الحساب</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in students %}
-                    <tr>
-                        <td><span
-                                style="font-family: 'Outfit'; color: var(--sky-primary); font-weight: 800; font-size: 1.1rem;">#{{
-                                student.code }}</span></td>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div
-                                    style="width: 45px; height: 45px; border-radius: 12px; background: var(--hover-bg); color: var(--sky-primary); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 950; border: 1px solid var(--border-color);">
-                                    {{ student.full_name[0] }}
+        <div class="card admin-card-glass" style="padding: 2rem;">
+            <div class="table-responsive">
+                <table class="modern-table-v2 admin-table-glass">
+                    <thead>
+                        <tr>
+                            <th style="font-family: 'Outfit'; color: #D4AF37;">الكود الجامعي</th>
+                            <th style="color: #D4AF37;">اسم الطالب بالكامل</th>
+                            <th style="text-align: center; color: #D4AF37;">إدارة الحساب</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr style="border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+                            <td>
+                                <span
+                                    style="font-family: 'Outfit'; color: #D4AF37; font-weight: 800; font-size: 1.1rem;">#{{
+                                    student.code }}</span>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div class="user-avatar"
+                                        style="width: 45px; height: 45px; font-size: 1.2rem; border-radius: 12px;">
+                                        {{ student.full_name[0] }}
+                                    </div>
+                                    <div style="font-weight: 800; color: #fff; font-size: 1.05rem;">{{ student.full_name
+                                        }}</div>
                                 </div>
-                                <div style="font-weight: 800; color: var(--text-primary); font-size: 1.05rem;">{{
-                                    student.full_name }}</div>
-                            </div>
-                        </td>
-                        <td style="text-align: center;">
-                            <div style="display: flex; gap: 10px; justify-content: center;">
-                                <a href="{{ url_for('main.admin_edit_student', user_id=student.id) }}"
-                                    class="premium-btn"
-                                    style="padding: 8px 12px; background: var(--bg-main); color: var(--sky-primary); border: 1px solid var(--border-color); box-shadow: none;"
-                                    title="تعديل البيانات">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ url_for('main.admin_delete_student', user_id=student.id) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('هل أنت متأكد من حذف الطالب {{ student.full_name }} نهائياً؟');">
-                                    <button type="submit" class="premium-btn"
-                                        style="padding: 8px 12px; background: #fee2e2; color: #ef4444; border: none; box-shadow: none; cursor: pointer;"
-                                        title="حذف الحساب">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3" style="text-align: center; padding: 5rem; color: var(--text-secondary);">
-                            <div style="font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.2;">🎓</div>
-                            <div style="font-weight: 600;">لا يوجد طلاب مسجلين حالياً.</div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            </td>
+                            <td style="text-align: center;">
+                                <div style="display: flex; gap: 12px; justify-content: center;">
+                                    <a href="{{ url_for('main.admin_edit_student', user_id=student.id) }}"
+                                        class="premium-btn"
+                                        style="padding: 8px 12px; background: rgba(212, 175, 55, 0.1); color: #D4AF37; border: 1px solid rgba(212, 175, 55, 0.2);"
+                                        title="تعديل البيانات">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ url_for('main.admin_delete_student', user_id=student.id) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('هل أنت متأكد من حذف الطالب {{ student.full_name }} نهائياً؟');">
+                                        <button type="submit" class="premium-btn"
+                                            style="padding: 8px 12px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);"
+                                            title="حذف الحساب">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding: 5rem;">
+                                <div style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;">🎓</div>
+                                <h3 class="text-secondary" style="font-weight: 600;">لا يوجد طلاب مسجلين حالياً.</h3>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card admin-card-glass mt-4"
+            style="padding: 1.5rem; border: 1px dashed rgba(212, 175, 55, 0.4) !important;">
+            <p style="font-size: 0.9rem; color: #bdae82; margin: 0; font-weight: 700; text-align: center;">
+                <i class="fas fa-shield-alt" style="color: #D4AF37; margin-left: 8px;"></i>
+                نظام الأمان مفعل: الحذف يتم لكل مستخدم على حدة لضمان عدم حدوث أخطاء جماعية.
+            </p>
         </div>
     </div>
-
-    <div
-        style="margin-top: 2rem; padding: 1.5rem; border-radius: 20px; background: var(--hover-bg); border: 1px dashed var(--border-color); text-align: center;">
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; font-weight: 600;">
-            <i class="fas fa-shield-alt" style="color: var(--sky-primary); margin-left: 8px;"></i>
-            تم إلغاء خيار الحذف الجماعي لأسباب أمنية. الحذف يتم لكل مستخدم على حدة وبشكل مؤكد.
-        </p>
-    </div>
 </div>
-
 {% endblock %}

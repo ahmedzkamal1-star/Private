@@ -1,202 +1,162 @@
 {% extends "base.html" %}
 
-{% block title %}إعدادات النظام - {{ settings.system_name }}{% endblock %}
+{% block title %}إعدادات النظام | {{ settings.system_name }}{% endblock %}
+
+{% block body_class %}bg-admin-security{% endblock %}
 
 {% block content %}
+<div class="main-content">
+    <div class="container-fluid animate-fade-in" style="padding: 20px;">
 
-<div class="main-container-v2 animate-slide-up">
-    <div class="section-header-v2">
-        <h3><i class="fas fa-sliders-h" style="margin-left: 10px; color: var(--sky-primary);"></i> إعدادات النظام</h3>
+        <div class="section-header-v2 mb-4">
+            <h1 class="admin-title-gold mb-0"><i class="fas fa-sliders-h"></i> إعدادات النظام</h1>
+            <p class="text-secondary mb-0" style="font-weight: 700; opacity: 0.8;">التحكم في هوية المنصة، حالات التشغيل،
+                وربط البوتات.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Basic Info -->
+            <div class="card admin-card-glass mb-4" style="border-right: 5px solid #D4AF37 !important;">
+                <h3 class="admin-title-gold mb-4"><i class="fas fa-info-circle"></i> المعلومات الأساسية</h3>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="admin-stat-label d-block mb-2">اسم النظام</label>
+                        <input type="text" name="system_name" value="{{ settings.system_name }}" required
+                            class="admin-input-glass w-100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">بريد التواصل</label>
+                        <input type="email" name="contact_email" value="{{ settings.contact_email }}"
+                            class="admin-input-glass w-100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">رقم الهاتف</label>
+                        <input type="text" name="contact_phone" value="{{ settings.contact_phone }}"
+                            class="admin-input-glass w-100">
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="card admin-card-glass mb-4" style="border-right: 5px solid #10b981 !important;">
+                <h3 class="admin-title-gold mb-4"
+                    style="background: linear-gradient(135deg, #fff, #10b981); -webkit-background-clip: text; background-clip: text;">
+                    <i class="fas fa-toggle-on"></i> حالات النظام</h3>
+                <div class="d-flex gap-4 flex-wrap">
+                    <label class="check-field-v2 admin-card-glass d-flex align-items-center gap-3"
+                        style="padding: 15px 25px; cursor: pointer; border-radius: 15px !important;">
+                        <input type="checkbox" name="allow_registration" {% if settings.allow_registration %}checked{%
+                            endif %} style="accent-color: #10b981; width: 22px; height: 22px;">
+                        <span style="font-weight: 800; color: #fff;">السماح بتسجيل الطلاب</span>
+                    </label>
+                    <label class="check-field-v2 admin-card-glass d-flex align-items-center gap-3"
+                        style="padding: 15px 25px; cursor: pointer; border-radius: 15px !important;">
+                        <input type="checkbox" name="maintenance_mode" {% if settings.maintenance_mode %}checked{% endif
+                            %} style="accent-color: #f59e0b; width: 22px; height: 22px;">
+                        <span style="font-weight: 800; color: #fff;">وضع الصيانة</span>
+                    </label>
+                    <label class="check-field-v2 admin-card-glass d-flex align-items-center gap-3"
+                        style="padding: 15px 25px; cursor: pointer; border-radius: 15px !important;">
+                        <input type="checkbox" name="show_schedule" {% if settings.show_schedule %}checked{% endif %}
+                            style="accent-color: #D4AF37; width: 22px; height: 22px;">
+                        <span style="font-weight: 800; color: #fff;">إظهار الجدول الدراسي</span>
+                    </label>
+                </div>
+                <p class="text-secondary mt-3 mb-0" style="font-size: 0.85rem; font-weight: 600;">* وضع الصيانة يمنع
+                    الطلاب من استخدام المنصة مؤقتاً.</p>
+            </div>
+
+            <!-- Telegram Bot Management -->
+            <div class="card admin-card-glass mb-4"
+                style="border-right: 5px solid #229ED9 !important; overflow: hidden; position: relative;">
+                <div
+                    style="position: absolute; top: -30px; left: -30px; font-size: 10rem; color: rgba(34, 158, 217, 0.05); transform: rotate(-15deg); pointer-events: none;">
+                    <i class="fab fa-telegram-plane"></i>
+                </div>
+
+                <h3 class="admin-title-gold mb-4"
+                    style="background: linear-gradient(135deg, #fff, #229ED9); -webkit-background-clip: text; background-clip: text;">
+                    <i class="fab fa-telegram-plane"></i> إعدادات بوت التنبيهات
+                </h3>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">Bot API Token</label>
+                        <input type="text" name="telegram_bot_token" value="{{ settings.telegram_bot_token or '' }}"
+                            placeholder="879649..." class="admin-input-glass w-100" style="font-family: 'Outfit';">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">Chat ID</label>
+                        <input type="text" name="telegram_chat_id" value="{{ settings.telegram_chat_id or '' }}"
+                            placeholder="@MyChannel or ID" class="admin-input-glass w-100"
+                            style="font-family: 'Outfit';">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="admin-stat-label d-block mb-2">رابط المنصة الرسمي</label>
+                        <input type="url" name="platform_url" value="{{ settings.platform_url or '' }}"
+                            placeholder="https://..." class="admin-input-glass w-100" style="font-family: 'Outfit';">
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mt-3 flex-wrap">
+                    <button type="button" onclick="testBot()" class="premium-btn" style="background: #229ED9;">
+                        <i class="fas fa-paper-plane" style="margin-left: 8px;"></i> تجربة الربط
+                    </button>
+                    <button type="button" onclick="activateWebhook()" class="premium-btn" style="background: #10b981;">
+                        <i class="fas fa-bolt" style="margin-left: 8px;"></i> تفعيل الرد التلقائي
+                    </button>
+                    <div id="bot-test-status" class="mt-2" style="font-weight: 800; font-size: 0.9rem;"></div>
+                </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="card admin-card-glass mb-4" style="border-right: 5px solid #ef4444 !important;">
+                <h3 class="admin-title-gold mb-4"
+                    style="background: linear-gradient(135deg, #fff, #ef4444); -webkit-background-clip: text; background-clip: text;">
+                    <i class="fas fa-key"></i> الأمان العالي</h3>
+                <div class="form-field-v2">
+                    <label class="admin-stat-label d-block mb-2">كود الماستر (Master Key)</label>
+                    <input type="text" name="master_key" value="{{ current_user.master_key }}" required
+                        class="admin-input-glass w-100" style="font-family: 'Outfit';">
+                </div>
+            </div>
+
+            <button type="submit" class="premium-btn w-100"
+                style="padding: 1.5rem; font-size: 1.2rem; justify-content: center;">
+                <i class="fas fa-save" style="margin-left: 10px;"></i> حفظ وتطبيق الإعدادات
+            </button>
+        </form>
     </div>
-
-    <form method="POST" enctype="multipart/form-data">
-        <!-- Basic Info -->
-        <div class="card" style="border-right: 5px solid var(--sky-primary);">
-            <h3 style="color: var(--sky-primary); margin-bottom: 1.5rem;">🔹 المعلومات الأساسية</h3>
-            <div class="form-field-v2" style="margin-bottom: 1.2rem;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 700;">اسم النظام</label>
-                <input type="text" name="system_name" value="{{ settings.system_name }}" required
-                    style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary);">
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700;">بريد التواصل</label>
-                    <input type="email" name="contact_email" value="{{ settings.contact_email }}"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary);">
-                </div>
-                <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700;">رقم الهاتف</label>
-                    <input type="text" name="contact_phone" value="{{ settings.contact_phone }}"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary);">
-                </div>
-            </div>
-        </div>
-
-        <!-- System Status -->
-        <div class="card" style="border-right: 5px solid #10b981;">
-            <h3 style="color: #10b981; margin-bottom: 1.5rem;">🛠️ حالات النظام</h3>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <label class="check-field-v2"
-                    style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 700;">
-                    <input type="checkbox" name="allow_registration" {% if settings.allow_registration %}checked{% endif
-                        %} style="accent-color: #10b981; width: 20px; height: 20px;">
-                    السماح بتسجيل الطلاب
-                </label>
-                <label class="check-field-v2"
-                    style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 700;">
-                    <input type="checkbox" name="maintenance_mode" {% if settings.maintenance_mode %}checked{% endif %}
-                        style="accent-color: #f59e0b; width: 20px; height: 20px;">
-                    وضع الصيانة
-                </label>
-                <label class="check-field-v2"
-                    style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 700;">
-                    <input type="checkbox" name="show_schedule" {% if settings.show_schedule %}checked{% endif %}
-                        style="accent-color: var(--sky-primary); width: 20px; height: 20px;">
-                    إظهار الجدول الدراسي للطلاب
-                </label>
-            </div>
-            <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary);">* وضع الصيانة يمنع وصول
-                الطلاب للنظام مؤقتاً.</p>
-        </div>
-
-        <!-- Social Media Links -->
-        <div class="card" style="border-right: 5px solid #0088cc;">
-            <h3 style="color: #0088cc; margin-bottom: 1.5rem;">📱 روابط التواصل الاجتماعي</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">
-                        <i class="fab fa-telegram" style="color: #0088cc; margin-left: 6px; font-size: 1.1rem;"></i>رابط
-                        قناة تيليجرام
-                    </label>
-                    <input type="url" name="telegram_link" value="{{ settings.telegram_link or '' }}"
-                        placeholder="https://t.me/your_channel"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit';">
-                </div>
-                <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">
-                        <i class="fab fa-whatsapp" style="color: #25d366; margin-left: 6px; font-size: 1.1rem;"></i>رابط
-                        واتساب
-                    </label>
-                    <input type="url" name="whatsapp_link" value="{{ settings.whatsapp_link or '' }}"
-                        placeholder="https://wa.me/201234567890"
-                        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit';">
-                </div>
-            </div>
-            <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary);">* هذه الروابط ستظهر للطلاب في
-                الصفحة الرئيسية كأزرار تواصل.</p>
-        </div>
-
-        <!-- Telegram Bot Management (v53 - Sky Blue Evolution) -->
-        <div class="card"
-            style="border-right: 5px solid #229ED9; position: relative; overflow: hidden; background: var(--card-bg);">
-            <div
-                style="position: absolute; top: -20px; left: -20px; font-size: 8rem; color: rgba(34, 158, 217, 0.1); transform: rotate(-15deg); pointer-events: none;">
-                <i class="fab fa-telegram-plane"></i>
-            </div>
-
-            <h3
-                style="color: #229ED9; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; position: relative; z-index: 2;">
-                <i class="fab fa-telegram-plane" style="font-size: 1.4rem;"></i>
-                إعدادات بوت التنبيهات (Admin Notifications)
-            </h3>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; position: relative; z-index: 2;">
-                <div class="form-field-v2">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">Bot
-                        API Token</label>
-                    <input type="text" name="telegram_bot_token" value="{{ settings.telegram_bot_token or '' }}"
-                        placeholder="8796498767:AAHt..."
-                        style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit'; transition: all 0.3s ease;"
-                        onfocus="this.style.borderColor='#229ED9'; this.style.boxShadow='0 0 0 4px rgba(34, 158, 217, 0.1)';"
-                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
-                </div>
-                <div class="form-field-v2">
-                    <label
-                        style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">Chat
-                        ID / Channel Handle</label>
-                    <input type="text" name="telegram_chat_id" value="{{ settings.telegram_chat_id or '' }}"
-                        placeholder="@MyChannel or ID"
-                        style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit'; transition: all 0.3s ease;"
-                        onfocus="this.style.borderColor='#229ED9'; this.style.boxShadow='0 0 0 4px rgba(34, 158, 217, 0.1)';"
-                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
-                </div>
-            </div>
-
-            <div class="form-field-v2" style="margin-top: 20px; position: relative; z-index: 2;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-primary);">رابط
-                    المنصة (لتوزيعه تلقائياً)</label>
-                <input type="url" name="platform_url" value="{{ settings.platform_url or '' }}"
-                    placeholder="https://yourname.pythonanywhere.com"
-                    style="width: 100%; padding: 14px; border-radius: 12px; border: 2px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit'; transition: all 0.3s ease;"
-                    onfocus="this.style.borderColor='#229ED9'; this.style.boxShadow='0 0 0 4px rgba(34, 158, 217, 0.1)';"
-                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
-            </div>
-
-            <div
-                style="margin-top: 2rem; display: flex; align-items: center; gap: 15px; position: relative; z-index: 2; flex-wrap: wrap;">
-                <button type="button" onclick="testBot()" class="premium-btn"
-                    style="background: linear-gradient(135deg, #229ED9, #1c84b5); padding: 12px 22px; font-size: 0.9rem; border: none; box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3);">
-                    <i class="fas fa-paper-plane" style="margin-left: 8px;"></i> تجربة الربط
-                </button>
-                <button type="button" onclick="activateWebhook()" class="premium-btn"
-                    style="background: linear-gradient(135deg, #10b981, #059669); padding: 12px 22px; font-size: 0.9rem; border: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
-                    <i class="fas fa-bolt" style="margin-left: 8px;"></i> تفعيل الرد التلقائي الدائم
-                </button>
-                <div id="bot-test-status" style="font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease;"></div>
-            </div>
-
-            <div
-                style="margin-top: 20px; padding: 12px; border-radius: 10px; background: rgba(34, 158, 217, 0.1); border: 1px dashed #229ED9; position: relative; z-index: 2;">
-                <p
-                    style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; display: flex; align-items: center; gap: 8px; font-weight: 600;">
-                    <i class="fas fa-info-circle" style="color: #229ED9;"></i>
-                    تأكد من إرسال "مرحباً" للبوت أولاً لكي يستطيع الربط بنجاح.
-                </p>
-            </div>
-        </div>
-
-        <script>
-            async function testBot() {
-                const statusDiv = document.getElementById('bot-test-status');
-                statusDiv.innerText = 'جاري التجربة...';
-                statusDiv.style.color = 'var(--text-secondary)';
-                try {
-                    const response = await fetch("{{ url_for('main.admin_test_bot') }}", { method: 'POST' });
-                    const result = await response.json();
-                    statusDiv.innerText = result.message;
-                    statusDiv.style.color = result.success ? '#10b981' : '#ef4444';
-                } catch (e) {
-                    statusDiv.innerText = 'خطأ في الاتصال بالسيرفر';
-                    statusDiv.style.color = '#ef4444';
-                }
-            }
-            async function activateWebhook() {
-                const statusDiv = document.getElementById('bot-test-status');
-                statusDiv.innerText = 'جاري التفعيل...';
-                statusDiv.style.color = 'var(--text-secondary)';
-                try {
-                    const response = await fetch("{{ url_for('main.admin_activate_webhook') }}", { method: 'POST' });
-                    const result = await response.json();
-                    statusDiv.innerText = result.message;
-                    statusDiv.style.color = result.success ? '#10b981' : '#ef4444';
-                } catch (e) {
-                    statusDiv.innerText = 'خطأ في الاتصال بالسيرفر';
-                    statusDiv.style.color = '#ef4444';
-                }
-            }
-        </script>
-</div>
-<div class="form-field-v2">
-    <label style="display: block; margin-bottom: 8px; font-weight: 700;">كود الماستر (Master Key)</label>
-    <input type="text" name="master_key" value="{{ current_user.master_key }}" required
-        style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-primary); font-family: 'Outfit';">
-</div>
 </div>
 
-<button type="submit" class="premium-btn" style="width: 100%; justify-content: center; padding: 1.2rem;">
-    <i class="fas fa-save" style="margin-left: 10px;"></i> حفظ الإعدادات
-</button>
-</form>
-</div>
-
+<script>
+    async function testBot() {
+        const statusDiv = document.getElementById('bot-test-status');
+        statusDiv.innerText = 'جاري التجربة...';
+        statusDiv.style.color = '#fff';
+        try {
+            const response = await fetch("{{ url_for('main.admin_test_bot') }}", { method: 'POST' });
+            const result = await response.json();
+            statusDiv.innerText = result.message;
+            statusDiv.style.color = result.success ? '#10b981' : '#ef4444';
+        } catch (e) {
+            statusDiv.innerText = 'خطأ في الاتصال بالسيرفر';
+            statusDiv.style.color = '#ef4444';
+        }
+    }
+    async function activateWebhook() {
+        const statusDiv = document.getElementById('bot-test-status');
+        statusDiv.innerText = 'جاري التفعيل...';
+        statusDiv.style.color = '#fff';
+        try {
+            const response = await fetch("{{ url_for('main.admin_activate_webhook') }}", { method: 'POST' });
+            const result = await response.json();
+            statusDiv.innerText = result.message;
+            statusDiv.style.color = result.success ? '#10b981' : '#ef4444';
+        } catch (e) {
+            statusDiv.innerText = 'خطأ في الاتصال بالسيرفر';
+            statusDiv.style.color = '#ef4444';
+        }
+    }
+</script>
 {% endblock %}
