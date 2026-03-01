@@ -679,10 +679,26 @@ body {
 }
 
 .nav-item {
-    padding: 15px 18px !important;
-    margin-bottom: 5px;
-    gap: 12px;
+    display: flex !important;
+    align-items: center !important;
+    padding: 14px 20px !important;
+    margin-bottom: 8px !important;
+    gap: 15px !important;
+    border-radius: 16px !important;
+    text-decoration: none !important;
+    color: var(--text-primary) !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover {
+    background: var(--hover-bg) !important;
+    transform: translateX(-5px) !important;
+}
+
+.nav-item.active {
+    background: var(--sky-gradient) !important;
+    color: white !important;
+    box-shadow: 0 10px 20px var(--shadow-color) !important;
 }
 
 .nav-item i {
@@ -857,8 +873,8 @@ body {
 
 /* Mobile Header (Universal Header now) */
 .mobile-header {
-    display: flex !important;
-    /* Show on all screens */
+    display: none !important;
+    /* Hidden on desktop by default */
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem;
