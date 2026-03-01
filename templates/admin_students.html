@@ -22,17 +22,17 @@
             <table class="modern-table-v2 admin-table-glass">
                 <thead>
                     <tr>
-                        <th style="font-family: 'Outfit'; color: #D4AF37;">الكود الجامعي</th>
-                        <th style="color: #D4AF37;">اسم الطالب بالكامل</th>
-                        <th style="text-align: center; color: #D4AF37;">إدارة الحساب</th>
+                        <th style="font-family: 'Outfit'; color: var(--sky-primary);">الكود الجامعي</th>
+                        <th style="color: var(--sky-primary);">اسم الطالب بالكامل</th>
+                        <th style="text-align: center; color: var(--sky-primary);">إدارة الحساب</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for student in students %}
-                    <tr style="border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+                    <tr style="border-bottom: 1px solid var(--border-color);">
                         <td>
                             <span
-                                style="font-family: 'Outfit'; color: #D4AF37; font-weight: 800; font-size: 1.1rem;">#{{
+                                style="font-family: 'Outfit'; color: var(--sky-primary); font-weight: 800; font-size: 1.1rem;">#{{
                                 student.code }}</span>
                         </td>
                         <td>
@@ -41,7 +41,8 @@
                                     style="width: 45px; height: 45px; font-size: 1.2rem; border-radius: 12px;">
                                     {{ student.full_name[0] }}
                                 </div>
-                                <div style="font-weight: 800; color: #fff; font-size: 1.05rem;">{{ student.full_name
+                                <div style="font-weight: 800; color: var(--text-primary); font-size: 1.05rem;">{{
+                                    student.full_name
                                     }}</div>
                             </div>
                         </td>
@@ -49,7 +50,7 @@
                             <div style="display: flex; gap: 12px; justify-content: center;">
                                 <a href="{{ url_for('main.admin_edit_student', user_id=student.id) }}"
                                     class="premium-btn"
-                                    style="padding: 8px 12px; background: rgba(212, 175, 55, 0.1); color: #D4AF37; border: 1px solid rgba(212, 175, 55, 0.2);"
+                                    style="padding: 8px 12px; background: rgba(var(--sky-primary), 0.1); color: var(--sky-primary); border: 1px solid var(--border-color);"
                                     title="تعديل البيانات">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -81,7 +82,7 @@
     <div class="card admin-card-glass mt-4"
         style="padding: 1.5rem; border: 1px dashed rgba(212, 175, 55, 0.4) !important;">
         <p style="font-size: 0.9rem; color: #bdae82; margin: 0; font-weight: 700; text-align: center;">
-            <i class="fas fa-shield-alt" style="color: #D4AF37; margin-left: 8px;"></i>
+            <i class="fas fa-shield-alt" style="color: var(--sky-primary); margin-left: 8px;"></i>
             نظام الأمان مفعل: الحذف يتم لكل مستخدم على حدة لضمان عدم حدوث أخطاء جماعية.
         </p>
     </div>
