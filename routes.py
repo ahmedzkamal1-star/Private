@@ -345,9 +345,25 @@ def api_get_courses():
     if current_user.role != 'student':
         return jsonify({"error": "Unauthorized"}), 403
         
-    enrollments = Enrollment.query.filter_by(student_id=current_user.id).all()
+    # Auto-enroll student in all available courses instantly (Mobile API)
+    all_courses = Course.query.all()
+    existing_enrollments = Enrollment.query.filter_by(student_id=current_user.id).all()
+    enrolled_course_ids = [e.course_id for e in existing_enrollments]
+    
+    new_enrollments = False
+    for course in all_courses:
+        if course.id not in enrolled_course_ids:
+            new_enrollment = Enrollment(student_id=current_user.id, course_id=course.id)
+            db.session.add(new_enrollment)
+            new_enrollments = True
+            
+    if new_enrollments:
+        db.session.commit()
+        # Refresh enrollments list after auto-enroll
+        existing_enrollments = Enrollment.query.filter_by(student_id=current_user.id).order_by(Enrollment.id.desc()).all()
+
     courses_data = []
-    for en in enrollments:
+    for en in existing_enrollments:
         course = Course.query.get(en.course_id)
         if course:
             courses_data.append({

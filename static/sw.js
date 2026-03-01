@@ -1,5 +1,5 @@
 // Service Worker for El-Dahih Mobile App
-const CACHE_NAME = 'eldahih-v3';
+const CACHE_NAME = 'eldahih-v4';
 const ASSETS = [
     '/mobile',
     '/static/mobile_app/styles.css',
