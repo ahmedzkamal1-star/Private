@@ -988,3 +988,131 @@ body {
         padding: 10px;
     }
 }
+
+/* ===== Toast Animation ===== */
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+/* ===== Light Mode Overrides (Explicit) ===== */
+[data-theme='light'] {
+    --bg-main: #f8fbff;
+    --bg-sidebar: rgba(255, 255, 255, 0.92);
+    --text-primary: #013a63;
+    --text-secondary: #2c7da0;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --border-color: rgba(0, 180, 216, 0.15);
+    --hover-bg: #e1f5fe;
+    --shadow-color: rgba(0, 119, 182, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --sky-primary: hsl(195, 95%, 48%);
+    --sky-dark: hsl(195, 100%, 38%);
+    --sky-gradient: linear-gradient(135deg, hsl(195, 95%, 48%), hsl(195, 100%, 38%));
+}
+
+/* Light mode blob overrides */
+[data-theme='light'] .blob-1 {
+    background: hsl(195, 95%, 80%);
+}
+
+[data-theme='light'] .blob-2 {
+    background: hsl(195, 80%, 60%);
+}
+
+[data-theme='light'] .blob-3 {
+    background: hsl(195, 70%, 70%);
+}
+
+/* Light mode stars and lanterns opacity */
+[data-theme='light'] .star {
+    background: rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme='light'] .lantern-css {
+    background: hsl(195, 95%, 48%);
+    box-shadow: 0 0 12px rgba(0, 180, 216, 0.4);
+}
+
+[data-theme='light'] .crescent-festive {
+    box-shadow: 20px 20px 0 0 hsl(195, 95%, 48%);
+    filter: drop-shadow(0 0 15px rgba(0, 180, 216, 0.5));
+}
+
+/* Dark mode enhancements */
+[data-theme='dark'] .blob-1 {
+    background: #001d3d;
+}
+
+[data-theme='dark'] .blob-2 {
+    background: #003566;
+}
+
+[data-theme='dark'] .blob-3 {
+    background: #023e8a;
+}
+
+[data-theme='dark'] .star {
+    background: #a8b2d1 !important;
+}
+
+[data-theme='dark'] .lantern-css {
+    background: #00d2ff;
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+}
+
+[data-theme='dark'] .crescent-festive {
+    box-shadow: 20px 20px 0 0 #00d2ff;
+    filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.6));
+}
+
+/* Dark mode card overrides */
+[data-theme='dark'] .card {
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark mode text gradient */
+[data-theme='dark'] .admin-title-gold,
+[data-theme='dark'] .stat-value-v2 {
+    background: linear-gradient(135deg, #e6f1ff, #00d2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Fixed dark-mode-toggle always visible */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    color: var(--sky-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 3000;
+    box-shadow: 0 10px 20px var(--shadow-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1) rotate(-10deg);
+    box-shadow: 0 15px 30px var(--shadow-color);
+}

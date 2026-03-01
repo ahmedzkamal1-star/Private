@@ -1,9 +1,9 @@
-/* static/js/main.js */
-// ===== إدارة Dark Mode والواجهة =====
+/* static/js/main.js - v51.0 Triple Theme + Ramadan */
+// ===== إدارة الأوضاع الثلاثة والواجهة =====
 
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. التحقق من وجود الوضع المختار محفوظ مسبقاً
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    // 1. تطبيق السمة المحفوظة
+    const savedTheme = localStorage.getItem('theme') || 'gold';
     applyTheme(savedTheme);
 
     // 2. إعداد زر تبديل الأوضاع
@@ -19,29 +19,25 @@ document.addEventListener('DOMContentLoaded', function () {
     initRamadan();
 });
 
-// دالة تهيئة وضع رمضان
-// دالة تهيئة وضع رمضان (دائمه الآن)
+// ===== وضع رمضان (دائم) =====
 function initRamadan() {
-    // تفعيل إجباري لجميع المستخدمين
     document.documentElement.setAttribute('data-ramadan', 'enabled');
     generateOrnaments();
     localStorage.setItem('ramadanMode', 'enabled');
 }
 
-// دالة تبديل وضع رمضان (تم إيقافها لجعل الوضع دائماً)
 window.toggleRamadan = function () {
     console.log('وضع رمضان مفعل تلقائياً! 🌙✨');
 };
 
 function generateOrnaments() {
-    removeOrnaments(); // Clean up first
+    removeOrnaments();
 
-    // 1. Container for Ornaments
     const container = document.createElement('div');
     container.className = 'ramadan-ornaments';
     document.body.prepend(container);
 
-    // 2. Stars
+    // Stars
     for (let i = 0; i < 60; i++) {
         const star = document.createElement('div');
         star.className = 'star';
@@ -55,8 +51,8 @@ function generateOrnaments() {
         container.appendChild(star);
     }
 
-    // 3. Hanging Lanterns
-    const lanternPositions = [15, 30, 70, 85]; // Percentages
+    // Hanging Lanterns
+    const lanternPositions = [15, 30, 70, 85];
     lanternPositions.forEach(pos => {
         const lantern = document.createElement('div');
         lantern.className = 'lantern-css';
@@ -66,7 +62,7 @@ function generateOrnaments() {
         container.appendChild(lantern);
     });
 
-    // 4. Large Crescent
+    // Crescent Moon
     const crescent = document.createElement('div');
     crescent.className = 'crescent-festive';
     container.appendChild(crescent);
@@ -77,65 +73,126 @@ function removeOrnaments() {
     if (container) container.remove();
 }
 
-function showFestiveEffect() {
-    // Simple alert or micro-animation for the first toggle
-    console.log('رمضان كريم! 🌙✨');
-}
-
-// دالة تطبيق السمة
+// ===== إدارة السمات الثلاثة =====
 function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    document.body.classList.remove('dark-mode'); // Clean up old class approach
+    document.body.classList.remove('dark-mode');
 
     if (theme === 'dark') {
         document.body.classList.add('dark-mode');
     }
 
+    // حفظ السمة
     localStorage.setItem('theme', theme);
+    // تنظيف المفتاح القديم
+    localStorage.removeItem('darkMode');
+
     updateThemeIcon(theme);
+
+    // تحديث الخلفية حسب الوضع
+    updateBackground(theme);
 }
 
-// دالة إعداد زر تبديل السمات (دائري)
+// تحديث الخلفية حسب السمة
+function updateBackground(theme) {
+    const meshBg = document.querySelector('.mesh-background');
+    const ornaments = document.querySelector('.ramadan-ornaments');
+
+    if (theme === 'gold') {
+        // الوضع الذهبي: خلفية رمضان + زينة مرئية
+        document.documentElement.style.backgroundImage = "url('/static/ramadan_bg.png')";
+        document.documentElement.style.backgroundSize = 'cover';
+        document.documentElement.style.backgroundPosition = 'center';
+        document.documentElement.style.backgroundAttachment = 'fixed';
+        document.documentElement.style.backgroundRepeat = 'no-repeat';
+        if (meshBg) {
+            meshBg.style.background = 'radial-gradient(circle at center, #0B2B40 0%, #051622 100%)';
+            meshBg.style.opacity = '0.4';
+        }
+        if (ornaments) ornaments.style.display = 'block';
+    } else if (theme === 'dark') {
+        // الوضع المظلم: فضاء عميق بدون خلفية صورة
+        document.documentElement.style.backgroundImage = 'none';
+        document.documentElement.style.backgroundColor = '#010814';
+        if (meshBg) {
+            meshBg.style.background = 'radial-gradient(circle at 30% 50%, #001d3d 0%, #010814 50%, #000 100%)';
+            meshBg.style.opacity = '1';
+        }
+        if (ornaments) ornaments.style.display = 'block';
+    } else {
+        // الوضع الفاتح: تدرج سماوي نظيف
+        document.documentElement.style.backgroundImage = 'none';
+        document.documentElement.style.backgroundColor = '#f8fbff';
+        if (meshBg) {
+            meshBg.style.background = 'radial-gradient(circle at 30% 20%, #e0f7fa 0%, #f8fbff 50%, #e1f5fe 100%)';
+            meshBg.style.opacity = '0.8';
+        }
+        // إخفاء الزينة في الوضع الفاتح
+        if (ornaments) ornaments.style.display = 'none';
+    }
+}
+
+// إعداد زر تبديل السمات: فاتح → مظلم → ذهبي → فاتح
 function setupThemeToggle() {
     const toggle = document.querySelector('.dark-mode-toggle');
     if (!toggle) return;
 
     toggle.addEventListener('click', function () {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        let nextTheme = 'light';
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'gold';
+        let nextTheme;
 
         if (currentTheme === 'light') {
             nextTheme = 'dark';
         } else if (currentTheme === 'dark') {
-            // Only allow Gold Mode for Admin
-            if (window.userRole === 'admin') {
-                nextTheme = 'gold';
-            } else {
-                nextTheme = 'light';
-            }
+            nextTheme = 'gold';
         } else {
+            // gold → light
             nextTheme = 'light';
         }
 
         applyTheme(nextTheme);
+
+        // Show theme name toast
+        showThemeToast(nextTheme);
     });
+}
+
+function showThemeToast(theme) {
+    // Remove old toast
+    const old = document.querySelector('.theme-toast');
+    if (old) old.remove();
+
+    const names = { light: '☀️ الوضع الفاتح', dark: '🌙 الوضع المظلم', gold: '👑 الوضع الذهبي' };
+    const toast = document.createElement('div');
+    toast.className = 'theme-toast';
+    toast.textContent = names[theme] || theme;
+    toast.style.cssText = `
+        position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+        background: var(--glass-bg); backdrop-filter: blur(20px);
+        color: var(--text-primary); padding: 12px 30px; border-radius: 20px;
+        font-weight: 800; font-size: 1.1rem; z-index: 9999;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        animation: toastIn 0.4s ease-out;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
 }
 
 // دالة تحديث الأيقونة
 function updateThemeIcon(theme) {
     const icon = document.querySelector('.dark-mode-toggle i');
     if (icon) {
-        if (theme === 'light') icon.className = 'fas fa-water';
+        if (theme === 'light') icon.className = 'fas fa-sun';
         else if (theme === 'dark') icon.className = 'fas fa-moon';
         else if (theme === 'gold') icon.className = 'fas fa-crown';
     }
 }
 
-// دالة إعداد القائمة الجانبية للجوال
+// إعداد القائمة الجانبية
 function setupMobileSidebar() {
     const sidebar = document.getElementById('sidebar');
     const menuBtn = document.querySelector('.menu-toggle-btn');
-    const mainContent = document.querySelector('.main-content');
 
     if (menuBtn && sidebar) {
         menuBtn.addEventListener('click', function (e) {
@@ -143,7 +200,6 @@ function setupMobileSidebar() {
             sidebar.classList.toggle('open');
         });
 
-        // إغلاق عند النقر بالخارج
         document.addEventListener('click', function (e) {
             if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
                 sidebar.classList.remove('open');
@@ -152,16 +208,12 @@ function setupMobileSidebar() {
     }
 }
 
-// دالة تفعيل الكلاس النشط عند الضغط
+// دالة تفعيل الكلاس النشط
 function setupActiveNav() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', function () {
-            // إزالة الكلاس النشط من الجميع
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            // إضافة النشط للعنصر الحالي
             this.classList.add('active');
-
-            // إغلاق القائمة في الجوال بعد النقر
             if (window.innerWidth <= 992) {
                 const sidebar = document.getElementById('sidebar');
                 if (sidebar) sidebar.classList.remove('open');
@@ -170,13 +222,12 @@ function setupActiveNav() {
     });
 }
 
-// تصدير دالة التبديل للاستخدام المباشر إذا لزم الأمر
 window.toggleSidebar = function () {
     const sidebar = document.getElementById('sidebar');
     if (sidebar) sidebar.classList.toggle('open');
 };
 
-// 5. تسجيل الـ Service Worker لدعم PWA
+// Service Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
         navigator.serviceWorker.register('/sw.js').then(function (registration) {
@@ -187,20 +238,15 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// دالة تسجيل الإعجاب (Like)
+// Like Toggle
 window.toggleLike = function (postId) {
     fetch(`/like_post/${postId}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
     })
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
+            if (data.error) { alert(data.error); return; }
 
             const btn = document.querySelector(`.like-btn[onclick="toggleLike(${postId})"]`);
             if (!btn) return;
