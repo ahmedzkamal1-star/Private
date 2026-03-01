@@ -21,9 +21,9 @@
     gstreamer1.0-plugins-base \
     gstreamer1.0-plugins-good
 
-# 2. Upload 'mobile_app_v102.zip' to the files sidebar in Colab
+# 2. Upload 'mobile_app_v103.zip' to the files sidebar in Colab
 # 3. Run this cell to unzip
-!unzip mobile_app_v102.zip -d .
+!unzip mobile_app_v103.zip -d .
 
 # 4. Run buildozer (Press 'y' when prompted)
 !buildozer -v android debug
