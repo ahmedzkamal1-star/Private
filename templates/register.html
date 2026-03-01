@@ -4,7 +4,14 @@
 
 {% block content %}
 <div class="auth-container-v2 animate-slide-up" style="max-width: 500px; margin: 3rem auto; padding: 0 15px;">
-    <div class="card" style="border-top: 8px solid var(--sky-primary); padding: 2.5rem;">
+    <div class="card" style="border-top: 8px solid var(--sky-primary); padding: 2.5rem; position: relative;">
+        <!-- Back to Home -->
+        <a href="{{ url_for('main.index') }}"
+            style="position: absolute; top: 15px; right: 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: 0.3s; z-index: 20;"
+            onmouseover="this.style.color='var(--sky-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+            <i class="fas fa-arrow-right" style="margin-left: 5px;"></i> العودة للرئيسية
+        </a>
+
         <h2
             style="text-align: center; font-weight: 900; color: var(--text-primary); margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; gap: 12px;">
             <i class="fas fa-user-plus" style="color: var(--sky-primary);"></i> إنشاء حساب جديد

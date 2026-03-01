@@ -339,7 +339,14 @@
 
     <!-- Login Card -->
     <div class="login-container">
-        <div class="login-header">
+        <!-- Back to Home -->
+        <a href="{{ url_for('main.index') }}"
+            style="position: absolute; top: 20px; right: 25px; color: rgba(240, 230, 210, 0.6); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: 0.3s; z-index: 20;"
+            onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='rgba(240, 230, 210, 0.6)'">
+            <i class="fas fa-arrow-right" style="margin-left: 5px;"></i> العودة للرئيسية
+        </a>
+
+        <div class="login-header" style="margin-top: 20px;">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="شعار المنصة" class="logo">
             <h2>تسجيل الدخول</h2>
             <p>أهلاً بك مجدداً! يرجى إدخال بياناتك</p>
