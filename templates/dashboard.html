@@ -82,6 +82,17 @@
                 {{ post.content|safe }}
             </div>
 
+            {% if post.pdf_filename %}
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('main.view_pdf', filename=post.pdf_filename) }}"
+                    style="display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--sky-primary), var(--sky-secondary)); color: white; padding: 12px 25px; border-radius: 15px; text-decoration: none; font-weight: 800; font-size: 1rem; box-shadow: 0 5px 20px rgba(0,180,216,0.3); transition: all 0.3s;">
+                    <i class="fas fa-file-pdf" style="font-size: 1.2rem;"></i>
+                    <span>فتح الملف المرفق</span>
+                    <i class="fas fa-external-link-alt" style="font-size: 0.8rem; opacity: 0.7;"></i>
+                </a>
+            </div>
+            {% endif %}
+
             <div class="post-footer"
                 style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 15px;">
                 <button
@@ -106,4 +117,33 @@
     {% endif %}
 </div>
 
+<script>
+    function toggleLike(postId) {
+        fetch('/like_post/' + postId, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const btns = document.querySelectorAll('.like-btn');
+                btns.forEach(btn => {
+                    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(postId)) {
+                        const countSpan = btn.querySelector('.like-count');
+                        if (data.status === 'liked') {
+                            btn.classList.add('active');
+                            btn.style.color = '#ef4444';
+                            btn.style.background = 'rgba(239,68,68,0.15)';
+                            btn.style.borderColor = '#ef4444';
+                        } else {
+                            btn.classList.remove('active');
+                            btn.style.color = 'var(--text-secondary)';
+                            btn.style.background = 'none';
+                            btn.style.borderColor = 'var(--border-color)';
+                        }
+                        countSpan.innerText = data.count;
+                    }
+                });
+            });
+    }
+</script>
 {% endblock %}

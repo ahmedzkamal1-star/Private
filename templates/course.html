@@ -188,4 +188,133 @@
         evt.currentTarget.className += " active";
     }
 </script>
+<!-- Screenshot Prevention System -->
+<style>
+    .main-container-v2,
+    .main-container-v2 * {
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        -webkit-touch-callout: none !important;
+    }
+
+    .screenshot-warning-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 99999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        animation: fadeInW 0.3s ease;
+    }
+
+    .screenshot-warning-overlay.active {
+        display: flex;
+    }
+
+    .screenshot-warning-overlay .sw-icon {
+        font-size: 5rem;
+        color: #ef4444;
+        animation: pulseW 1s infinite;
+    }
+
+    .screenshot-warning-overlay .sw-text {
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 900;
+        text-align: center;
+    }
+
+    .screenshot-warning-overlay .sw-sub {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    @keyframes fadeInW {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulseW {
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+    }
+
+    .screenshot-toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: 800;
+        font-size: 1rem;
+        z-index: 100000;
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .screenshot-toast.show {
+        transform: translateX(-50%) translateY(0);
+    }
+</style>
+
+<div class="screenshot-warning-overlay" id="screenshotWarning">
+    <div class="sw-icon"><i class="fas fa-shield-alt"></i></div>
+    <div class="sw-text">⚠️ يعتذر عن التصوير</div>
+    <div class="sw-sub">المحتوى محمي - لا يمكن تصوير هذه الصفحة 🛡️</div>
+</div>
+<div class="screenshot-toast" id="screenshotToast">
+    <i class="fas fa-ban"></i>
+    <span>⛔ ماينفعش تصور! المحتوى محمي</span>
+</div>
+
+<script>
+    (function () {
+        const warning = document.getElementById('screenshotWarning');
+        const toast = document.getElementById('screenshotToast');
+        let wt;
+        function showWarn() {
+            warning.classList.add('active');
+            toast.classList.add('show');
+            clearTimeout(wt);
+            wt = setTimeout(() => { warning.classList.remove('active'); toast.classList.remove('show'); }, 3000);
+        }
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'PrintScreen' || e.keyCode === 44) { e.preventDefault(); navigator.clipboard.writeText('').catch(() => { }); showWarn(); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'PrintScreen' || e.keyCode === 44) { e.preventDefault(); showWarn(); return false; }
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S')) { e.preventDefault(); showWarn(); return false; }
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'i' || e.key === 'I')) { e.preventDefault(); return false; }
+        });
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); showWarn(); return false; });
+        window.onbeforeprint = function () { showWarn(); };
+    })();
+</script>
 {% endblock %}

@@ -218,8 +218,47 @@
         renderPage(pageNum);
     });
 
-    // Anti-Screenshot Protection
-    document.addEventListener('contextmenu', e => e.preventDefault());
+    // Anti-Screenshot Protection with Warning
+    (function () {
+        // Screenshot Warning Overlay (dynamic creation)
+        const warningDiv = document.createElement('div');
+        warningDiv.id = 'screenshotWarning';
+        warningDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:99999;display:none;justify-content:center;align-items:center;flex-direction:column;gap:20px;';
+        warningDiv.innerHTML = '<div style="font-size:5rem;color:#ef4444;animation:pulseW 1s infinite"><i class="fas fa-shield-alt"></i></div><div style="color:white;font-size:1.8rem;font-weight:900;text-align:center">⚠️ يعتذر عن التصوير</div><div style="color:rgba(255,255,255,0.6);font-size:1rem;text-align:center">المحتوى محمي - لا يمكن تصوير هذه الصفحة 🛡️</div>';
+        document.body.appendChild(warningDiv);
+
+        const toastDiv = document.createElement('div');
+        toastDiv.id = 'screenshotToast';
+        toastDiv.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:linear-gradient(135deg,#ef4444,#dc2626);color:white;padding:15px 30px;border-radius:15px;font-weight:800;font-size:1rem;z-index:100000;box-shadow:0 10px 30px rgba(239,68,68,0.4);transition:transform 0.4s cubic-bezier(0.68,-0.55,0.265,1.55);display:flex;align-items:center;gap:10px;';
+        toastDiv.innerHTML = '<i class="fas fa-ban"></i><span>⛔ ماينفعش تصور! المحتوى محمي</span>';
+        document.body.appendChild(toastDiv);
+
+        // Add animation keyframe
+        const style = document.createElement('style');
+        style.textContent = '@keyframes pulseW{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}';
+        document.head.appendChild(style);
+
+        let wt;
+        function showWarn() {
+            warningDiv.style.display = 'flex';
+            toastDiv.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(wt);
+            wt = setTimeout(() => {
+                warningDiv.style.display = 'none';
+                toastDiv.style.transform = 'translateX(-50%) translateY(-100px)';
+            }, 3000);
+        }
+
+        document.addEventListener('contextmenu', e => { e.preventDefault(); showWarn(); });
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'PrintScreen' || e.keyCode === 44) { e.preventDefault(); navigator.clipboard.writeText('').catch(() => { }); showWarn(); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'PrintScreen' || e.keyCode === 44) { e.preventDefault(); showWarn(); return false; }
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S')) { e.preventDefault(); showWarn(); return false; }
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'i' || e.key === 'I')) { e.preventDefault(); return false; }
+        });
+    })();
 
     // Periodically scramble watermark to make stitching harder
     setInterval(() => {
@@ -228,7 +267,7 @@
 
     // Detect print attempt
     window.onbeforeprint = () => {
-        document.body.innerHTML = "<h1>الطباعة معطلة لحماية المحتوى 🛡️</h1>";
+        document.body.innerHTML = "<h1 style='text-align:center; padding:5rem; color:#ef4444;'>⛔ الطباعة معطلة لحماية المحتوى 🛡️</h1>";
     };
 </script>
 {% endblock %}

@@ -104,10 +104,11 @@
 
             {% if post.pdf_filename %}
             <div class="mb-4">
-                <a href="{{ url_for('main.uploaded_file', filename=post.pdf_filename) }}" target="_blank"
-                    class="premium-btn"
-                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.8rem 1.5rem;">
-                    <i class="fas fa-file-pdf" style="margin-left: 10px;"></i> فتح الملف المرفق
+                <a href="{{ url_for('main.view_pdf', filename=post.pdf_filename) }}" class="premium-btn"
+                    style="background: linear-gradient(135deg, var(--sky-primary), var(--sky-secondary)); color: white; border: none; padding: 0.8rem 1.5rem; gap: 10px;">
+                    <i class="fas fa-file-pdf" style="margin-left: 10px;"></i> فتح
+                    <i class="fas fa-external-link-alt"
+                        style="font-size: 0.75rem; opacity: 0.7; margin-right: 5px;"></i>
                 </a>
             </div>
             {% endif %}
