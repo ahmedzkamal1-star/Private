@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}لوحة التحكم - Al-dahih{% endblock %}
+{% block title %}الرئيسية - {{ settings.system_name }}{% endblock %}
 
 {% block content %}
 
@@ -15,123 +15,93 @@
             style="margin: 0; color: var(--text-primary); font-weight: 900; display: flex; align-items: center; gap: 10px;">
             أهلاً بك يا {% if current_user.gender == 'female' %}دحيحة{% else %}دحيح{% endif %} {{
             current_user.full_name.split()[0] if current_user.full_name else 'المجتهد' }}
-            {% if current_user.points >= 500 %}
-            <span
-                style="font-size: 0.7rem; background: linear-gradient(45deg, #ffd700, #ff8c00); color: white; padding: 4px 10px; border-radius: 50px; box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4); animation: pulse 2s infinite;">
-                <i class="fas fa-crown"></i> GOLD MEMBER
-            </span>
-            {% endif %}
         </h2>
         <p style="margin: 5px 0 0 0; opacity: 0.8; font-weight: 600;">جاهز لاستكمال رحلة النجاح اليوم؟</p>
     </div>
 </div>
 
-<!-- Student Stats Grid -->
+<!-- Quick Stats Area -->
 <div class="stats-grid-v2 animate-slide-up">
-    <div class="card stat-card-v2">
+    <a href="{{ url_for('main.my_courses') }}" class="card stat-card-v2" style="text-decoration: none;">
         <div>
-            <div class="stat-label-v2">موادي المسجلة</div>
-            <div class="stat-value-v2" style="font-family: 'Outfit';">{{ enrollments|length }}</div>
+            <div class="stat-label-v2">موادي الدراسية</div>
+            <div class="stat-value-v2">{{ enrollments|length }}</div>
         </div>
-        <div class="stat-icon-v2" style="margin-right: auto; color: var(--sky-primary); font-size: 2rem;">
+        <div class="stat-icon-v2" style="margin-right: auto; color: var(--sky-primary);">
             <i class="fas fa-graduation-cap"></i>
         </div>
-    </div>
-    <div class="card stat-card-v2" style="--sky-primary: #f59e0b; position: relative; overflow: hidden;">
+    </a>
+    <div class="card stat-card-v2" style="--sky-primary: #f59e0b;">
         <div>
-            <div class="stat-label-v2">نقاطي الحالية</div>
-            <div class="stat-value-v2" style="font-family: 'Outfit';">{{ current_user.points }}</div>
-            <div style="display: flex; gap: 3px; margin-top: 5px; color: #f59e0b; font-size: 0.8rem;">
-                {% set stars = (current_user.points // 100) %}
-                {% if stars > 5 %}{% set stars = 5 %}{% endif %}
-                {% for i in range(stars) %}<i class="fas fa-star"></i>{% endfor %}
-                {% for i in range(5 - stars) %}<i class="far fa-star" style="opacity: 0.3;"></i>{% endfor %}
-            </div>
+            <div class="stat-label-v2">نقاط التميز</div>
+            <div class="stat-value-v2">{{ current_user.points }}</div>
         </div>
-        <div class="stat-icon-v2" style="margin-right: auto; color: #f59e0b; font-size: 2rem;">
-            <i class="fas fa-star"></i>
+        <div class="stat-icon-v2" style="margin-right: auto; color: #f59e0b;">
+            <i class="fas fa-trophy"></i>
         </div>
     </div>
 </div>
 
-<!-- Student services Menu Grid -->
-<div class="section-header-v2" style="margin-top: 2rem;">
-    <h3><i class="fas fa-rocket" style="margin-left: 10px; color: var(--sky-primary);"></i> خدمات سريعة</h3>
-</div>
-<div class="menu-grid-v2" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-    <a href="#my-courses" class="card" style="text-align: center; padding: 1.5rem; text-decoration: none;">
-        <div style="font-size: 2rem; color: var(--sky-primary); margin-bottom: 8px;"><i class="fas fa-book-open"></i>
-        </div>
-        <span style="font-weight: 800; color: var(--text-primary);">الدروس</span>
+<!-- Merged Posts Feed (The Heart of the App) -->
+<div class="section-header-v2"
+    style="margin-top: 2.5rem; display: flex; align-items: center; justify-content: space-between;">
+    <h3><i class="fas fa-bullhorn" style="margin-left: 10px; color: var(--sky-primary);"></i> آخر الأخبار والمنشورات
+    </h3>
+    {% if latest_schedule %}
+    <a href="{{ url_for('main.student_view_schedules') }}" class="premium-btn"
+        style="padding: 5px 15px; font-size: 0.85rem;">
+        <i class="fas fa-calendar-alt"></i> الجدول الدراسي
     </a>
-    <a href="{{ url_for('main.admin_chat') }}" class="card"
-        style="text-align: center; padding: 1.5rem; text-decoration: none;">
-        <div style="font-size: 2rem; color: #10b981; margin-bottom: 8px;"><i class="fas fa-headset"></i></div>
-        <span style="font-weight: 800; color: var(--text-primary);">الدعم</span>
-    </a>
-    <a href="{{ url_for('main.student_view_schedules') }}" class="card"
-        style="text-align: center; padding: 1.5rem; text-decoration: none;">
-        <div style="font-size: 2rem; color: #f59e0b; margin-bottom: 8px;"><i class="fas fa-calendar-check"></i></div>
-        <span style="font-weight: 800; color: var(--text-primary);">الجدول</span>
-    </a>
-</div>
-
-<!-- My Courses Section -->
-<div class="section-header-v2 animate-fade-in" id="my-courses"
-    style="animation-delay: 0.3s; margin-right: 20px; margin-top: 30px;">
-    <h3>📚 استكمال المذاكرة</h3>
-</div>
-<div class="animate-fade-in" style="animation-delay: 0.4s; padding: 0 15px;">
-    {% if enrollments %}
-    {% for enrollment in enrollments %}
-    <a href="{{ url_for('main.course_details', course_id=enrollment.course.id) }}" class="card list-item-v2"
-        style="display: flex; align-items: center; text-decoration: none; padding: 15px; margin-bottom: 12px; gap: 15px;">
-        <div class="item-avatar-v2"
-            style="width: 50px; height: 50px; background: var(--grad-main); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900;">
-            {{ enrollment.course.name[0] }}</div>
-        <div class="item-info-v2" style="flex: 1;">
-            <div class="item-title-v2" style="font-weight: 700; color: var(--p-text);">{{ enrollment.course.name }}
-            </div>
-            <div class="item-subtitle-v2" style="font-size: 0.8rem; color: var(--p-text-muted);">{{
-                enrollment.course.instructor }}</div>
-        </div>
-        <i class="fas fa-chevron-left" style="color: var(--p-text-muted); opacity: 0.5;"></i>
-    </a>
-    {% endfor %}
-    {% else %}
-    <div class="card" style="padding: 30px; text-align: center;">
-        <p style="color: var(--p-text-muted);">لم تسجل في أي مواد بعد. ✨</p>
-        <a href="#available-courses" style="color: var(--p-primary); text-decoration: none; font-weight: 700;">تصفح
-            المواد المتاحة</a>
-    </div>
     {% endif %}
 </div>
 
-<!-- Available Courses Section -->
-<div class="section-header-v2 animate-fade-in" id="available-courses"
-    style="animation-delay: 0.5s; margin-right: 20px; margin-top: 30px;">
-    <h3>🌐 مواد متاحة للتسجيل</h3>
-</div>
-<div class="animate-fade-in" style="animation-delay: 0.6s; padding: 0 15px;">
-    {% if available_courses %}
-    {% for course in available_courses %}
-    <div class="card list-item-v2"
-        style="display: flex; align-items: center; padding: 15px; margin-bottom: 12px; gap: 15px;">
-        <div class="item-avatar-v2"
-            style="width: 50px; height: 50px; background: rgba(99, 102, 241, 0.1); color: var(--p-primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900;">
-            {{ course.name[0] }}</div>
-        <div class="item-info-v2" style="flex: 1;">
-            <div class="item-title-v2" style="font-weight: 700; color: var(--p-text);">{{ course.name }}</div>
-            <div class="item-subtitle-v2" style="font-size: 0.8rem; color: var(--p-text-muted);">{{ course.instructor }}
+<div class="posts-feed animate-fade-in" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 20px;">
+    {% if posts %}
+    {% for post in posts %}
+    <div class="card post-card-v2" style="padding: 0; overflow: hidden; border: 1px solid var(--border-color);">
+        {% if post.image_filename %}
+        <div class="post-media" style="width: 100%; max-height: 400px; overflow: hidden;">
+            <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}"
+                style="width: 100%; height: 100%; object-fit: cover;" alt="Post Image">
+        </div>
+        {% endif %}
+
+        <div class="post-body" style="padding: 1.5rem;">
+            <div class="post-meta"
+                style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; opacity: 0.7; font-size: 0.85rem;">
+                <i class="far fa-clock"></i> {{ post.timestamp.strftime('%Y-%m-%d %I:%M %p') }}
+                <span
+                    style="margin-right: auto; background: var(--hover-bg); padding: 2px 10px; border-radius: 50px; color: var(--sky-primary); font-weight: 700;">
+                    أدمن المنصة
+                </span>
+            </div>
+            <h4 style="margin: 0 0 10px 0; color: var(--sky-primary); font-size: 1.2rem; font-weight: 800;">{{
+                post.title }}</h4>
+            <div class="post-text"
+                style="line-height: 1.8; color: var(--text-primary); font-weight: 500; font-size: 1rem;">
+                {{ post.content|safe }}
+            </div>
+
+            <div class="post-footer"
+                style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 15px;">
+                <button
+                    class="like-btn {% if current_user.id in post.likes|map(attribute='user_id') %}active{% endif %}"
+                    onclick="toggleLike({{ post.id }})"
+                    style="background: none; border: 1px solid var(--border-color); padding: 8px 20px; border-radius: 50px; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 700; transition: all 0.3s;">
+                    <i class="fas fa-heart"></i> <span class="like-count">{{ post.likes|length }}</span>
+                </button>
+                <div
+                    style="margin-right: auto; display: flex; align-items: center; gap: 5px; opacity: 0.6; font-size: 0.85rem;">
+                    <i class="fas fa-eye"></i> {{ post.views|length }} مشاهدة
+                </div>
             </div>
         </div>
-        <a href="{{ url_for('main.enroll', course_id=course.id) }}" class="premium-btn"
-            style="padding: 10px 15px; font-size: 0.8rem; border-radius: 12px; box-shadow: none;">انضمام</a>
     </div>
     {% endfor %}
     {% else %}
-    <div class="card" style="padding: 30px; text-align: center;">
-        <p style="color: var(--p-text-muted);">لا توجد مواد جديدة حالياً.</p>
+    <div class="card" style="padding: 3rem; text-align: center; background: var(--glass-bg);">
+        <div style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"><i class="fas fa-stream"></i></div>
+        <p style="color: var(--text-secondary); font-weight: 700;">لا توجد منشورات حالياً. ترقبوا كل جديد! ✨</p>
     </div>
     {% endif %}
 </div>

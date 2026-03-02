@@ -142,7 +142,7 @@ def logout():
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    from models import User, Course, Lesson, Enrollment
+    from models import User, Course, Lesson, Enrollment, HomePost, PostView, Schedule
     if current_user.role == 'admin':
         students_count = User.query.filter_by(role='student').count()
         courses_count = Course.query.count()
@@ -154,7 +154,7 @@ def dashboard():
                                lessons_count=lessons_count,
                                enrollments_count=enrollments_count)
     
-    # Auto-enroll student in all available courses instantly
+    # Auto-enroll student in all available courses instantly (Backend Logic)
     all_courses = Course.query.all()
     existing_enrollments = Enrollment.query.filter_by(student_id=current_user.id).all()
     enrolled_course_ids = [e.course_id for e in existing_enrollments]
@@ -168,19 +168,54 @@ def dashboard():
             
     if new_enrollments:
         db.session.commit()
-        # Refresh enrollments list after auto-enroll
+        # Refresh enrollments list
         existing_enrollments = Enrollment.query.filter_by(student_id=current_user.id).order_by(Enrollment.id.desc()).all()
-        
-    enrollments = existing_enrollments
-    available_courses = [] # No more available courses, they are all instantly enrolled
     
-    return render_template('dashboard.html', enrollments=enrollments, available_courses=available_courses)
+    # MERGED CONTENT: Fetch Posts and Schedule for the main view
+    posts = HomePost.query.order_by(HomePost.timestamp.desc()).all()
+    latest_schedule = Schedule.query.order_by(Schedule.timestamp.desc()).first()
+    
+    # Track views (moved from index)
+    for post in posts:
+        existing_view = PostView.query.filter_by(post_id=post.id, user_id=current_user.id).first()
+        if not existing_view:
+            view = PostView(post_id=post.id, user_id=current_user.id)
+            db.session.add(view)
+    db.session.commit()
+    
+    return render_template('dashboard.html', 
+                           enrollments=existing_enrollments, 
+                           posts=posts, 
+                           latest_schedule=latest_schedule)
+
+@main.route('/my_courses')
+@login_required
+def my_courses():
+    from models import Enrollment
+    if current_user.role == 'admin':
+        return redirect(url_for('main.admin_courses'))
+    
+    enrollments = Enrollment.query.filter_by(student_id=current_user.id).order_by(Enrollment.id.desc()).all()
+    return render_template('courses.html', enrollments=enrollments)
+
+@main.route('/unenroll/<int:enrollment_id>', methods=['POST'])
+@login_required
+def unenroll(enrollment_id):
+    from models import Enrollment
+    enrollment = Enrollment.query.get_or_404(enrollment_id)
+    if enrollment.student_id != current_user.id:
+        abort(403)
+    
+    db.session.delete(enrollment)
+    db.session.commit()
+    flash('تم إلغاء تسجيل المادة بنجاح.', 'success')
+    return redirect(url_for('main.my_courses'))
 
 @main.route('/view_pdf/<filename>')
 @login_required
 def view_pdf(filename):
-    # Redirect directly to the file - most reliable across all devices
-    return redirect(url_for('main.uploaded_file', filename=filename))
+    # Render the secure viewer template which handles the rendering via PDF.js
+    return render_template('secure_pdf_viewer.html', filename=filename)
 
 @main.route('/exam/<int:exam_id>')
 @login_required

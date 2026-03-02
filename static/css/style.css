@@ -26,10 +26,11 @@
 
     /* Light Mode Basics */
     --bg-main: #f8fbff;
-    --bg-sidebar: rgba(255, 255, 255, 0.9);
-    --text-primary: #013a63;
-    --text-secondary: #2c7da0;
-    --border-color: rgba(0, 180, 216, 0.15);
+    --bg-sidebar: rgba(20, 18, 10, 0.98);
+    --text-primary: #FFFFFF;
+    /* Ivory/White for gold mode text readability */
+    --text-secondary: #d4af37;
+    --border-color: rgba(212, 175, 55, 0.35);
     --card-bg: rgba(255, 255, 255, 0.95);
     --hover-bg: #e1f5fe;
     --shadow-color: rgba(0, 119, 182, 0.12);
@@ -59,9 +60,10 @@
 
     --bg-main: var(--ramadan-night);
     --bg-sidebar: rgba(10, 17, 40, 0.98);
-    --text-primary: var(--ramadan-beige);
+    --text-primary: #FFFFFF;
+    /* Pure white for max readability in Ramadan */
     --text-secondary: var(--ramadan-gold);
-    --card-bg: rgba(10, 17, 40, 0.94);
+    --card-bg: rgba(15, 23, 42, 0.95);
     /* Maximum readability */
     --border-color: rgba(212, 175, 55, 0.2);
     --hover-bg: rgba(212, 175, 55, 0.08);
@@ -199,9 +201,10 @@
     --bg-main: #010814;
     /* Deeper Space black */
     --bg-sidebar: rgba(2, 12, 27, 0.96);
-    --text-primary: #e6f1ff;
-    --text-secondary: #a8b2d1;
-    --border-color: rgba(0, 180, 216, 0.2);
+    --text-primary: #FFFFFF;
+    /* Maximum contrast in dark mode */
+    --text-secondary: #00d2ff;
+    --border-color: rgba(0, 180, 216, 0.3);
     --card-bg: #020c1b;
     --hover-bg: rgba(0, 180, 216, 0.1);
     --shadow-color: rgba(0, 0, 0, 0.6);
@@ -297,6 +300,46 @@
 }
 
 /* Global Liquid Background Animation (v35.0) */
+.post-text {
+    line-height: 1.9;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+[data-theme='dark'] .post-text,
+[data-theme='gold'] .post-text,
+[data-ramadan='enabled'] .post-text {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.course-card-v2:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px var(--shadow-color);
+}
+
+.premium-logout-v2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: all 0.3s;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.premium-logout-v2:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.02);
+}
+
 .mesh-background {
     opacity: 0.6;
     animation: liquidFlow 15s ease infinite alternate;
