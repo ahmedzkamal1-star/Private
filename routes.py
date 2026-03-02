@@ -23,8 +23,8 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
         
-        # Auto-logout banned/frozen users
-        if current_user.is_frozen:
+        # Auto-logout banned/frozen users (skip admins)
+        if current_user.role == 'student' and current_user.is_frozen:
             # Check if freeze has expired (for timed freezes)
             if current_user.freeze_until and datetime.utcnow() > current_user.freeze_until:
                 current_user.is_frozen = False
@@ -32,10 +32,12 @@ def before_request():
                 db.session.commit()
             else:
                 # Still frozen - force logout
-                if request.endpoint not in ['main.logout', 'static']:
+                if request.endpoint not in ['main.logout', 'main.login', 'static', None]:
+                    # Save info before logout
+                    user_pan = current_user.pan_level
                     from flask_login import logout_user
                     logout_user()
-                    if current_user.pan_level >= 4:
+                    if user_pan >= 4:
                         flash('⛔ تم حظرك نهائياً من المنصة بسبب مخالفات أمنية.', 'danger')
                     else:
                         flash('🚫 حسابك مجمد مؤقتاً بسبب مخالفة أمنية. تواصل مع الإدارة.', 'warning')

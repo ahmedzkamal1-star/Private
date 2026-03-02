@@ -167,6 +167,32 @@ class AuthManager:
             logger.error(f"Get lessons error: {str(e)}")
             return None, str(e)
 
+    def get_posts(self):
+        """Fetch home posts from the platform"""
+        if not self.token:
+            return None, "غير مصرح"
+            
+        try:
+            headers = self.get_headers()
+            response = self.session.get(
+                f"{BASE_URL}/api/posts",
+                headers=headers,
+                timeout=15,
+                verify=True
+            )
+            
+            if response.status_code == 200:
+                return response.json(), None
+            elif response.status_code == 401:
+                self.token = None
+                return None, "جلستك انتهت"
+            else:
+                return None, f"خطأ: {response.status_code}"
+                
+        except Exception as e:
+            logger.error(f"Get posts error: {str(e)}")
+            return None, str(e)
+
     def get_lesson_content(self, lesson_id):
         """Fetch secure content for a lesson"""
         if not self.token:

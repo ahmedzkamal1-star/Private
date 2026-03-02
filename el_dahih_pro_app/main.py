@@ -82,7 +82,10 @@ TRANSLATIONS = {
         'error': 'خطأ',
         'success': 'نجح',
         'connection_error': 'خطأ في الاتصال',
-        'retry': 'إعادة محاولة'
+        'retry': 'إعادة محاولة',
+        'home_title': 'الرئيسية',
+        'open_btn': 'فتح',
+        'privacy_msg': 'عذراً، التصوير غير مسموح حفاظاً على الخصوصية'
     },
     'en': {
         'login_title': 'Student Login',
@@ -112,7 +115,10 @@ TRANSLATIONS = {
         'error': 'Error',
         'success': 'Success',
         'connection_error': 'Connection Error',
-        'retry': 'Retry'
+        'retry': 'Retry',
+        'home_title': 'Home',
+        'open_btn': 'Open',
+        'privacy_msg': 'Sorry, photography is not allowed to preserve privacy'
     }
 }
 
@@ -205,6 +211,98 @@ class LoginScreen(Screen):
         )
         self.dialog.auto_dismiss = False
         self.dialog.open()
+
+
+class HomeScreen(Screen):
+    """Home screen showing posts with images"""
+    
+    def on_enter(self, *args):
+        """Load posts when entering home screen"""
+        self.load_posts()
+
+    def load_posts(self):
+        """Fetch and show posts"""
+        auth = AuthManager()
+        app = MDApp.get_running_app()
+        
+        try:
+            posts, error = auth.get_posts()
+            
+            if error:
+                logger.error(f"Error loading posts: {error}")
+                return
+            
+            self.ids.posts_list.clear_widgets()
+            
+            for post in posts:
+                card = MDCard(
+                    orientation='vertical',
+                    size_hint_y=None,
+                    height="400dp" if post.get('image_url') else "180dp",
+                    padding="15dp",
+                    spacing="10dp",
+                    radius="15dp",
+                    elevation=2,
+                    md_bg_color=get_color_from_hex("#FFFFFF") if app.theme_cls.theme_style == "Light" else get_color_from_hex("#1E1E1E")
+                )
+                
+                # Header
+                header = MDBoxLayout(adaptive_height=True, spacing="10dp")
+                icon = MDIcon(icon="bullhorn-outline", theme_text_color="Custom", text_color=get_color_from_hex("#00A8E8"))
+                title = MDLabel(text=app.f_ar(post.get('title', '')), font_name="Arabic", bold=True, font_style="Subtitle1")
+                header.add_widget(icon)
+                header.add_widget(title)
+                
+                # Content
+                content = MDLabel(
+                    text=app.f_ar(post.get('content', '')),
+                    font_name="Arabic",
+                    theme_text_color="Secondary",
+                    font_style="Body2",
+                    halign="right" if app.current_lang == 'ar' else "left"
+                )
+                
+                card.add_widget(header)
+                card.add_widget(content)
+                
+                # Image if available
+                if post.get('image_url'):
+                    from kivy.uix.image import AsyncImage
+                    img = AsyncImage(
+                        source=post.get('image_url'),
+                        size_hint_y=None,
+                        height="200dp",
+                        allow_stretch=True,
+                        keep_ratio=True
+                    )
+                    card.add_widget(img)
+                
+                # Action Buttons
+                actions = MDBoxLayout(adaptive_height=True, spacing="10dp")
+                like_btn = MDFlatButton(text=f"❤️ {post.get('likes_count', 0)}", font_name="Arabic")
+                actions.add_widget(like_btn)
+                
+                card.add_widget(actions)
+                self.ids.posts_list.add_widget(card)
+                
+        except Exception as e:
+            logger.error(f"Failed to load posts: {e}")
+
+
+class LessonViewerScreen(Screen):
+    """Internal viewer for decrypted lesson content"""
+    content_title = StringProperty("")
+    
+    def on_enter(self, *args):
+        # Enable strict FLAG_SECURE on this screen
+        SecurityShield.enable_screenshot_protection()
+        
+    def show_privacy_warning(self):
+        """Show the privacy message requested by user"""
+        Snackbar(
+            text=MDApp.get_running_app().get_text('privacy_msg'),
+            bg_color=get_color_from_hex("#BD362F")
+        ).open()
 
 
 class DashboardScreen(Screen):
@@ -481,7 +579,9 @@ class ElDahihApp(MDApp):
         # Create screen manager
         sm = ScreenManager()
         sm.add_widget(LoginScreen(name='login'))
+        sm.add_widget(HomeScreen(name='home'))
         sm.add_widget(DashboardScreen(name='dashboard'))
+        sm.add_widget(LessonViewerScreen(name='viewer'))
         
         return sm
 
