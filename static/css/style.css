@@ -24,19 +24,19 @@
     --grad-main: var(--sky-gradient);
     --danger: #ef4444;
 
-    /* Light Mode Basics */
-    --bg-main: #f8fbff;
-    --bg-sidebar: rgba(20, 18, 10, 0.98);
-    --text-primary: #FFFFFF;
-    /* Ivory/White for gold mode text readability */
-    --text-secondary: #d4af37;
-    --border-color: rgba(212, 175, 55, 0.35);
-    --card-bg: rgba(255, 255, 255, 0.95);
+    /* Light Mode Basics (Modern Sky Blue Evolution) */
+    --bg-main: #f0f7ff;
+    --bg-sidebar: #ffffff;
+    --text-primary: #012a4a;
+    /* High contrast Dark Blue */
+    --text-secondary: #2c7da0;
+    --border-color: rgba(0, 180, 216, 0.15);
+    --card-bg: #ffffff;
     --hover-bg: #e1f5fe;
-    --shadow-color: rgba(0, 119, 182, 0.12);
+    --shadow-color: rgba(0, 119, 182, 0.1);
 
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.5);
 
     /* Ramadan Palette - Midnight Navy Comfort (v45) */
     --ramadan-gold: #D4AF37;
@@ -63,7 +63,7 @@
     --text-primary: #FFFFFF;
     /* Pure white for max readability in Ramadan */
     --text-secondary: var(--ramadan-gold);
-    --card-bg: rgba(15, 23, 42, 0.95);
+    --card-bg: rgba(20, 28, 50, 0.98);
     /* Maximum readability */
     --border-color: rgba(212, 175, 55, 0.2);
     --hover-bg: rgba(212, 175, 55, 0.08);
@@ -1117,10 +1117,10 @@ body {
     filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.6));
 }
 
-/* Dark mode card overrides */
-[data-theme='dark'] .card {
-    border: 1px solid rgba(0, 180, 216, 0.2);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+/* Default (Light) mode text styles */
+.admin-title-gold {
+    color: var(--text-primary);
+    font-weight: 900;
 }
 
 /* Dark mode text gradient */
@@ -1130,6 +1130,12 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+[data-theme='dark'] .card {
+    border: 1px solid rgba(0, 180, 216, 0.2) !important;
+    background: #020c1b !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 /* Fixed dark-mode-toggle always visible */

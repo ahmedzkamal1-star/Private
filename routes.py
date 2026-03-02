@@ -1316,12 +1316,16 @@ def admin_settings():
         settings.platform_url = request.form.get('platform_url')
         
         # Security Updates for Admin
-        new_pass = request.form.get('admin_password')
+        new_pass = request.form.get('new_password')
+        confirm_pass = request.form.get('confirm_password')
         new_master = request.form.get('master_key')
         
         if new_pass:
-            current_user.set_password(new_pass)
-            flash('تم تحديث كلمة مرور الأدمن بنجاح.', 'success')
+            if new_pass == confirm_pass:
+                current_user.set_password(new_pass)
+                flash('تم تحديث كلمة مرور الأدمن بنجاح.', 'success')
+            else:
+                flash('كلمات المرور غير متطابقة!', 'danger')
             
         if new_master:
             current_user.master_key = new_master

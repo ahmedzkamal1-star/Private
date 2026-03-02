@@ -41,7 +41,8 @@
             <div class="card admin-card-glass mb-4" style="border-right: 5px solid #10b981 !important;">
                 <h3 class="admin-title-gold mb-4"
                     style="background: linear-gradient(135deg, #fff, #10b981); -webkit-background-clip: text; background-clip: text;">
-                    <i class="fas fa-toggle-on"></i> حالات النظام</h3>
+                    <i class="fas fa-toggle-on"></i> حالات النظام
+                </h3>
                 <div class="d-flex gap-4 flex-wrap">
                     <label class="check-field-v2 admin-card-glass d-flex align-items-center gap-3"
                         style="padding: 15px 25px; cursor: pointer; border-radius: 15px !important;">
@@ -113,11 +114,34 @@
             <div class="card admin-card-glass mb-4" style="border-right: 5px solid #ef4444 !important;">
                 <h3 class="admin-title-gold mb-4"
                     style="background: linear-gradient(135deg, #fff, #ef4444); -webkit-background-clip: text; background-clip: text;">
-                    <i class="fas fa-key"></i> الأمان العالي</h3>
-                <div class="form-field-v2">
-                    <label class="admin-stat-label d-block mb-2">كود الماستر (Master Key)</label>
-                    <input type="text" name="master_key" value="{{ current_user.master_key }}" required
-                        class="admin-input-glass w-100" style="font-family: 'Outfit';">
+                    <i class="fas fa-key"></i> الأمان العالي
+                </h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">كود الماستر (Master Key)</label>
+                        <input type="text" name="master_key" value="{{ current_user.master_key }}" required
+                            class="admin-input-glass w-100" style="font-family: 'Outfit';">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Password Change -->
+            <div class="card admin-card-glass mb-4" style="border-right: 5px solid #6366f1 !important;">
+                <h3 class="admin-title-gold mb-4"
+                    style="background: linear-gradient(135deg, #fff, #6366f1); -webkit-background-clip: text; background-clip: text;">
+                    <i class="fas fa-user-shield"></i> تغيير كلمة مرور الأدمن
+                </h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">كلمة المرور الجديدة</label>
+                        <input type="password" name="new_password" placeholder="اتركه فارغاً إذا لا تريد التغيير"
+                            class="admin-input-glass w-100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="admin-stat-label d-block mb-2">تأكيد كلمة المرور</label>
+                        <input type="password" name="confirm_password" placeholder="أعد كتابة كلمة المرور"
+                            class="admin-input-glass w-100">
+                    </div>
                 </div>
             </div>
 
