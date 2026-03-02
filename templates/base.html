@@ -13,6 +13,17 @@
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
 
     <script>
+        // Global Nuclear Cache Break: Unregister Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+    </script>
+
+    <script>
         window.userRole = "{{ current_user.role|lower if current_user.is_authenticated else 'guest' }}";
     </script>
 

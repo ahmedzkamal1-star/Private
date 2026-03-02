@@ -11,6 +11,17 @@
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0A1128">
+
+    <script>
+        // Nuclear Cache Break: Unregister Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+    </script>
     <style>
         /* Login-specific overrides */
         body.login-page {
@@ -321,6 +332,11 @@
 </head>
 
 <body class="login-page">
+    <!-- Version Badge for Verification -->
+    <div
+        style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #00d2ff; padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; font-family: 'Outfit', sans-serif; z-index: 10000; border: 1.5px solid #00d2ff; font-weight: 800; pointer-events: none; box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);">
+        🚀 V67.0 PRE-RELEASE
+    </div>
     <!-- Animated Particles -->
     <div class="login-particles" id="particles"></div>
 
