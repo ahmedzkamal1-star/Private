@@ -58,13 +58,8 @@ def index():
     latest_schedule = Schedule.query.order_by(Schedule.timestamp.desc()).first()
     
     if current_user.is_authenticated and current_user.role == 'student':
-        # Track views for each post
-        for post in posts:
-            existing_view = PostView.query.filter_by(post_id=post.id, user_id=current_user.id).first()
-            if not existing_view:
-                view = PostView(post_id=post.id, user_id=current_user.id)
-                db.session.add(view)
-        db.session.commit()
+        # Redirect student to the new unified dashboard
+        return redirect(url_for('main.dashboard'))
         
     return render_template('index.html', posts=posts, latest_schedule=latest_schedule)
 
