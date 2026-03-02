@@ -22,6 +22,24 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+        
+        # Auto-logout banned/frozen users
+        if current_user.is_frozen:
+            # Check if freeze has expired (for timed freezes)
+            if current_user.freeze_until and datetime.utcnow() > current_user.freeze_until:
+                current_user.is_frozen = False
+                current_user.freeze_until = None
+                db.session.commit()
+            else:
+                # Still frozen - force logout
+                if request.endpoint not in ['main.logout', 'static']:
+                    from flask_login import logout_user
+                    logout_user()
+                    if current_user.pan_level >= 4:
+                        flash('⛔ تم حظرك نهائياً من المنصة بسبب مخالفات أمنية.', 'danger')
+                    else:
+                        flash('🚫 حسابك مجمد مؤقتاً بسبب مخالفة أمنية. تواصل مع الإدارة.', 'warning')
+                    return redirect(url_for('main.login'))
 
 @main.app_context_processor
 def inject_global_vars():
@@ -470,8 +488,8 @@ def api_get_posts():
             "likes_count": len(post.likes) if post.likes else 0,
             "comments_count": len(post.comments) if post.comments else 0,
             "views_count": len(post.views) if post.views else 0,
-            "image_url": f"/uploads/{post.image_filename}" if post.image_filename else None,
-            "pdf_url": f"/uploads/{post.pdf_filename}" if post.pdf_filename else None
+            "image_url": f"https://mr7riko.pythonanywhere.com/uploads/{post.image_filename}" if post.image_filename else None,
+            "pdf_url": f"https://mr7riko.pythonanywhere.com/uploads/{post.pdf_filename}" if post.pdf_filename else None
         }
         posts_data.append(post_data)
     return jsonify(posts_data)
@@ -580,7 +598,7 @@ def get_secure_content(content_type, content_id):
     watermark_text = f"{current_user.full_name} | {current_user.code}"
     try:
         if original_filename.lower().endswith('.pdf'):
-            processed_data = file_data # Skip PyPDF2 to preserve text clarity, handled by frontend PDF.js
+            processed_data = add_watermark_to_pdf(file_data, watermark_text)
         elif original_filename.lower().endswith(('.png', '.jpg', '.jpeg')):
             processed_data = add_watermark_to_image(file_data, watermark_text)
         else:

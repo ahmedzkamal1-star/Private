@@ -168,16 +168,16 @@
         const watermarkText = studentName + ' | ' + studentCode;
         const grid = document.getElementById('watermarkGrid');
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 30; i++) {
             const span = document.createElement('span');
             span.textContent = watermarkText;
-            span.style.cssText = 'font-size: 18px; font-weight: 900; color: rgba(212,175,55,0.12); white-space: nowrap; padding: 30px 50px;';
+            span.style.cssText = 'font-size: 16px; font-weight: 900; color: rgba(180,180,180,0.04); white-space: nowrap; padding: 40px 60px;';
             grid.appendChild(span);
         }
 
         // Slight animation to make stitching harder
         setInterval(() => {
-            grid.style.opacity = (Math.random() * 0.08 + 0.08).toFixed(2);
+            grid.style.opacity = (Math.random() * 0.03 + 0.03).toFixed(2);
         }, 2500);
     })();
 
