@@ -1,4 +1,3 @@
-/* static/js/main.js - v51.0 Triple Theme + Ramadan */
 // ===== إدارة الأوضاع الثلاثة والواجهة =====
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -18,6 +17,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // 5. تهيئة وضع رمضان
     initRamadan();
 });
+
+// إعداد زر تبديل السمات
+function setupThemeToggle() {
+    const toggleBtn = document.querySelector('.dark-mode-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            window.toggleTheme();
+        });
+    }
+}
 
 // ===== وضع رمضان (دائم) =====
 function initRamadan() {
