@@ -40,8 +40,8 @@
                         <td><span style="color: #10b981; font-weight: 700; font-size: 0.85rem;">متصل منذ {{
                                 (datetime.utcnow() - student.last_seen).seconds // 60 }} دقيقة</span></td>
                         <td>
-                            <a href="#" onclick="alert('خدمة المراسلة قيد التطوير'); return false;" class="premium-btn"
-                                style="padding: 6px 15px; font-size: 0.8rem;">
+                            <a href="{{ url_for('main.admin_view_student_messages', student_id=student.id) }}"
+                                class="premium-btn" style="padding: 6px 15px; font-size: 0.8rem;">
                                 <i class="fas fa-comment"></i> رسالة
                             </a>
                         </td>

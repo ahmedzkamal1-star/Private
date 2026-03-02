@@ -1259,6 +1259,12 @@ def admin_view_student_messages(student_id):
 
     return render_template('admin_reply.html', student=student, messages=messages)
 
+# Alias for backward compatibility or legacy template calls
+@main.route('/admin/reply/<int:student_id>')
+@login_required
+def admin_reply(student_id):
+    return redirect(url_for('main.admin_view_student_messages', student_id=student_id))
+
 @main.route('/uploads/<filename>')
 @login_required
 def uploaded_file(filename):
