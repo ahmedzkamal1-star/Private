@@ -1,7 +1,10 @@
-// Service Worker for El-Dahih Mobile App
-const CACHE_NAME = 'eldahih-v4';
+// Service Worker for El-Dahih Mobile App (v66)
+const CACHE_NAME = 'eldahih-v66';
 const ASSETS = [
+    '/',
     '/mobile',
+    '/static/css/style.css?v=66.0',
+    '/static/js/main.js?v=66.0',
     '/static/mobile_app/styles.css',
     '/static/mobile_app/app.js',
     '/static/icon-192.png',
