@@ -722,7 +722,8 @@ body {
 
 /* Main Content - Fluid & Expansive (Spread Out) */
 .main-content {
-    margin-right: 0;
+    margin-right: 320px;
+    /* Aligned for fixed sidebar width + gap */
     padding: 2.5rem;
     padding-top: 100px;
     min-height: 100vh;
